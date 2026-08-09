@@ -5,8 +5,8 @@ const heroImage = "https://plus.unsplash.com/premium_photo-1661490222612-f670204
 
 export default function Hero() {
   const stats = [
-    { icon: <Award className="w-6 h-6" />, value: '1300+', label: 'Certifications déployées' },
-    { icon: <Users className="w-6 h-6" />, value: '95%', label: 'Taux de réussite' },
+    { icon: <Award className="w-6 h-6" />, value: '130+', label: 'Certifications déployées' },
+    { icon: <Users className="w-6 h-6" />, value: '75%', label: 'Taux de réussite' },
     { icon: <TrendingUp className="w-6 h-6" />, value: '15+', label: "Années d'expertise" },
   ]
 
@@ -24,7 +24,7 @@ export default function Hero() {
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <span className="text-sm font-medium">🚀 Cabinet de conseil & formation</span>
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-orange-100">
               Conseilux <span className="text-orange-200">Training</span>
             </h1>
@@ -34,16 +34,22 @@ export default function Hero() {
             <p className="text-lg text-orange-200/80 mb-8">
               Conseil stratégique • Formation • Recrutement • Accompagnement commercial terrain
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link 
+              {/*
+                ✅ Redirige vers /catalogue (page formulaire)
+                Le PDF se télécharge automatiquement APRÈS soumission du formulaire
+                Flux : Hero → /catalogue (formulaire) → PDF téléchargé
+              */}
+              <Link
                 href="/catalogue"
                 className="inline-flex items-center gap-2 bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors text-lg"
               >
                 <FileText className="w-5 h-5" />
                 Télécharger le Catalogue
               </Link>
-              <Link 
+
+              <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-600 transition-colors text-lg"
               >
