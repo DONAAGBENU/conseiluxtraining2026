@@ -10,12 +10,16 @@ interface FormData {
   email: string
   phone: string
   company: string
+  pays: string
+  ville: string
 }
 
 interface FormErrors {
   name?: string
   email?: string
   phone?: string
+  pays?: string
+  ville?: string
 }
 
 export default function CataloguePage() {
@@ -24,6 +28,8 @@ export default function CataloguePage() {
     phone: '',
     email: '',
     company: '',
+    pays: '',
+    ville: '',
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
@@ -43,6 +49,12 @@ export default function CataloguePage() {
     }
     if (!formData.phone.trim()) {
       newErrors.phone = 'Le téléphone est requis'
+    }
+    if (!formData.pays.trim()) {
+      newErrors.pays = 'Le pays est requis'
+    }
+    if (!formData.ville.trim()) {
+      newErrors.ville = 'La ville est requise'
     }
 
     setErrors(newErrors)
@@ -66,6 +78,8 @@ export default function CataloguePage() {
           email: formData.email,
           telephone: formData.phone,
           entreprise: formData.company,
+          pays: formData.pays,
+          ville: formData.ville,
           source: 'catalogue',
           date: new Date().toISOString(),
         }),
@@ -99,7 +113,7 @@ export default function CataloguePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col text-white">
       <Header />
 
       <main className="flex-grow">
@@ -126,12 +140,12 @@ export default function CataloguePage() {
         {/* ── Formulaire ── */}
         <section className="py-16">
           <div className="container mx-auto px-4 max-w-2xl">
-            <div className="rounded-3xl bg-white shadow-xl border border-slate-200 p-10">
+            <div className="card border-t-4 border-orange-600 p-10 shadow-2xl">
 
               <div className="text-center mb-10">
-                <FileText className="w-16 h-16 text-orange-600 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold text-slate-900">Téléchargez le catalogue</h2>
-                <p className="text-slate-600 mt-3">
+                <FileText className="w-16 h-16 text-orange-500 mx-auto mb-4" />
+                <h2 className="text-3xl font-bold text-white">Téléchargez le catalogue</h2>
+                <p className="text-orange-200/60 mt-3 text-sm">
                   Remplissez le formulaire pour recevoir notre brochure complète et découvrir nos offres.
                 </p>
               </div>
@@ -141,94 +155,136 @@ export default function CataloguePage() {
 
                   {/* Nom */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Nom et prénom <span className="text-orange-600">*</span>
+                    <label className="block text-sm font-medium text-orange-100 mb-2">
+                      Nom et prénom <span className="text-orange-500">*</span>
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
                       <input
                         type="text"
                         name="name"
                         required
                         placeholder="ex: Jean Dupont"
-                        className={`w-full pl-10 pr-4 rounded-2xl border px-4 py-3 shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all ${
+                        className={`w-full pl-11 pr-4 rounded-2xl border py-3 bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
                           errors.name
-                            ? 'border-red-400 focus:border-red-400'
-                            : 'border-slate-300 focus:border-orange-500'
+                            ? 'border-red-400'
+                            : 'border-white/10'
                         }`}
                         value={formData.name}
                         onChange={handleChange}
                       />
                     </div>
                     {errors.name && (
-                      <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                      <p className="text-red-400 text-xs mt-1">{errors.name}</p>
                     )}
                   </div>
 
                   {/* Entreprise */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Entreprise <span className="text-slate-400 text-xs">(optionnel)</span>
+                    <label className="block text-sm font-medium text-orange-100 mb-2">
+                      Entreprise <span className="text-orange-200/40 text-xs">(optionnel)</span>
                     </label>
                     <input
                       type="text"
                       name="company"
                       placeholder="ex: Société Générale"
-                      className="w-full rounded-2xl border border-slate-300 px-4 py-3 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-2xl bg-black/35 border border-white/10 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm"
                       value={formData.company}
                       onChange={handleChange}
                     />
                   </div>
 
+                  {/* Pays & Ville */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">
+                        Pays <span className="text-orange-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="pays"
+                        required
+                        placeholder="ex: Togo"
+                        className={`w-full px-4 py-3 rounded-2xl border bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
+                          errors.pays ? 'border-red-400' : 'border-white/10'
+                        }`}
+                        value={formData.pays}
+                        onChange={handleChange}
+                      />
+                      {errors.pays && (
+                        <p className="text-red-400 text-xs mt-1">{errors.pays}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">
+                        Ville <span className="text-orange-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="ville"
+                        required
+                        placeholder="ex: Lomé"
+                        className={`w-full px-4 py-3 rounded-2xl border bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
+                          errors.ville ? 'border-red-400' : 'border-white/10'
+                        }`}
+                        value={formData.ville}
+                        onChange={handleChange}
+                      />
+                      {errors.ville && (
+                        <p className="text-red-400 text-xs mt-1">{errors.ville}</p>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Email <span className="text-orange-600">*</span>
+                    <label className="block text-sm font-medium text-orange-100 mb-2">
+                      Email <span className="text-orange-500">*</span>
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
                       <input
                         type="email"
                         name="email"
                         required
                         placeholder="ex: jean@entreprise.com"
-                        className={`w-full pl-10 pr-4 rounded-2xl border px-4 py-3 shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all ${
+                        className={`w-full pl-11 pr-4 rounded-2xl border py-3 bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
                           errors.email
-                            ? 'border-red-400 focus:border-red-400'
-                            : 'border-slate-300 focus:border-orange-500'
+                            ? 'border-red-400'
+                            : 'border-white/10'
                         }`}
                         value={formData.email}
                         onChange={handleChange}
                       />
                     </div>
                     {errors.email && (
-                      <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                      <p className="text-red-400 text-xs mt-1">{errors.email}</p>
                     )}
                   </div>
 
                   {/* Téléphone */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Numéro de téléphone <span className="text-orange-600">*</span>
+                    <label className="block text-sm font-medium text-orange-100 mb-2">
+                      Numéro de téléphone <span className="text-orange-500">*</span>
                     </label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
                       <input
                         type="tel"
                         name="phone"
                         required
                         placeholder="ex: +228 90 00 00 00"
-                        className={`w-full pl-10 pr-4 rounded-2xl border px-4 py-3 shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all ${
+                        className={`w-full pl-11 pr-4 rounded-2xl border py-3 bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
                           errors.phone
-                            ? 'border-red-400 focus:border-red-400'
-                            : 'border-slate-300 focus:border-orange-500'
+                            ? 'border-red-400'
+                            : 'border-white/10'
                         }`}
                         value={formData.phone}
                         onChange={handleChange}
                       />
                     </div>
                     {errors.phone && (
-                      <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                      <p className="text-red-400 text-xs mt-1">{errors.phone}</p>
                     )}
                   </div>
 
@@ -236,7 +292,7 @@ export default function CataloguePage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-700 disabled:bg-orange-300 disabled:cursor-not-allowed transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors"
                   >
                     {loading ? (
                       <>
@@ -251,7 +307,7 @@ export default function CataloguePage() {
                     )}
                   </button>
 
-                  <p className="text-center text-xs text-slate-400 mt-2">
+                  <p className="text-center text-xs text-orange-200/40 mt-2">
                     Vos données sont confidentielles et ne seront jamais partagées.
                   </p>
                 </form>
@@ -259,15 +315,15 @@ export default function CataloguePage() {
               ) : (
                 /* ── État succès ── */
                 <div className="text-center py-12">
-                  <CheckCircle className="w-16 h-16 text-orange-600 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3">Merci !</h3>
-                  <p className="text-slate-600 max-w-xl mx-auto mb-6">
+                  <CheckCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-white mb-3">Merci !</h3>
+                  <p className="text-orange-200/80 max-w-xl mx-auto mb-6">
                     Votre demande a été enregistrée. Le téléchargement va commencer automatiquement.
                   </p>
                   <a
                     href="/catalogue.pdf"
                     download="Catalogue-Conseilux-Training.pdf"
-                    className="inline-flex items-center gap-2 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-8 transition-colors shadow-lg shadow-orange-500/20"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 transition-colors shadow-lg shadow-orange-500/20"
                   >
                     <Download className="w-5 h-5" />
                     Cliquez ici si le téléchargement ne démarre pas

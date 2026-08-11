@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "titre": "Gestion de Projet PMP",
+    "description": "Préparez-vous à la certification PMP avec notre programme complet",
+    "categorie": "Gestion de Projet",
+    "duree": "5 jours",
+    "prix": "1 500 000 FCFA",
+    "certifiante": true,
+    "modules": [
+      "Introduction au PMP",
+      "Planification",
+      "Exécution",
+      "Suivi et contrôle",
+      "Clôture"
+    ],
+    "createdAt": "2026-08-11T12:04:50.101Z"
+  },
+  {
+    "id": "2",
+    "titre": "Cybersécurité CISSP",
+    "description": "Formation complète pour la certification CISSP",
+    "categorie": "Technologies & Cybersécurité",
+    "duree": "5 jours",
+    "prix": "2 000 000 FCFA",
+    "certifiante": true,
+    "modules": [
+      "Sécurité des réseaux",
+      "Cryptographie",
+      "Gestion des risques",
+      "Audit sécurité"
+    ],
+    "createdAt": "2026-08-11T12:04:50.101Z"
+  }
+]

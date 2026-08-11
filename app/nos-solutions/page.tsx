@@ -96,18 +96,18 @@ export default function NosSolutions() {
         </section>
 
         {/* Services */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-transparent">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">
+            <h2 className="text-3xl font-bold text-center text-white mb-12">
               Nos Prestations
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service, index) => (
-                <div key={index} className="card border-l-4 border-orange-600 flex items-start gap-4">
-                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
+                <div key={index} className="card border-l-4 border-orange-600 flex items-start gap-4 bg-white/10 backdrop-blur-md border-white/10">
+                  <CheckCircle className="w-6 h-6 text-orange-500 flex-shrink-0 mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900 mb-1">{service.title}</h3>
-                    <p className="text-sm text-gray-600">{service.description}</p>
+                    <h3 className="font-semibold text-white mb-1">{service.title}</h3>
+                    <p className="text-sm text-orange-200/80">{service.description}</p>
                   </div>
                 </div>
               ))}
@@ -116,32 +116,34 @@ export default function NosSolutions() {
         </section>
 
         {/* Logiciels */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-transparent border-t border-white/5">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-slate-900 mb-4">
+            <h2 className="text-3xl font-bold text-center text-white mb-4">
               Nos Solutions Logicielles
             </h2>
-            <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            <p className="text-center text-orange-200/60 mb-12 max-w-2xl mx-auto">
               Des logiciels de gestion adaptés à tous les secteurs d'activité
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {softwareSolutions.map((solution, index) => (
-                <div key={index} className={`bg-white border-2 ${solution.color} rounded-xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
-                  <div className="text-orange-600 mb-4">{solution.icon}</div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">{solution.name}</h3>
-                  <p className="text-gray-600 mb-4">{solution.description}</p>
-                  <ul className="space-y-1">
-                    {solution.features.map((feature, idx) => (
-                      <li key={idx} className="text-sm text-gray-700 flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-orange-600" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                <div key={index} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
+                  <div>
+                    <div className="text-orange-500 mb-4">{solution.icon}</div>
+                    <h3 className="text-2xl font-bold text-white mb-2">{solution.name}</h3>
+                    <p className="text-orange-200/80 mb-4 text-sm">{solution.description}</p>
+                    <ul className="space-y-2">
+                      {solution.features.map((feature, idx) => (
+                        <li key={idx} className="text-sm text-orange-100 flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-orange-500 shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                   <Link 
                     href="/contact"
-                    className="inline-flex items-center gap-2 mt-4 text-orange-600 font-semibold hover:text-slate-900 transition-colors"
+                    className="inline-flex items-center gap-2 mt-6 text-orange-500 font-semibold hover:text-white transition-colors"
                   >
                     En savoir plus <ArrowRight className="w-4 h-4" />
                   </Link>

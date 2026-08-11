@@ -1,61 +1,44 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
-import { Star, User, Building, Calendar } from 'lucide-react'
+import { Star, Calendar, MessageSquare, Loader2 } from 'lucide-react'
+
+interface Testimonial {
+  id: string
+  nom: string
+  role: string
+  entreprise: string
+  texte: string
+  note: number
+  date: string
+  logo: string
+  approuve: boolean
+}
 
 export default function Avis() {
-  const allTestimonials = [
-    {
-      name: 'Marie Kouassi',
-      role: 'Directrice RH',
-      company: 'Groupe SIB',
-      text: "Grâce à ConseiluxTraining, nous avons certifié 50 collaborateurs en gestion de projet. Un accompagnement professionnel et des résultats exceptionnels. Leur expertise a transformé notre approche de la formation.",
-      rating: 5,
-      date: '15 mai 2024'
-    },
-    {
-      name: 'Jean Adé',
-      role: 'CEO',
-      company: 'Tech Solutions Africa',
-      text: "La formation en cybersécurité a transformé notre approche de la sécurité. Nos équipes sont désormais certifiées et opérationnelles. Je recommande vivement leurs services.",
-      rating: 5,
-      date: '12 avril 2024'
-    },
-    {
-      name: 'Fatima Diallo',
-      role: 'Responsable Formation',
-      company: 'Groupe BIA',
-      text: "Un partenaire de confiance qui comprend nos enjeux. Les formations TOEIC ont permis à nos équipes d'atteindre leurs objectifs. Une équipe compétente et disponible.",
-      rating: 5,
-      date: '28 mars 2024'
-    },
-    {
-      name: 'Koffi Amoussou',
-      role: 'Directeur des Opérations',
-      company: 'Logistics Express',
-      text: "La formation en Lean Six Sigma a permis d'optimiser nos processus. Des résultats concrets et mesurables. Je suis très satisfait de la qualité des formations.",
-      rating: 5,
-      date: '10 février 2024'
-    },
-    {
-      name: 'Amina Touré',
-      role: 'Chef de Projet',
-      company: 'Agence Digital Plus',
-      text: "La préparation PMP avec ConseiluxTraining m'a permis d'obtenir ma certification du premier coup. Les formateurs sont d'une grande qualité pédagogique.",
-      rating: 5,
-      date: '25 janvier 2024'
-    },
-    {
-      name: 'Souleymane Diarra',
-      role: 'Directeur Général',
-      company: 'Groupe MINES',
-      text: "Des formations adaptées aux besoins de notre industrie. La flexibilité et la qualité des prestations font de ConseiluxTraining un partenaire de choix.",
-      rating: 5,
-      date: '05 décembre 2023'
-    },
-  ]
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchApprovedAvis()
+  }, [])
+
+  const fetchApprovedAvis = async () => {
+    try {
+      const res = await fetch('/api/avis?approved=true')
+      const data = await res.json()
+      setTestimonials(data.avis || [])
+    } catch (err) {
+      console.error('Erreur lors du chargement des avis:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col text-white">
       <Header />
       
       <main className="flex-grow">
@@ -70,39 +53,56 @@ export default function Avis() {
 
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {allTestimonials.map((testimonial, index) => (
-                <div key={index} className="card border-t-4 border-orange-600 hover:-translate-y-1 transition-all">
-                  <div className="flex text-orange-600 mb-3">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 mb-4 italic line-clamp-4">
-                    &quot;{testimonial.text}&quot;
-                  </p>
-                  <div className="border-t pt-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">
-                        {testimonial.name.charAt(0)}
+            {loading ? (
+              <div className="flex items-center justify-center min-h-[30vh]">
+                <Loader2 className="w-10 h-10 animate-spin text-orange-500" />
+              </div>
+            ) : testimonials.length === 0 ? (
+              <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl max-w-xl mx-auto">
+                <MessageSquare className="w-16 h-16 text-orange-200/20 mx-auto mb-4" />
+                <p className="text-orange-200/60 font-medium">Aucun avis publié pour le moment.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {testimonials.map((testimonial) => (
+                  <div 
+                    key={testimonial.id} 
+                    className="card border-t-4 border-orange-600 hover:-translate-y-1 transition-all bg-white/10 backdrop-blur-md border-white/10 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex text-orange-400 mb-3">
+                        {[...Array(testimonial.note)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-current" />
+                        ))}
                       </div>
-                      <div>
-                        <p className="font-semibold text-slate-900">{testimonial.name}</p>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <span>{testimonial.role}</span>
-                          <span>•</span>
-                          <span>{testimonial.company}</span>
+                      <p className="text-orange-100/90 mb-6 italic text-sm font-light leading-relaxed">
+                        &quot;{testimonial.texte}&quot;
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/5 pt-4 mt-auto">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-orange-600/20 border border-orange-500/20 rounded-full flex items-center justify-center text-orange-400 font-bold text-base">
+                          {testimonial.nom.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-white">{testimonial.nom}</p>
+                          <div className="flex flex-wrap items-center gap-1.5 text-xs text-orange-200/60 mt-0.5">
+                            <span>{testimonial.role}</span>
+                            {testimonial.role && testimonial.entreprise && <span>•</span>}
+                            <span>{testimonial.entreprise}</span>
+                          </div>
                         </div>
                       </div>
+                      <p className="text-[10px] text-orange-200/40 mt-3 flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {testimonial.date}
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {testimonial.date}
-                    </p>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

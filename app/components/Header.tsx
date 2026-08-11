@@ -26,6 +26,7 @@ export default function Header() {
     },
     { label: 'Nos Solutions', href: '/nos-solutions' },
     { label: 'Catalogue', href: '/catalogue' },
+    { label: 'Évaluation', href: '/evaluation' },
     { label: 'Avis', href: '/avis' },
     { label: 'Contact', href: '/contact' },
   ]

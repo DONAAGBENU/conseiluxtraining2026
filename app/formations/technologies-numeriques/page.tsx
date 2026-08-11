@@ -87,23 +87,23 @@ export default function TechnologiesNumeriques() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trainings.map((training, index) => (
-                <div key={index} className="card border-t-4 border-orange-600">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">{training.title}</h3>
-                  <p className="text-sm text-gray-600 mb-4 flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-orange-600" />
+                <div key={index} className="card border-t-4 border-orange-600 bg-white/10 backdrop-blur-md border-white/10">
+                  <h3 className="text-xl font-bold text-white mb-2">{training.title}</h3>
+                  <p className="text-sm text-orange-200/60 mb-4 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-orange-500" />
                     {training.duration}
                   </p>
                   <ul className="space-y-2">
                     {training.modules.map((module, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-sm">
-                        <CheckCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">{module}</span>
+                        <CheckCircle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-orange-100/90">{module}</span>
                       </li>
                     ))}
                   </ul>
                   <Link 
                     href="/contact"
-                    className="mt-4 inline-block bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-slate-900 transition-colors text-sm"
+                    className="mt-6 inline-block bg-orange-600 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-orange-500 transition-colors text-sm shadow-md shadow-orange-600/10 text-center"
                   >
                     Demander un devis
                   </Link>

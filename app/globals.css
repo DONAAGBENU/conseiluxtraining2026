@@ -36,25 +36,3 @@
     @apply bg-white/10 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 border border-white/5;
   }
 }
-
-@layer utilities {
-  .bg-white {
-    background-color: rgba(255,255,255,0.06) !important;
-  }
-
-  .bg-white\/10 {
-    background-color: rgba(255,255,255,0.10) !important;
-  }
-
-  .text-slate-900 {
-    color: #ffffff !important;
-  }
-
-  .text-gray-600 {
-    color: #d1d5db !important;
-  }
-
-  .border-gray-100 {
-    border-color: rgba(255,255,255,0.06) !important;
-  }
-}

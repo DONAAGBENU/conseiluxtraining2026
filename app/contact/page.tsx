@@ -54,49 +54,49 @@ export default function Contact() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Formulaire */}
-              <div className="card border-t-4 border-orange-600">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">Envoyez-nous un message</h2>
+              <div className="card border-t-4 border-orange-600 bg-white/10 backdrop-blur-md border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-6">Envoyez-nous un message</h2>
                 <form className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-orange-100 mb-1">
                       Nom et Prénom *
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-orange-600 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                       placeholder="Votre nom complet"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-orange-100 mb-1">
                       Email *
                     </label>
                     <input
                       type="email"
                       required
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-orange-600 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                       placeholder="votre@email.com"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-orange-100 mb-1">
                       Téléphone
                     </label>
                     <input
                       type="tel"
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-orange-600 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                       placeholder="+229 01 23 45 67"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-orange-100 mb-1">
                       Sujet
                     </label>
-                    <select className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-orange-600 outline-none">
+                    <select className="w-full px-4 py-2 bg-black/35 text-white border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none [&>option]:bg-slate-900">
                       <option value="">Sélectionnez un sujet</option>
                       <option value="formation">Demande de formation</option>
                       <option value="conseil">Conseil stratégique</option>
@@ -107,20 +107,20 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-orange-100 mb-1">
                       Message *
                     </label>
                     <textarea
                       rows={5}
                       required
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-orange-600 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                       placeholder="Décrivez votre demande..."
                     ></textarea>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-slate-900 transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-500 transition-colors flex items-center justify-center gap-2"
                   >
                     <Send className="w-5 h-5" />
                     Envoyer le message
@@ -130,18 +130,18 @@ export default function Contact() {
 
               {/* Informations de contact */}
               <div className="space-y-6">
-                <div className="card border-t-4 border-orange-600">
-                  <h3 className="text-xl font-bold text-slate-900 mb-4">Nos Bureaux</h3>
+                <div className="card border-t-4 border-orange-600 bg-white/10 backdrop-blur-md border-white/10">
+                  <h3 className="text-xl font-bold text-white mb-4">Nos Bureaux</h3>
                   <div className="space-y-4">
                     {offices.map((office, index) => (
-                      <div key={index} className="border-b border-gray-100 last:border-0 pb-3 last:pb-0">
-                        <h4 className="font-semibold text-slate-900">{office.city}, {office.country}</h4>
-                        <p className="text-sm text-gray-600 flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-orange-600" />
+                      <div key={index} className="border-b border-white/10 last:border-0 pb-3 last:pb-0">
+                        <h4 className="font-semibold text-orange-100">{office.city}, {office.country}</h4>
+                        <p className="text-sm text-orange-200/80 flex items-center gap-2 mt-1">
+                          <Phone className="w-4 h-4 text-orange-500" />
                           {office.phone}
                         </p>
-                        <p className="text-sm text-gray-600 flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-orange-600" />
+                        <p className="text-sm text-orange-200/80 flex items-center gap-2 mt-1">
+                          <MapPin className="w-4 h-4 text-orange-500" />
                           {office.address}
                         </p>
                       </div>
@@ -149,19 +149,19 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div className="card bg-orange-50 border-2 border-orange-600/20">
-                  <h3 className="text-xl font-bold text-slate-900 mb-4">Informations Générales</h3>
-                  <div className="space-y-3">
-                    <p className="flex items-center gap-3 text-sm">
-                      <Mail className="w-5 h-5 text-orange-600 flex-shrink-0" />
+                <div className="card border-t-4 border-orange-600 bg-white/10 backdrop-blur-md border-white/10">
+                  <h3 className="text-xl font-bold text-white mb-4">Informations Générales</h3>
+                  <div className="space-y-4">
+                    <p className="flex items-center gap-3 text-sm text-orange-100">
+                      <Mail className="w-5 h-5 text-orange-500 flex-shrink-0" />
                       <span>contact@conseiluxtraining.com</span>
                     </p>
-                    <p className="flex items-center gap-3 text-sm">
-                      <Clock className="w-5 h-5 text-orange-600 flex-shrink-0" />
+                    <p className="flex items-center gap-3 text-sm text-orange-100">
+                      <Clock className="w-5 h-5 text-orange-500 flex-shrink-0" />
                       <span>Lundi - Vendredi : 8h00 - 18h00</span>
                     </p>
-                    <div className="mt-4">
-                      <p className="text-sm text-gray-600">
+                    <div className="mt-4 border-t border-white/5 pt-4">
+                      <p className="text-sm text-orange-200/90 font-medium">
                         📍 Présence multi-pays : Bénin, Togo, Côte d'Ivoire, Niger, France
                       </p>
                     </div>

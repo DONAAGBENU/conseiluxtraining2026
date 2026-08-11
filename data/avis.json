@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "nom": "Marie Kouassi",
+    "role": "Directrice RH",
+    "entreprise": "Groupe SIB",
+    "texte": "Grâce à ConseiluxTraining, nous avons certifié 50 collaborateurs en gestion de projet. Un accompagnement exceptionnel.",
+    "note": 5,
+    "date": "15 mai 2024",
+    "logo": "/images/partners/sib.png",
+    "approuve": true,
+    "createdAt": "2026-08-11T12:04:49.858Z"
+  },
+  {
+    "id": "2",
+    "nom": "Jean Adé",
+    "role": "CEO",
+    "entreprise": "Tech Solutions Africa",
+    "texte": "La formation en cybersécurité a transformé notre approche. Nos équipes sont désormais certifiées.",
+    "note": 5,
+    "date": "12 avril 2024",
+    "logo": "/images/partners/tech.png",
+    "approuve": true,
+    "createdAt": "2026-08-11T12:04:49.858Z"
+  }
+]

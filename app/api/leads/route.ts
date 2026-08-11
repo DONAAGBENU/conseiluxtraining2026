@@ -31,12 +31,12 @@ function writeLeads(leads: any[]) {
   fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), 'utf-8')
 }
 
-// POST — Ajouter un nouveau lead
+// POST — Ajouter un nouveau lead/inscription
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    const { nom, email, telephone, entreprise, source, date } = body
+    const { nom, email, telephone, entreprise, source, date, pays, ville, formationTitre, message } = body
 
     // Validation basique
     if (!nom || !email || !telephone) {
@@ -57,6 +57,10 @@ export async function POST(request: NextRequest) {
       entreprise: entreprise || '',
       source: source || 'catalogue',
       date: date || new Date().toISOString(),
+      pays: pays || '',
+      ville: ville || '',
+      formationTitre: formationTitre || '',
+      message: message || '',
     }
 
     leads.push(newLead)
