@@ -25,14 +25,25 @@ export default function AdminLayout({
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/auth/check')
-      const data = await res.json()
-      if (data.authenticated) {
-        setAuthenticated(true)
-      } else {
+      // Ajout d'un timeout de 5 secondes pour éviter le chargement infini
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      
+      const res = await fetch('/api/auth/check', {
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!res.ok) {
         setAuthenticated(false)
+        return
       }
-    } catch {
+      
+      const data = await res.json()
+      setAuthenticated(data.authenticated || false)
+    } catch (error) {
+      console.error('Erreur checkAuth:', error)
       setAuthenticated(false)
     } finally {
       setLoading(false)

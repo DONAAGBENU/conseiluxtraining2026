@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { CheckCircle, Star, Trash2, Loader2, MessageSquare } from 'lucide-react'
+import { CheckCircle, Star, Trash2, Loader2, MessageSquare, Mail, Phone } from 'lucide-react'
 
 interface Avis {
   id: string
@@ -14,6 +14,8 @@ interface Avis {
   logo: string
   approuve: boolean
   createdAt: string
+  email?: string
+  telephone?: string
 }
 
 export default function AdminAvis() {
@@ -26,7 +28,20 @@ export default function AdminAvis() {
 
   const fetchAvis = async () => {
     try {
-      const res = await fetch('/api/avis')
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      
+      const res = await fetch('/api/avis', {
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!res.ok) {
+        console.error('Erreur HTTP lors du chargement des avis')
+        return
+      }
+      
       const data = await res.json()
       setAvis(data.avis || [])
     } catch (err) {
@@ -66,6 +81,18 @@ export default function AdminAvis() {
         alert('Une erreur est survenue')
       }
     }
+  }
+
+  const getEmailUrl = (email: string, name: string) => {
+    const subject = `Votre avis sur ConseiluxTraining`
+    const body = `Bonjour ${name},\n\nNous avons bien reçu votre avis sur ConseiluxTraining et nous vous en remercions.\n\nCordialement,\nL'équipe ConseiluxTraining`
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }
+
+  const getWhatsAppUrl = (phone: string, name: string) => {
+    const cleanPhone = phone.replace(/[^0-9]/g, '')
+    const msg = `Bonjour ${name}, nous avons bien reçu votre avis sur ConseiluxTraining. Merci pour votre feedback !`
+    return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`
   }
 
   return (
@@ -121,7 +148,7 @@ export default function AdminAvis() {
                   </div>
                 </div>
                 
-                <div className="flex gap-2 self-end md:self-center border-t border-white/5 md:border-0 pt-4 md:pt-0 w-full md:w-auto justify-end">
+                <div className="flex gap-2 self-end md:self-center border-t border-white/5 md:border-0 pt-4 md:pt-0 w-full md:w-auto justify-end flex-wrap">
                   {!a.approuve && (
                     <button
                       onClick={() => handleApprouver(a.id)}
@@ -131,6 +158,26 @@ export default function AdminAvis() {
                       <CheckCircle className="w-5 h-5" />
                       <span className="md:hidden lg:inline">Approuver</span>
                     </button>
+                  )}
+                  {a.email && (
+                    <a
+                      href={getEmailUrl(a.email, a.nom)}
+                      className="p-3 text-blue-400 hover:text-white hover:bg-blue-600/20 rounded-2xl transition-all duration-200 border border-blue-500/10"
+                      title="Contacter par email"
+                    >
+                      <Mail className="w-5 h-5" />
+                    </a>
+                  )}
+                  {a.telephone && (
+                    <a
+                      href={getWhatsAppUrl(a.telephone, a.nom)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 text-green-400 hover:text-white hover:bg-green-600/20 rounded-2xl transition-all duration-200 border border-green-500/10"
+                      title="Contacter par WhatsApp"
+                    >
+                      <Phone className="w-5 h-5" />
+                    </a>
                   )}
                   <button
                     onClick={() => handleSupprimer(a.id)}

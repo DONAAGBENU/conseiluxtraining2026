@@ -21,22 +21,51 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const [resFormations, resDates, resAvis, resLeads] = await Promise.all([
-        fetch('/api/formations'),
-        fetch('/api/dates'),
-        fetch('/api/avis'),
-        fetch('/api/leads'),
+      // Ajout de timeouts pour éviter le chargement infini
+      const fetchWithTimeout = async (url: string, timeout = 3000) => {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), timeout)
+        
+        try {
+          const res = await fetch(url, { signal: controller.signal })
+          clearTimeout(timeoutId)
+          
+          if (!res.ok) {
+            console.error(`Erreur HTTP ${res.status} pour ${url}`)
+            return null
+          }
+          
+          // Vérifier que la réponse contient du contenu avant de parser
+          const text = await res.text()
+          if (!text || text.trim() === '') {
+            console.error(`Réponse vide pour ${url}`)
+            return null
+          }
+          
+          try {
+            return JSON.parse(text)
+          } catch (parseError) {
+            console.error(`Erreur JSON parsing pour ${url}:`, parseError)
+            return null
+          }
+        } catch (error) {
+          clearTimeout(timeoutId)
+          console.error(`Erreur fetch ${url}:`, error)
+          return null
+        }
+      }
+
+      const [dataFormations, dataDates, dataAvis, dataLeads] = await Promise.all([
+        fetchWithTimeout('/api/formations'),
+        fetchWithTimeout('/api/dates'),
+        fetchWithTimeout('/api/avis'),
+        fetchWithTimeout('/api/leads'),
       ])
 
-      const dataFormations = await resFormations.json()
-      const dataDates = await resDates.json()
-      const dataAvis = await resAvis.json()
-      const dataLeads = await resLeads.json()
-
-      const listFormations = dataFormations.formations || []
-      const listDates = dataDates.dates || []
-      const listAvis = dataAvis.avis || []
-      const listLeads = dataLeads.leads || []
+      const listFormations = dataFormations?.formations || []
+      const listDates = dataDates?.dates || []
+      const listAvis = dataAvis?.avis || []
+      const listLeads = dataLeads?.leads || []
 
       setStats({
         formations: listFormations.length,

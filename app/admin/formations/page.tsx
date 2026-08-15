@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Trash2, X, Loader2, Award, BookOpen } from 'lucide-react'
+import { Plus, Trash2, X, Loader2, Award, BookOpen, Edit } from 'lucide-react'
 
 interface Formation {
   id: string
@@ -19,6 +19,8 @@ export default function AdminFormations() {
   const [formations, setFormations] = useState<Formation[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [editMode, setEditMode] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [formLoading, setFormLoading] = useState(false)
   const [formData, setFormData] = useState({
     titre: '',
@@ -31,13 +33,12 @@ export default function AdminFormations() {
   })
 
   const categories = [
-    'Technologies & Cybersécurité',
-    'Gestion de Projet',
-    'Management & Leadership',
-    'Filières Métiers',
-    'Performance Commerciale',
-    'Langues',
-    'Facilitation Professionnelle'
+    'Technologie numérique',
+    'Gestion de projet',
+    'Management et leadership',
+    'Performance commerciale',
+    'Filières métiers',
+    'Langues'
   ]
 
   useEffect(() => {
@@ -46,7 +47,20 @@ export default function AdminFormations() {
 
   const fetchFormations = async () => {
     try {
-      const res = await fetch('/api/formations')
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      
+      const res = await fetch('/api/formations', {
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!res.ok) {
+        console.error('Erreur HTTP lors du chargement des formations')
+        return
+      }
+      
       const data = await res.json()
       setFormations(data.formations || [])
     } catch (err) {
@@ -66,24 +80,59 @@ export default function AdminFormations() {
     }
 
     try {
-      const res = await fetch('/api/formations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      let res
+      if (editMode && editingId) {
+        // Update existing formation
+        res = await fetch(`/api/formations/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+      } else {
+        // Create new formation
+        res = await fetch('/api/formations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+      }
 
       if (res.ok) {
         await fetchFormations()
         setShowForm(false)
+        setEditMode(false)
+        setEditingId(null)
         setFormData({ titre: '', description: '', categorie: '', duree: '', prix: '', certifiante: false, modules: [''] })
       } else {
-        alert("Erreur lors de la création de la formation")
+        alert(editMode ? "Erreur lors de la modification de la formation" : "Erreur lors de la création de la formation")
       }
     } catch {
       alert("Une erreur est survenue")
     } finally {
       setFormLoading(false)
     }
+  }
+
+  const handleEdit = (formation: Formation) => {
+    setFormData({
+      titre: formation.titre,
+      description: formation.description,
+      categorie: formation.categorie,
+      duree: formation.duree,
+      prix: formation.prix,
+      certifiante: formation.certifiante,
+      modules: formation.modules.length > 0 ? formation.modules : ['']
+    })
+    setEditingId(formation.id)
+    setEditMode(true)
+    setShowForm(true)
+  }
+
+  const resetForm = () => {
+    setFormData({ titre: '', description: '', categorie: '', duree: '', prix: '', certifiante: false, modules: [''] })
+    setEditMode(false)
+    setEditingId(null)
+    setShowForm(false)
   }
 
   const handleDelete = async (id: string) => {
@@ -169,6 +218,14 @@ export default function AdminFormations() {
               </div>
               <div className="flex gap-2 self-end md:self-center">
                 <button
+                  onClick={() => handleEdit(formation)}
+                  className="p-3 text-blue-400 hover:text-white hover:bg-blue-600/20 rounded-2xl transition-all duration-200 border border-blue-500/10 flex items-center gap-2 text-sm font-semibold"
+                  title="Modifier"
+                >
+                  <Edit className="w-5 h-5" />
+                  <span className="hidden sm:inline">Modifier</span>
+                </button>
+                <button
                   onClick={() => handleDelete(formation.id)}
                   className="p-3 text-red-400 hover:text-white hover:bg-red-600/20 rounded-2xl transition-all duration-200 border border-red-500/10"
                   title="Supprimer"
@@ -186,9 +243,11 @@ export default function AdminFormations() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-slate-900 border border-white/10 rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">Ajouter une formation</h2>
+              <h2 className="text-2xl font-bold text-white">
+                {editMode ? 'Modifier la formation' : 'Ajouter une formation'}
+              </h2>
               <button 
-                onClick={() => setShowForm(false)} 
+                onClick={resetForm} 
                 className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
               >
                 <X className="w-6 h-6" />

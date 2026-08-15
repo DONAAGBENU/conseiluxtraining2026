@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
-import { CheckCircle, Clock, Loader2 } from 'lucide-react'
+import { CheckCircle, Clock, Loader2, Mail, MessageSquare, Send } from 'lucide-react'
 import Link from 'next/link'
 
 export default function FormationDetail() {
@@ -12,6 +12,19 @@ export default function FormationDetail() {
   const slug = params?.slug as string
   const [formation, setFormation] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [formData, setFormData] = useState({
+    nom: '',
+    email: '',
+    telephone: '',
+    entreprise: '',
+    pays: '',
+    ville: '',
+    message: '',
+    contactPreference: 'email' // 'email' or 'whatsapp'
+  })
+  const [formLoading, setFormLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   useEffect(() => {
     if (!slug) return
@@ -27,6 +40,48 @@ export default function FormationDetail() {
       .catch(err => console.error('Erreur chargement formation:', err))
       .finally(() => setLoading(false))
   }, [slug])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormLoading(true)
+
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          source: 'inscription',
+          formationTitre: formation.titre,
+          date: new Date().toISOString()
+        })
+      })
+
+      if (res.ok) {
+        setSuccess(true)
+        setFormData({
+          nom: '',
+          email: '',
+          telephone: '',
+          entreprise: '',
+          pays: '',
+          ville: '',
+          message: '',
+          contactPreference: 'email'
+        })
+        setTimeout(() => {
+          setSuccess(false)
+          setShowForm(false)
+        }, 3000)
+      } else {
+        alert('Erreur lors de l\'inscription')
+      }
+    } catch (err) {
+      alert('Une erreur est survenue')
+    } finally {
+      setFormLoading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -97,17 +152,175 @@ export default function FormationDetail() {
                 </ul>
               </div>
 
-              <Link 
-                href="/contact"
+              <button 
+                onClick={() => setShowForm(true)}
                 className="mt-8 inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-orange-500 transition-colors shadow-lg shadow-orange-600/10"
               >
-                Demander un devis
-              </Link>
+                S'inscrire à cette formation
+              </button>
             </div>
           </div>
         </section>
       </main>
       <Footer />
+
+      {/* Modal d'inscription */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-900 border border-white/10 rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white">Inscription - {formation.titre}</h2>
+              <button 
+                onClick={() => setShowForm(false)} 
+                className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
+              >
+                ×
+              </button>
+            </div>
+
+            {success && (
+              <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                <p className="text-green-400 text-sm font-medium">Inscription envoyée avec succès ! Nous vous contacterons bientôt.</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-orange-100 mb-2">Nom et Prénom *</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  placeholder="Votre nom complet"
+                  value={formData.nom}
+                  onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Email *</label>
+                  <input
+                    type="email"
+                    required
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="votre@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Téléphone *</label>
+                  <input
+                    type="tel"
+                    required
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="+228 90 54 64 64"
+                    value={formData.telephone}
+                    onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-orange-100 mb-2">Entreprise</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  placeholder="Nom de votre entreprise"
+                  value={formData.entreprise}
+                  onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Pays</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="Togo"
+                    value={formData.pays}
+                    onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Ville</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="Lomé"
+                    value={formData.ville}
+                    onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-orange-100 mb-2">Message (optionnel)</label>
+                <textarea
+                  rows={3}
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  placeholder="Questions supplémentaires..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-orange-100 mb-3">Préférence de contact *</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, contactPreference: 'email' })}
+                    className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${
+                      formData.contactPreference === 'email'
+                        ? 'border-orange-500 bg-orange-500/10'
+                        : 'border-white/10 bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    <Mail className="w-6 h-6 text-orange-400" />
+                    <span className="text-sm font-medium">Email</span>
+                    <span className="text-xs text-orange-200/50">contact@conseiluxtraining.com</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, contactPreference: 'whatsapp' })}
+                    className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${
+                      formData.contactPreference === 'whatsapp'
+                        ? 'border-green-500 bg-green-500/10'
+                        : 'border-white/10 bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    <MessageSquare className="w-6 h-6 text-green-400" />
+                    <span className="text-sm font-medium">WhatsApp</span>
+                    <span className="text-xs text-orange-200/50">+228 90 54 64 64</span>
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={formLoading}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors mt-4"
+              >
+                {formLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Envoi en cours...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Envoyer mon inscription
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

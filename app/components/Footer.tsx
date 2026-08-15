@@ -40,11 +40,11 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-orange-600">Nos Formations</h4>
             <ul className="space-y-2 text-gray-400 text-sm">
-              <li><Link href="/formations/technologies-numeriques" className="hover:text-white transition-colors">Technologies & Cybersécurité</Link></li>
-              <li><Link href="/formations/gestion-projet" className="hover:text-white transition-colors">Gestion de Projet</Link></li>
-              <li><Link href="/formations/management-leadership" className="hover:text-white transition-colors">Management & Leadership</Link></li>
-              <li><Link href="/formations/filieres-metiers" className="hover:text-white transition-colors">Filières Métiers</Link></li>
-              <li><Link href="/formations/performance-commerciale" className="hover:text-white transition-colors">Performance Commerciale</Link></li>
+              <li><Link href="/formations/technologies-numeriques" className="hover:text-white transition-colors">Technologie numérique</Link></li>
+              <li><Link href="/formations/gestion-projet" className="hover:text-white transition-colors">Gestion de projet</Link></li>
+              <li><Link href="/formations/management-leadership" className="hover:text-white transition-colors">Management et leadership</Link></li>
+              <li><Link href="/formations/filieres-metiers" className="hover:text-white transition-colors">Filières métiers</Link></li>
+              <li><Link href="/formations/performance-commerciale" className="hover:text-white transition-colors">Performance commerciale</Link></li>
               <li><Link href="/formations/langues" className="hover:text-white transition-colors">Langues</Link></li>
             </ul>
           </div>
@@ -85,8 +85,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm relative">
           <p>© 2026 ConseiluxTraining & Development. Tous droits réservés.</p>
+          <div className="absolute bottom-0 right-4 text-orange-400/60 text-xs font-medium">
+            by DONA
+          </div>
         </div>
       </div>
     </footer>

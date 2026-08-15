@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
-import { Star, Calendar, MessageSquare, Loader2 } from 'lucide-react'
+import { Star, Calendar, MessageSquare, Loader2, X, Send, CheckCircle } from 'lucide-react'
 
 interface Testimonial {
   id: string
@@ -20,6 +20,18 @@ interface Testimonial {
 export default function Avis() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [formData, setFormData] = useState({
+    nom: '',
+    role: '',
+    entreprise: '',
+    texte: '',
+    note: 5,
+    email: '',
+    telephone: ''
+  })
+  const [formLoading, setFormLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   useEffect(() => {
     fetchApprovedAvis()
@@ -34,6 +46,39 @@ export default function Avis() {
       console.error('Erreur lors du chargement des avis:', err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormLoading(true)
+
+    try {
+      const res = await fetch('/api/avis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          date: new Date().toLocaleDateString('fr-FR'),
+          logo: '',
+          approuve: false
+        })
+      })
+
+      if (res.ok) {
+        setSuccess(true)
+        setFormData({ nom: '', role: '', entreprise: '', texte: '', note: 5, email: '', telephone: '' })
+        setTimeout(() => {
+          setSuccess(false)
+          setShowForm(false)
+        }, 3000)
+      } else {
+        alert('Erreur lors de l\'envoi de l\'avis')
+      }
+    } catch (err) {
+      alert('Une erreur est survenue')
+    } finally {
+      setFormLoading(false)
     }
   }
 
@@ -53,6 +98,16 @@ export default function Avis() {
 
         <section className="py-16">
           <div className="container mx-auto px-4">
+            <div className="flex justify-center mb-8">
+              <button
+                onClick={() => setShowForm(true)}
+                className="bg-orange-600 hover:bg-orange-500 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg shadow-orange-600/10"
+              >
+                <MessageSquare className="w-5 h-5" />
+                Ajouter un avis
+              </button>
+            </div>
+
             {loading ? (
               <div className="flex items-center justify-center min-h-[30vh]">
                 <Loader2 className="w-10 h-10 animate-spin text-orange-500" />
@@ -108,6 +163,142 @@ export default function Avis() {
       </main>
 
       <Footer />
+
+      {/* Modal d'ajout d'avis */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-900 border border-white/10 rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white">Partager votre expérience</h2>
+              <button 
+                onClick={() => setShowForm(false)} 
+                className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {success && (
+              <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                <p className="text-green-400 text-sm font-medium">Avis envoyé avec succès ! Il sera publié après modération.</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-orange-100 mb-2">Votre nom *</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  placeholder="Votre nom complet"
+                  value={formData.nom}
+                  onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Votre rôle</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="ex: Directeur, Consultant..."
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Entreprise</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="Nom de votre entreprise"
+                    value={formData.entreprise}
+                    onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Email (optionnel)</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="votre@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">Téléphone (optionnel)</label>
+                  <input
+                    type="tel"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="+228 90 54 64 64"
+                    value={formData.telephone}
+                    onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-orange-100 mb-2">Votre note *</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, note: star })}
+                      className="p-2 transition-all"
+                    >
+                      <Star 
+                        className={`w-8 h-8 ${
+                          star <= formData.note 
+                            ? 'text-orange-400 fill-current' 
+                            : 'text-orange-200/40'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-orange-100 mb-2">Votre avis *</label>
+                <textarea
+                  rows={4}
+                  required
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  placeholder="Partagez votre expérience avec ConseiluxTraining..."
+                  value={formData.texte}
+                  onChange={(e) => setFormData({ ...formData, texte: e.target.value })}
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                disabled={formLoading}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors mt-4"
+              >
+                {formLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Envoi en cours...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Envoyer mon avis
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

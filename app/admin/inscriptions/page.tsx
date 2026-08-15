@@ -15,6 +15,7 @@ interface Lead {
   ville?: string
   formationTitre?: string
   message?: string
+  contactPreference?: string
 }
 
 export default function AdminInscriptions() {
@@ -29,11 +30,27 @@ export default function AdminInscriptions() {
 
   const fetchLeads = async () => {
     try {
-      const res = await fetch('/api/leads')
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      
+      const res = await fetch('/api/leads', {
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!res.ok) {
+        const errorText = await res.text()
+        console.error(`Erreur HTTP ${res.status} lors du chargement des leads:`, errorText)
+        setLeads([]) // Set empty array on error to avoid UI breaking
+        return
+      }
+      
       const data = await res.json()
       setLeads(data.leads || [])
     } catch (err) {
       console.error('Erreur lors du chargement des leads/inscriptions:', err)
+      setLeads([]) // Set empty array on error to avoid UI breaking
     } finally {
       setLoading(false)
     }
@@ -201,6 +218,18 @@ export default function AdminInscriptions() {
                     <div className="bg-orange-500/10 border border-orange-500/20 rounded-2xl p-4">
                       <h4 className="font-semibold text-orange-400 text-sm">Formation demandée :</h4>
                       <p className="text-white text-base font-medium mt-1">{lead.formationTitre}</p>
+                      {lead.contactPreference && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <span className="text-xs font-semibold text-orange-400">Préférence de contact :</span>
+                          <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
+                            lead.contactPreference === 'whatsapp' 
+                              ? 'bg-green-500/20 text-green-400' 
+                              : 'bg-blue-500/20 text-blue-400'
+                          }`}>
+                            {lead.contactPreference === 'whatsapp' ? 'WhatsApp' : 'Email'}
+                          </span>
+                        </div>
+                      )}
                       {lead.message && (
                         <div className="mt-2 border-t border-orange-500/10 pt-2">
                           <h4 className="font-semibold text-orange-400 text-xs">Message du client :</h4>

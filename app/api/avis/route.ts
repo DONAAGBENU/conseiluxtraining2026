@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { nom, role, entreprise, texte, note, logo } = body
+    const { nom, role, entreprise, texte, note, logo, email, telephone } = body
 
     if (!nom || !texte || !note) {
       return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
@@ -89,6 +89,8 @@ export async function POST(request: NextRequest) {
       note: Number(note) || 5,
       date: new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date()),
       logo: logo || '',
+      email: email || '',
+      telephone: telephone || '',
       approuve: false, // Doit être approuvé par l'admin
       createdAt: new Date().toISOString()
     }
