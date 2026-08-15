@@ -22,10 +22,11 @@ function writeMessages(messages: any[]) {
   fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2), 'utf-8')
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const messages = readMessages()
-    const index = messages.findIndex((m: any) => m.id === params.id)
+    const index = messages.findIndex((m: any) => m.id === id)
     
     if (index === -1) {
       return NextResponse.json({ error: 'Message non trouvé' }, { status: 404 })
@@ -40,10 +41,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const messages = readMessages()
-    const filtered = messages.filter((m: any) => m.id !== params.id)
+    const filtered = messages.filter((m: any) => m.id !== id)
     writeMessages(filtered)
 
     return NextResponse.json({ success: true })
