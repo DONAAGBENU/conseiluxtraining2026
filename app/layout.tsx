@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
+import { LanguageProvider } from './components/LanguageProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 const poppins = Poppins({ 
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
   title: 'ConseiluxTraining & Development - Formation, Conseil, Recrutement',
   description: 'Cabinet de conseil spécialisé en conseil stratégique, formation professionnelle, développement des compétences et recrutement sur mesure.',
   keywords: 'formation, conseil, recrutement, certification, TOEIC, TOEFL, GRE, management, leadership, cybersécurité',
+  icons: {
+    icon: '/images/logo conseilux vectoriel  [Récupéré]_Plan de travail 1.png',
+    apple: '/images/logo conseilux vectoriel  [Récupéré]_Plan de travail 1.png',
+  },
 }
 
 export default function RootLayout({
@@ -21,9 +26,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr">
+    <html lang="fr" data-scroll-behavior="smooth">
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/logo conseilux vectoriel  [Récupéré]_Plan de travail 1.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/images/logo conseilux vectoriel  [Récupéré]_Plan de travail 1.png" />
       </head>
       <body className={`${inter.className} ${poppins.variable}`}>
         <div className="relative min-h-screen">
@@ -37,7 +43,9 @@ export default function RootLayout({
           <div className="fixed inset-0 -z-10 bg-slate-900/70" />
 
           <div className="relative">
-            {children}
+            <LanguageProvider>
+              {children}
+            </LanguageProvider>
           </div>
         </div>
       </body>

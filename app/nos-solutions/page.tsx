@@ -1,11 +1,10 @@
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { 
-  Package, Settings, Database, Cloud, ShoppingCart, 
-  Briefcase, Users, FileText, CheckCircle, ArrowRight,
-  Laptop, Building, TrendingUp, Award
+  CheckCircle, ArrowRight
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function NosSolutions() {
   const softwareSolutions = [
@@ -13,42 +12,28 @@ export default function NosSolutions() {
       name: 'SAP',
       description: 'ERP complet pour la gestion d\'entreprise',
       features: ['Finance & Comptabilité', 'RH & Paie', 'Logistique', 'Ventes'],
-      icon: <Settings className="w-12 h-12" />,
+      image: '/images/conseil.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
     },
     {
       name: 'Sage 100',
       description: 'Gestion commerciale et comptabilité',
       features: ['Comptabilité', 'Facturation', 'Gestion de stock', 'CRM'],
-      icon: <Database className="w-12 h-12" />,
+      image: '/images/formation.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
     },
     {
       name: 'Microsoft 365',
       description: 'Suite collaborative et productive',
       features: ['Teams', 'SharePoint', 'Power BI', 'Office'],
-      icon: <Cloud className="w-12 h-12" />,
+      image: '/images/recrutement.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
     },
     {
       name: 'Power Platform',
       description: 'Automatisation et analyse de données',
       features: ['Power BI', 'Power Apps', 'Power Automate', 'Power Virtual Agents'],
-      icon: <TrendingUp className="w-12 h-12" />,
-      color: 'border-orange-200 hover:border-orange-600'
-    },
-    {
-      name: 'EBP',
-      description: 'Solutions de gestion pour TPE/PME',
-      features: ['Comptabilité', 'Paie', 'Gestion commerciale', 'Immobilisations'],
-      icon: <Briefcase className="w-12 h-12" />,
-      color: 'border-orange-200 hover:border-orange-600'
-    },
-    {
-      name: 'Azure',
-      description: 'Cloud computing et infrastructure',
-      features: ['VM', 'Stockage', 'Sécurité', 'IA'],
-      icon: <Laptop className="w-12 h-12" />,
+      image: '/images/accompagnement.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
     },
   ]
@@ -129,7 +114,15 @@ export default function NosSolutions() {
               {softwareSolutions.map((solution, index) => (
                 <div key={index} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
                   <div>
-                    <div className="text-orange-500 mb-4">{solution.icon}</div>
+                    <div className="text-orange-500 mb-4 h-16 w-16 rounded-lg overflow-hidden">
+                      <Image 
+                        src={solution.image} 
+                        alt={solution.name}
+                        width={64}
+                        height={64}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{solution.name}</h3>
                     <p className="text-orange-200/80 mb-4 text-sm">{solution.description}</p>
                     <ul className="space-y-2">

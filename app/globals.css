@@ -35,4 +35,21 @@
   .card {
     @apply bg-white/10 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 border border-white/5;
   }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-33.33%);
+    }
+  }
+
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+  }
+
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
 }

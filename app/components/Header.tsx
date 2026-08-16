@@ -2,33 +2,64 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Menu, X, Phone, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { Menu, X, Phone, ChevronDown, Globe } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useLanguage } from './LanguageProvider'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [animatedText, setAnimatedText] = useState('')
+  const { language, setLanguage, t } = useLanguage()
+  const fullText = 'Conseilux Training and Development'
+
+  useEffect(() => {
+    const animateText = () => {
+      let index = 0
+      setAnimatedText('')
+      
+      const interval = setInterval(() => {
+        if (index < fullText.length) {
+          setAnimatedText(fullText.slice(0, index + 1))
+          index++
+        } else {
+          clearInterval(interval)
+        }
+      }, 100)
+      
+      return () => clearInterval(interval)
+    }
+    
+    // Animation initiale
+    animateText()
+    
+    // Rejouer l'animation toutes les 10 secondes
+    const repeatInterval = setInterval(() => {
+      animateText()
+    }, 10000)
+    
+    return () => clearInterval(repeatInterval)
+  }, [])
 
   const navItems = [
-    { label: 'Accueil', href: '/' },
+    { label: t.nav.home, href: '/' },
     { 
-      label: 'Formations', 
+      label: t.nav.formations, 
       href: '/formations',
       dropdown: [
-        { label: 'Technologies & Cybersécurité', href: '/formations/technologies-numeriques' },
-        { label: 'Gestion de Projet', href: '/formations/gestion-projet' },
-        { label: 'Management & Leadership', href: '/formations/management-leadership' },
-        { label: 'Filières Métiers', href: '/formations/filieres-metiers' },
-        { label: 'Performance Commerciale', href: '/formations/performance-commerciale' },
-        { label: 'Langues', href: '/formations/langues' },
-        { label: 'Facilitation Professionnelle', href: '/formations/facilitation-professionnelle' },
+        { label: t.categories.technology, href: '/formations/technologies-numeriques' },
+        { label: t.categories.projectManagement, href: '/formations/gestion-projet' },
+        { label: t.categories.management, href: '/formations/management-leadership' },
+        { label: t.categories.careers, href: '/formations/filieres-metiers' },
+        { label: t.categories.commercial, href: '/formations/performance-commerciale' },
+        { label: t.categories.languages, href: '/formations/langues' },
       ]
     },
-    { label: 'Nos Solutions', href: '/nos-solutions' },
-    { label: 'Catalogue', href: '/catalogue' },
-    { label: 'Évaluation', href: '/evaluation' },
-    { label: 'Avis', href: '/avis' },
-    { label: 'Contact', href: '/contact' },
+    { label: t.nav.solutions, href: '/nos-solutions' },
+    { label: t.nav.catalogue, href: '/catalogue' },
+    { label: t.nav.evaluation, href: '/evaluation' },
+    { label: t.nav.reviews, href: '/avis' },
+    { label: t.nav.contact, href: '/contact' },
   ]
 
   const phoneNumbers = [
@@ -51,8 +82,14 @@ export default function Header() {
                 alt="Logo Conseilux Training and Developement"
                 width={56}
                 height={56}
-                className="object-contain"
+                className="object-contain w-full h-full"
               />
+            </div>
+            <div className="ml-3 hidden md:block">
+              <h1 className="text-lg font-bold text-white leading-tight" style={{ width: '240px', minHeight: '24px' }}>
+                {animatedText}
+                <span className="animate-pulse">|</span>
+              </h1>
             </div>
           </Link>
 
@@ -99,12 +136,24 @@ export default function Header() {
                 )}
               </li>
             ))}
+            
+            {/* Language Switcher */}
+            <li className="flex items-center gap-2">
+              <button
+                onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+                className="flex items-center gap-2 text-orange-100 hover:text-white transition-colors font-medium px-3 py-2 rounded-lg border border-white/20 hover:border-orange-500/50"
+              >
+                <Globe className="w-4 h-4" />
+                {language === 'fr' ? 'FR' : 'EN'}
+              </button>
+            </li>
+            
             <li>
               <Link 
                 href="/catalogue"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-7 py-3 rounded-full font-semibold shadow-lg shadow-orange-500/30 hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
               >
-                Télécharger Catalogue
+                {t.nav.downloadCatalogue}
               </Link>
             </li>
           </ul>
@@ -151,6 +200,17 @@ export default function Header() {
                 )}
               </div>
             ))}
+            
+            {/* Language Switcher Mobile */}
+            <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+              <button
+                onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+                className="flex items-center gap-2 text-orange-100 hover:text-white transition-colors font-medium px-3 py-2 rounded-lg border border-white/20 hover:border-orange-500/50"
+              >
+                <Globe className="w-4 h-4" />
+                {language === 'fr' ? 'FR' : 'EN'}
+              </button>
+            </div>
             
             {/* Numéros mobile */}
             {/* numéros supérieurs retirés */}
