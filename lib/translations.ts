@@ -68,7 +68,19 @@ export const translations = {
       certified: 'Certifiante',
       modules: 'Modules',
       enroll: 'S\'inscrire',
-      viewMore: 'Voir plus'
+      viewMore: 'Voir plus',
+      category: 'Catégorie',
+      objectives: 'Objectifs',
+      targetAudience: 'Public cible',
+      prerequisites: 'Prérequis',
+      methodology: 'Méthodologie',
+      certification: 'Certification',
+      schedule: 'Planning',
+      location: 'Lieu',
+      trainer: 'Formateur',
+      availableSessions: 'Sessions disponibles',
+      registerNow: 'S\'inscrire maintenant',
+      downloadProgram: 'Télécharger le programme'
     },
     // Solutions
     solutions: {
@@ -79,7 +91,19 @@ export const translations = {
       learnMore: 'En savoir plus',
       ctaTitle: 'Besoin d\'une solution sur mesure ?',
       ctaSubtitle: 'Contactez-nous pour un diagnostic gratuit de vos besoins',
-      consultUs: 'Nous consulter'
+      consultUs: 'Nous consulter',
+      service1: 'Conseil & Choix de la solution',
+      service1Desc: 'Nous vous aidons à sélectionner la solution la plus adaptée à vos besoins',
+      service2: 'Paramétrage & Intégration',
+      service2Desc: 'Configuration sur mesure et intégration avec vos systèmes existants',
+      service3: 'Migration des données',
+      service3Desc: 'Reprise et migration sécurisée de vos données',
+      service4: 'Formation utilisateurs',
+      service4Desc: 'Formation complète de vos équipes sur les nouveaux outils',
+      service5: 'Support & Maintenance',
+      service5Desc: 'Assistance continue et maintenance de vos solutions',
+      service6: 'Accompagnement au changement',
+      service6Desc: 'Support pour l\'adoption et la transition vers les nouveaux outils'
     },
     // Contact
     contact: {
@@ -93,7 +117,64 @@ export const translations = {
       message: 'Message',
       send: 'Envoyer le message',
       offices: 'Nos Bureaux',
-      generalInfo: 'Informations Générales'
+      generalInfo: 'Informations Générales',
+      successMessage: 'Message envoyé avec succès !',
+      errorMessage: 'Erreur lors de l\'envoi du message'
+    },
+    // Avis
+    reviews: {
+      title: 'Avis Clients',
+      subtitle: 'Découvrez ce que nos clients disent de nous',
+      noReviews: 'Aucun avis disponible pour le moment',
+      addReview: 'Ajouter un avis',
+      reviewFormTitle: 'Partagez votre expérience',
+      yourName: 'Votre nom',
+      yourRating: 'Votre note',
+      yourComment: 'Votre commentaire',
+      submitReview: 'Soumettre votre avis',
+      averageRating: 'Note moyenne',
+      totalReviews: 'avis',
+      stars: 'étoiles'
+    },
+    // Catalogue
+    catalogue: {
+      title: 'Catalogue des Formations',
+      subtitle: 'Téléchargez notre catalogue complet',
+      download: 'Télécharger le catalogue',
+      description: 'Découvrez toutes nos formations certifiantes et nos programmes sur mesure',
+      fields: {
+        name: 'Nom complet',
+        email: 'Email professionnel',
+        company: 'Entreprise',
+        phone: 'Téléphone',
+        submit: 'Télécharger le catalogue'
+      }
+    },
+    // Evaluation
+    evaluation: {
+      title: 'Évaluation d\'Anglais',
+      subtitle: 'Évaluez votre niveau d\'anglais professionnel',
+      description: 'Testez vos compétences en anglais et découvrez votre niveau selon les standards internationaux',
+      startTest: 'Commencer le test',
+      questions: 'questions',
+      time: 'temps',
+      results: 'Résultats',
+      yourLevel: 'Votre niveau',
+      recommendations: 'Recommandations',
+      certificate: 'Certificat'
+    },
+    // About
+    about: {
+      title: 'À Propos de Nous',
+      subtitle: 'Découvrez notre histoire et notre mission',
+      mission: 'Notre Mission',
+      missionDesc: 'Accompagner les organisations dans le développement de leur capital humain pour une performance durable',
+      vision: 'Notre Vision',
+      visionDesc: 'Devenir le partenaire de référence en conseil, formation et recrutement en Afrique de l\'Ouest',
+      history: 'Notre Histoire',
+      historyDesc: 'Fondé par des experts passionnés, Conseilux Training and Development s\'est imposé comme un acteur clé dans le développement des compétences',
+      team: 'Notre Équipe',
+      teamDesc: 'Une équipe de consultants et formateurs expérimentés dédiés à votre succès'
     },
     // Footer
     footer: {
@@ -172,7 +253,19 @@ export const translations = {
       certified: 'Certified',
       modules: 'Modules',
       enroll: 'Enroll',
-      viewMore: 'View More'
+      viewMore: 'View More',
+      category: 'Category',
+      objectives: 'Objectives',
+      targetAudience: 'Target Audience',
+      prerequisites: 'Prerequisites',
+      methodology: 'Methodology',
+      certification: 'Certification',
+      schedule: 'Schedule',
+      location: 'Location',
+      trainer: 'Trainer',
+      availableSessions: 'Available Sessions',
+      registerNow: 'Register Now',
+      downloadProgram: 'Download Program'
     },
     // Solutions
     solutions: {
@@ -183,7 +276,19 @@ export const translations = {
       learnMore: 'Learn More',
       ctaTitle: 'Need a custom solution?',
       ctaSubtitle: 'Contact us for a free diagnostic of your needs',
-      consultUs: 'Consult Us'
+      consultUs: 'Consult Us',
+      service1: 'Consulting & Solution Selection',
+      service1Desc: 'We help you select the solution best suited to your needs',
+      service2: 'Configuration & Integration',
+      service2Desc: 'Custom configuration and integration with your existing systems',
+      service3: 'Data Migration',
+      service3Desc: 'Secure data recovery and migration',
+      service4: 'User Training',
+      service4Desc: 'Complete training of your teams on new tools',
+      service5: 'Support & Maintenance',
+      service5Desc: 'Continuous assistance and maintenance of your solutions',
+      service6: 'Change Management',
+      service6Desc: 'Support for adoption and transition to new tools'
     },
     // Contact
     contact: {
@@ -197,7 +302,64 @@ export const translations = {
       message: 'Message',
       send: 'Send Message',
       offices: 'Our Offices',
-      generalInfo: 'General Information'
+      generalInfo: 'General Information',
+      successMessage: 'Message sent successfully!',
+      errorMessage: 'Error sending message'
+    },
+    // Avis
+    reviews: {
+      title: 'Client Reviews',
+      subtitle: 'Discover what our clients say about us',
+      noReviews: 'No reviews available at the moment',
+      addReview: 'Add a review',
+      reviewFormTitle: 'Share your experience',
+      yourName: 'Your name',
+      yourRating: 'Your rating',
+      yourComment: 'Your comment',
+      submitReview: 'Submit your review',
+      averageRating: 'Average rating',
+      totalReviews: 'reviews',
+      stars: 'stars'
+    },
+    // Catalogue
+    catalogue: {
+      title: 'Training Catalog',
+      subtitle: 'Download our complete catalog',
+      download: 'Download catalog',
+      description: 'Discover all our certified trainings and custom programs',
+      fields: {
+        name: 'Full name',
+        email: 'Professional email',
+        company: 'Company',
+        phone: 'Phone',
+        submit: 'Download catalog'
+      }
+    },
+    // Evaluation
+    evaluation: {
+      title: 'English Evaluation',
+      subtitle: 'Evaluate your professional English level',
+      description: 'Test your English skills and discover your level according to international standards',
+      startTest: 'Start the test',
+      questions: 'questions',
+      time: 'time',
+      results: 'Results',
+      yourLevel: 'Your level',
+      recommendations: 'Recommendations',
+      certificate: 'Certificate'
+    },
+    // About
+    about: {
+      title: 'About Us',
+      subtitle: 'Discover our history and mission',
+      mission: 'Our Mission',
+      missionDesc: 'Support organizations in developing their human capital for sustainable performance',
+      vision: 'Our Vision',
+      visionDesc: 'Become the reference partner in consulting, training and recruitment in West Africa',
+      history: 'Our History',
+      historyDesc: 'Founded by passionate experts, Conseilux Training and Development has established itself as a key player in skills development',
+      team: 'Our Team',
+      teamDesc: 'A team of experienced consultants and trainers dedicated to your success'
     },
     // Footer
     footer: {

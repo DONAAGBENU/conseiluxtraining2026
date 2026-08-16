@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { Star, Calendar, MessageSquare, Loader2, X, Send, CheckCircle } from 'lucide-react'
+import { useLanguage } from '@/app/components/LanguageProvider'
 
 interface Testimonial {
   id: string
@@ -18,6 +19,7 @@ interface Testimonial {
 }
 
 export default function Avis() {
+  const { t, language } = useLanguage()
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -73,10 +75,10 @@ export default function Avis() {
           setShowForm(false)
         }, 3000)
       } else {
-        alert('Erreur lors de l\'envoi de l\'avis')
+        alert(language === 'fr' ? 'Erreur lors de l\'envoi de l\'avis' : 'Error sending review')
       }
     } catch (err) {
-      alert('Une erreur est survenue')
+      alert(language === 'fr' ? 'Une erreur est survenue' : 'An error occurred')
     } finally {
       setFormLoading(false)
     }
@@ -89,9 +91,9 @@ export default function Avis() {
       <main className="flex-grow">
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Avis Clients</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.reviews.title}</h1>
             <p className="text-xl text-orange-100 max-w-2xl mx-auto">
-              Ce que nos clients disent de leurs expériences avec ConseiluxTraining
+              {language === 'fr' ? 'Ce que nos clients disent de leurs expériences avec ConseiluxTraining' : 'What our clients say about their experiences with ConseiluxTraining'}
             </p>
           </div>
         </section>
@@ -104,7 +106,7 @@ export default function Avis() {
                 className="bg-orange-600 hover:bg-orange-500 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg shadow-orange-600/10"
               >
                 <MessageSquare className="w-5 h-5" />
-                Ajouter un avis
+                {t.reviews.addReview}
               </button>
             </div>
 
@@ -115,7 +117,7 @@ export default function Avis() {
             ) : testimonials.length === 0 ? (
               <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl max-w-xl mx-auto">
                 <MessageSquare className="w-16 h-16 text-orange-200/20 mx-auto mb-4" />
-                <p className="text-orange-200/60 font-medium">Aucun avis publié pour le moment.</p>
+                <p className="text-orange-200/60 font-medium">{t.reviews.noReviews}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -169,7 +171,7 @@ export default function Avis() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-slate-900 border border-white/10 rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">Partager votre expérience</h2>
+              <h2 className="text-2xl font-bold text-white">{t.reviews.reviewFormTitle}</h2>
               <button 
                 onClick={() => setShowForm(false)} 
                 className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
@@ -181,18 +183,18 @@ export default function Avis() {
             {success && (
               <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-green-400" />
-                <p className="text-green-400 text-sm font-medium">Avis envoyé avec succès ! Il sera publié après modération.</p>
+                <p className="text-green-400 text-sm font-medium">{language === 'fr' ? 'Avis envoyé avec succès ! Il sera publié après modération.' : 'Review sent successfully! It will be published after moderation.'}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Votre nom *</label>
+                <label className="block text-sm font-medium text-orange-100 mb-2">{t.reviews.yourName} *</label>
                 <input
                   type="text"
                   required
                   className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                  placeholder="Votre nom complet"
+                  placeholder={language === 'fr' ? 'Votre nom complet' : 'Your full name'}
                   value={formData.nom}
                   onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
                 />
@@ -200,21 +202,21 @@ export default function Avis() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Votre rôle</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Votre rôle' : 'Your role'}</label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                    placeholder="ex: Directeur, Consultant..."
+                    placeholder={language === 'fr' ? 'ex: Directeur, Consultant...' : 'ex: Director, Consultant...'}
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Entreprise</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Entreprise' : 'Company'}</label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                    placeholder="Nom de votre entreprise"
+                    placeholder={language === 'fr' ? 'Nom de votre entreprise' : 'Your company name'}
                     value={formData.entreprise}
                     onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
                   />
@@ -223,17 +225,17 @@ export default function Avis() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Email (optionnel)</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Email (optionnel)' : 'Email (optional)'}</label>
                   <input
                     type="email"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                    placeholder="votre@email.com"
+                    placeholder="your@email.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Téléphone (optionnel)</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Téléphone (optionnel)' : 'Phone (optional)'}</label>
                   <input
                     type="tel"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
@@ -245,7 +247,7 @@ export default function Avis() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Votre note *</label>
+                <label className="block text-sm font-medium text-orange-100 mb-2">{t.reviews.yourRating} *</label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -267,12 +269,12 @@ export default function Avis() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Votre avis *</label>
+                <label className="block text-sm font-medium text-orange-100 mb-2">{t.reviews.yourComment} *</label>
                 <textarea
                   rows={4}
                   required
                   className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                  placeholder="Partagez votre expérience avec ConseiluxTraining..."
+                  placeholder={language === 'fr' ? 'Partagez votre expérience avec ConseiluxTraining...' : 'Share your experience with ConseiluxTraining...'}
                   value={formData.texte}
                   onChange={(e) => setFormData({ ...formData, texte: e.target.value })}
                 ></textarea>
@@ -286,12 +288,12 @@ export default function Avis() {
                 {formLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Envoi en cours...
+                    {language === 'fr' ? 'Envoi en cours...' : 'Sending...'}
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    Envoyer mon avis
+                    {t.reviews.submitReview}
                   </>
                 )}
               </button>

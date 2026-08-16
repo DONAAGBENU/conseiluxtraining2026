@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { FileText, Download, CheckCircle, User, Mail, Phone, Loader2 } from 'lucide-react'
+import { useLanguage } from '@/app/components/LanguageProvider'
 
 interface FormData {
   name: string
@@ -23,6 +24,7 @@ interface FormErrors {
 }
 
 export default function CataloguePage() {
+  const { t, language } = useLanguage()
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
@@ -40,15 +42,15 @@ export default function CataloguePage() {
     const newErrors: FormErrors = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Le nom est requis'
+      newErrors.name = language === 'fr' ? 'Le nom est requis' : 'Name is required'
     }
     if (!formData.email.trim()) {
-      newErrors.email = "L'email est requis"
+      newErrors.email = language === 'fr' ? "L'email est requis" : 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email invalide'
+      newErrors.email = language === 'fr' ? 'Email invalide' : 'Invalid email'
     }
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Le téléphone est requis'
+      newErrors.phone = language === 'fr' ? 'Le téléphone est requis' : 'Phone is required'
     }
     if (!formData.pays.trim()) {
       newErrors.pays = 'Le pays est requis'
@@ -129,10 +131,10 @@ export default function CataloguePage() {
           <div className="absolute inset-0 bg-orange-600/40" />
           <div className="container mx-auto px-4 relative z-10">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-              Catalogue 2026-2027
+              {t.catalogue.title}
             </h1>
             <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
-              Découvrez l'ensemble de nos formations, certifications et solutions pour accélérer vos performances.
+              {t.catalogue.description}
             </p>
           </div>
         </section>
@@ -144,9 +146,9 @@ export default function CataloguePage() {
 
               <div className="text-center mb-10">
                 <FileText className="w-16 h-16 text-orange-500 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold text-white">Téléchargez le catalogue</h2>
+                <h2 className="text-3xl font-bold text-white">{t.catalogue.download}</h2>
                 <p className="text-orange-200/60 mt-3 text-sm">
-                  Remplissez le formulaire pour recevoir notre brochure complète et découvrir nos offres.
+                  {language === 'fr' ? 'Remplissez le formulaire pour recevoir notre brochure complète et découvrir nos offres.' : 'Fill out the form to receive our complete brochure and discover our offers.'}
                 </p>
               </div>
 
@@ -156,7 +158,7 @@ export default function CataloguePage() {
                   {/* Nom */}
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-2">
-                      Nom et prénom <span className="text-orange-500">*</span>
+                      {t.catalogue.fields.name} <span className="text-orange-500">*</span>
                     </label>
                     <div className="relative">
                       <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
@@ -164,7 +166,7 @@ export default function CataloguePage() {
                         type="text"
                         name="name"
                         required
-                        placeholder="ex: Jean Dupont"
+                        placeholder={language === 'fr' ? 'ex: Jean Dupont' : 'ex: John Doe'}
                         className={`w-full pl-11 pr-4 rounded-2xl border py-3 bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
                           errors.name
                             ? 'border-red-400'
@@ -182,12 +184,12 @@ export default function CataloguePage() {
                   {/* Entreprise */}
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-2">
-                      Entreprise <span className="text-orange-200/40 text-xs">(optionnel)</span>
+                      {t.catalogue.fields.company} <span className="text-orange-200/40 text-xs">({language === 'fr' ? 'optionnel' : 'optional'})</span>
                     </label>
                     <input
                       type="text"
                       name="company"
-                      placeholder="ex: Société Générale"
+                      placeholder={language === 'fr' ? 'ex: Société Générale' : 'ex: General Company'}
                       className="w-full px-4 py-3 rounded-2xl bg-black/35 border border-white/10 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm"
                       value={formData.company}
                       onChange={handleChange}
@@ -198,13 +200,13 @@ export default function CataloguePage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-orange-100 mb-2">
-                        Pays <span className="text-orange-500">*</span>
+                        {language === 'fr' ? 'Pays' : 'Country'} <span className="text-orange-500">*</span>
                       </label>
                       <input
                         type="text"
                         name="pays"
                         required
-                        placeholder="ex: Togo"
+                        placeholder={language === 'fr' ? 'ex: Togo' : 'ex: Togo'}
                         className={`w-full px-4 py-3 rounded-2xl border bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
                           errors.pays ? 'border-red-400' : 'border-white/10'
                         }`}

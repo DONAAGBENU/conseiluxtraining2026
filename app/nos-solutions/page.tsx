@@ -1,3 +1,5 @@
+"use client"
+
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { 
@@ -5,33 +7,35 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useLanguage } from '@/app/components/LanguageProvider'
 
 export default function NosSolutions() {
+  const { t, language } = useLanguage()
   const softwareSolutions = [
     {
       name: 'SAP',
-      description: 'ERP complet pour la gestion d\'entreprise',
-      features: ['Finance & Comptabilité', 'RH & Paie', 'Logistique', 'Ventes'],
+      description: language === 'fr' ? 'ERP complet pour la gestion d\'entreprise' : 'Complete ERP for business management',
+      features: language === 'fr' ? ['Finance & Comptabilité', 'RH & Paie', 'Logistique', 'Ventes'] : ['Finance & Accounting', 'HR & Payroll', 'Logistics', 'Sales'],
       image: '/images/conseil.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
     },
     {
       name: 'Sage 100',
-      description: 'Gestion commerciale et comptabilité',
-      features: ['Comptabilité', 'Facturation', 'Gestion de stock', 'CRM'],
+      description: language === 'fr' ? 'Gestion commerciale et comptabilité' : 'Commercial management and accounting',
+      features: language === 'fr' ? ['Comptabilité', 'Facturation', 'Gestion de stock', 'CRM'] : ['Accounting', 'Invoicing', 'Stock management', 'CRM'],
       image: '/images/formation.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
     },
     {
       name: 'Microsoft 365',
-      description: 'Suite collaborative et productive',
+      description: language === 'fr' ? 'Suite collaborative et productive' : 'Collaborative and productive suite',
       features: ['Teams', 'SharePoint', 'Power BI', 'Office'],
       image: '/images/recrutement.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
     },
     {
       name: 'Power Platform',
-      description: 'Automatisation et analyse de données',
+      description: language === 'fr' ? 'Automatisation et analyse de données' : 'Automation and data analysis',
       features: ['Power BI', 'Power Apps', 'Power Automate', 'Power Virtual Agents'],
       image: '/images/accompagnement.jpeg',
       color: 'border-orange-200 hover:border-orange-600'
@@ -40,28 +44,28 @@ export default function NosSolutions() {
 
   const services = [
     {
-      title: 'Conseil & Choix de la solution',
-      description: 'Nous vous aidons à sélectionner la solution la plus adaptée à vos besoins'
+      title: t.solutions.service1,
+      description: t.solutions.service1Desc
     },
     {
-      title: 'Paramétrage & Intégration',
-      description: 'Configuration sur mesure et intégration avec vos systèmes existants'
+      title: t.solutions.service2,
+      description: t.solutions.service2Desc
     },
     {
-      title: 'Migration des données',
-      description: 'Reprise et migration sécurisée de vos données'
+      title: t.solutions.service3,
+      description: t.solutions.service3Desc
     },
     {
-      title: 'Formation utilisateurs',
-      description: 'Formation complète de vos équipes sur les nouveaux outils'
+      title: t.solutions.service4,
+      description: t.solutions.service4Desc
     },
     {
-      title: 'Support & Maintenance',
-      description: 'Assistance continue et maintenance de vos solutions'
+      title: t.solutions.service5,
+      description: t.solutions.service5Desc
     },
     {
-      title: 'Accompagnement au changement',
-      description: 'Support pour l\'adoption et la transition vers les nouveaux outils'
+      title: t.solutions.service6,
+      description: t.solutions.service6Desc
     },
   ]
 
@@ -73,9 +77,9 @@ export default function NosSolutions() {
         {/* Hero */}
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Nos Solutions</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.solutions.title}</h1>
             <p className="text-xl text-orange-100 max-w-2xl mx-auto">
-              Digitalisez et automatisez la gestion de votre entreprise
+              {t.solutions.subtitle}
             </p>
           </div>
         </section>
@@ -84,7 +88,7 @@ export default function NosSolutions() {
         <section className="py-16 bg-transparent">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center text-white mb-12">
-              Nos Prestations
+              {t.solutions.services}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service, index) => (
@@ -104,10 +108,10 @@ export default function NosSolutions() {
         <section className="py-16 bg-transparent border-t border-white/5">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center text-white mb-4">
-              Nos Solutions Logicielles
+              {t.solutions.software}
             </h2>
             <p className="text-center text-orange-200/60 mb-12 max-w-2xl mx-auto">
-              Des logiciels de gestion adaptés à tous les secteurs d'activité
+              {language === 'fr' ? 'Des logiciels de gestion adaptés à tous les secteurs d\'activité' : 'Management software adapted to all business sectors'}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -138,7 +142,7 @@ export default function NosSolutions() {
                     href="/contact"
                     className="inline-flex items-center gap-2 mt-6 text-orange-500 font-semibold hover:text-white transition-colors"
                   >
-                    En savoir plus <ArrowRight className="w-4 h-4" />
+                    {t.solutions.learnMore} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               ))}
@@ -149,15 +153,15 @@ export default function NosSolutions() {
         {/* CTA */}
         <section className="py-16 bg-orange-600 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Besoin d'une solution sur mesure ?</h2>
+            <h2 className="text-3xl font-bold mb-4">{t.solutions.ctaTitle}</h2>
             <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-              Contactez-nous pour un diagnostic gratuit de vos besoins
+              {t.solutions.ctaSubtitle}
             </p>
             <Link 
               href="/contact"
               className="inline-flex items-center gap-2 bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors"
             >
-              Nous consulter
+              {t.solutions.consultUs}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

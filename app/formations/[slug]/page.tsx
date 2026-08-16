@@ -6,8 +6,10 @@ import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { CheckCircle, Clock, Loader2, Mail, MessageSquare, Send } from 'lucide-react'
 import Link from 'next/link'
+import { useLanguage } from '@/app/components/LanguageProvider'
 
 export default function FormationDetail() {
+  const { t, language } = useLanguage()
   const params = useParams()
   const slug = params?.slug as string
   const [formation, setFormation] = useState<any>(null)
@@ -37,9 +39,9 @@ export default function FormationDetail() {
         )
         setFormation(found || null)
       })
-      .catch(err => console.error('Erreur chargement formation:', err))
+      .catch(err => console.error(language === 'fr' ? 'Erreur chargement formation:' : 'Error loading training:', err))
       .finally(() => setLoading(false))
-  }, [slug])
+  }, [slug, language])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -74,10 +76,10 @@ export default function FormationDetail() {
           setShowForm(false)
         }, 3000)
       } else {
-        alert('Erreur lors de l\'inscription')
+        alert(language === 'fr' ? 'Erreur lors de l\'inscription' : 'Error during registration')
       }
     } catch (err) {
-      alert('Une erreur est survenue')
+      alert(language === 'fr' ? 'Une erreur est survenue' : 'An error occurred')
     } finally {
       setFormLoading(false)
     }
@@ -100,7 +102,7 @@ export default function FormationDetail() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow flex items-center justify-center">
-          <p className="text-xl text-orange-200/60">Formation non trouvée</p>
+          <p className="text-xl text-orange-200/60">{language === 'fr' ? 'Formation non trouvée' : 'Training not found'}</p>
         </main>
         <Footer />
       </div>
@@ -141,7 +143,7 @@ export default function FormationDetail() {
               </div>
 
               <div className="mt-6">
-                <h3 className="font-bold text-white mb-3">Modules de formation</h3>
+                <h3 className="font-bold text-white mb-3">{language === 'fr' ? 'Modules de formation' : 'Training modules'}</h3>
                 <ul className="space-y-2">
                   {formation.modules.map((module: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
@@ -156,7 +158,7 @@ export default function FormationDetail() {
                 onClick={() => setShowForm(true)}
                 className="mt-8 inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-orange-500 transition-colors shadow-lg shadow-orange-600/10"
               >
-                S'inscrire à cette formation
+                {language === 'fr' ? 'S\'inscrire à cette formation' : 'Register for this training'}
               </button>
             </div>
           </div>
@@ -169,7 +171,7 @@ export default function FormationDetail() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-slate-900 border border-white/10 rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">Inscription - {formation.titre}</h2>
+              <h2 className="text-2xl font-bold text-white">{language === 'fr' ? 'Inscription' : 'Registration'} - {formation.titre}</h2>
               <button 
                 onClick={() => setShowForm(false)} 
                 className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
@@ -181,18 +183,18 @@ export default function FormationDetail() {
             {success && (
               <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-green-400" />
-                <p className="text-green-400 text-sm font-medium">Inscription envoyée avec succès ! Nous vous contacterons bientôt.</p>
+                <p className="text-green-400 text-sm font-medium">{language === 'fr' ? 'Inscription envoyée avec succès ! Nous vous contacterons bientôt.' : 'Registration sent successfully! We will contact you soon.'}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Nom et Prénom *</label>
+                <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.name} *</label>
                 <input
                   type="text"
                   required
                   className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                  placeholder="Votre nom complet"
+                  placeholder={language === 'fr' ? 'Votre nom complet' : 'Your full name'}
                   value={formData.nom}
                   onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
                 />
@@ -200,18 +202,18 @@ export default function FormationDetail() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Email *</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.email} *</label>
                   <input
                     type="email"
                     required
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                    placeholder="votre@email.com"
+                    placeholder="your@email.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Téléphone *</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.phone} *</label>
                   <input
                     type="tel"
                     required
@@ -224,11 +226,11 @@ export default function FormationDetail() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Entreprise</label>
+                <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Entreprise' : 'Company'}</label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                  placeholder="Nom de votre entreprise"
+                  placeholder={language === 'fr' ? 'Nom de votre entreprise' : 'Your company name'}
                   value={formData.entreprise}
                   onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
                 />
@@ -236,21 +238,21 @@ export default function FormationDetail() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Pays</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Pays' : 'Country'}</label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                    placeholder="Togo"
+                    placeholder={language === 'fr' ? 'Togo' : 'Togo'}
                     value={formData.pays}
                     onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Ville</label>
+                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Ville' : 'City'}</label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                    placeholder="Lomé"
+                    placeholder={language === 'fr' ? 'Lomé' : 'Lomé'}
                     value={formData.ville}
                     onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
                   />
@@ -258,18 +260,18 @@ export default function FormationDetail() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Message (optionnel)</label>
+                <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Message (optionnel)' : 'Message (optional)'}</label>
                 <textarea
                   rows={3}
                   className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                  placeholder="Questions supplémentaires..."
+                  placeholder={language === 'fr' ? 'Questions supplémentaires...' : 'Additional questions...'}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 ></textarea>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-3">Préférence de contact *</label>
+                <label className="block text-sm font-medium text-orange-100 mb-3">{language === 'fr' ? 'Préférence de contact *' : 'Contact preference *'}</label>
                 <div className="grid grid-cols-2 gap-4">
                   <button
                     type="button"
@@ -308,12 +310,12 @@ export default function FormationDetail() {
                 {formLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Envoi en cours...
+                    {language === 'fr' ? 'Envoi en cours...' : 'Sending...'}
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    Envoyer mon inscription
+                    {language === 'fr' ? 'Envoyer mon inscription' : 'Send my registration'}
                   </>
                 )}
               </button>

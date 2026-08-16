@@ -4,8 +4,10 @@ import { useState } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { Mail, Phone, MapPin, Clock, Send, Loader2, CheckCircle } from 'lucide-react'
+import { useLanguage } from '@/app/components/LanguageProvider'
 
 export default function Contact() {
+  const { t, language } = useLanguage()
   const [formData, setFormData] = useState({
     nom: '',
     email: '',
@@ -32,10 +34,10 @@ export default function Contact() {
         setFormData({ nom: '', email: '', telephone: '', sujet: '', message: '' })
         setTimeout(() => setSuccess(false), 5000)
       } else {
-        alert('Erreur lors de l\'envoi du message')
+        alert(language === 'fr' ? 'Erreur lors de l\'envoi du message' : 'Error sending message')
       }
     } catch (err) {
-      alert('Une erreur est survenue')
+      alert(language === 'fr' ? 'Une erreur est survenue' : 'An error occurred')
     } finally {
       setLoading(false)
     }
@@ -80,9 +82,9 @@ export default function Contact() {
       <main className="flex-grow">
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Contactez-nous</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.contact.title}</h1>
             <p className="text-xl text-orange-100 max-w-2xl mx-auto">
-              Nous sommes à votre écoute pour répondre à vos besoins
+              {t.contact.subtitle}
             </p>
           </div>
         </section>
@@ -92,25 +94,25 @@ export default function Contact() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Formulaire */}
               <div className="card border-t-4 border-orange-600 bg-white/10 backdrop-blur-md border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-6">Envoyez-nous un message</h2>
+                <h2 className="text-2xl font-bold text-white mb-6">{t.contact.sendMessage}</h2>
                 
                 {success && (
                   <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <p className="text-green-400 text-sm font-medium">Message envoyé avec succès !</p>
+                    <p className="text-green-400 text-sm font-medium">{t.contact.successMessage}</p>
                   </div>
                 )}
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-1">
-                      Nom et Prénom *
+                      {t.contact.name} *
                     </label>
                     <input
                       type="text"
                       required
                       className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
-                      placeholder="Votre nom complet"
+                      placeholder={language === 'fr' ? 'Votre nom complet' : 'Your full name'}
                       value={formData.nom}
                       onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
                     />
@@ -118,13 +120,13 @@ export default function Contact() {
 
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-1">
-                      Email *
+                      {t.contact.email} *
                     </label>
                     <input
                       type="email"
                       required
                       className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
-                      placeholder="votre@email.com"
+                      placeholder="your@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     />
@@ -132,7 +134,7 @@ export default function Contact() {
 
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-1">
-                      Téléphone
+                      {t.contact.phone}
                     </label>
                     <input
                       type="tel"
@@ -145,31 +147,31 @@ export default function Contact() {
 
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-1">
-                      Sujet
+                      {t.contact.subject}
                     </label>
                     <select 
                       className="w-full px-4 py-2 bg-black/35 text-white border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none [&>option]:bg-slate-900"
                       value={formData.sujet}
                       onChange={(e) => setFormData({ ...formData, sujet: e.target.value })}
                     >
-                      <option value="">Sélectionnez un sujet</option>
-                      <option value="formation">Demande de formation</option>
-                      <option value="conseil">Conseil stratégique</option>
-                      <option value="recrutement">Recrutement</option>
-                      <option value="catalogue">Télécharger catalogue</option>
-                      <option value="autre">Autre</option>
+                      <option value="">{language === 'fr' ? 'Sélectionnez un sujet' : 'Select a subject'}</option>
+                      <option value="formation">{language === 'fr' ? 'Demande de formation' : 'Training request'}</option>
+                      <option value="conseil">{language === 'fr' ? 'Conseil stratégique' : 'Strategic consulting'}</option>
+                      <option value="recrutement">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</option>
+                      <option value="catalogue">{language === 'fr' ? 'Télécharger catalogue' : 'Download catalog'}</option>
+                      <option value="autre">{language === 'fr' ? 'Autre' : 'Other'}</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-1">
-                      Message *
+                      {t.contact.message} *
                     </label>
                     <textarea
                       rows={5}
                       required
                       className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
-                      placeholder="Décrivez votre demande..."
+                      placeholder={language === 'fr' ? 'Décrivez votre demande...' : 'Describe your request...'}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     ></textarea>
@@ -183,12 +185,12 @@ export default function Contact() {
                     {loading ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        Envoi en cours...
+                        {language === 'fr' ? 'Envoi en cours...' : 'Sending...'}
                       </>
                     ) : (
                       <>
                         <Send className="w-5 h-5" />
-                        Envoyer le message
+                        {t.contact.send}
                       </>
                     )}
                   </button>
@@ -198,7 +200,7 @@ export default function Contact() {
               {/* Informations de contact */}
               <div className="space-y-6">
                 <div className="card border-t-4 border-orange-600 bg-white/10 backdrop-blur-md border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4">Nos Bureaux</h3>
+                  <h3 className="text-xl font-bold text-white mb-4">{t.contact.offices}</h3>
                   <div className="space-y-4">
                     {offices.map((office, index) => (
                       <div key={index} className="border-b border-white/10 last:border-0 pb-3 last:pb-0">
@@ -217,7 +219,7 @@ export default function Contact() {
                 </div>
 
                 <div className="card border-t-4 border-orange-600 bg-white/10 backdrop-blur-md border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4">Informations Générales</h3>
+                  <h3 className="text-xl font-bold text-white mb-4">{t.contact.generalInfo}</h3>
                   <div className="space-y-4">
                     <p className="flex items-center gap-3 text-sm text-orange-100">
                       <Mail className="w-5 h-5 text-orange-500 flex-shrink-0" />
@@ -225,11 +227,11 @@ export default function Contact() {
                     </p>
                     <p className="flex items-center gap-3 text-sm text-orange-100">
                       <Clock className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                      <span>Lundi - Vendredi : 8h00 - 18h00</span>
+                      <span>{language === 'fr' ? 'Lundi - Vendredi : 8h00 - 18h00' : 'Monday - Friday: 8:00 AM - 6:00 PM'}</span>
                     </p>
                     <div className="mt-4 border-t border-white/5 pt-4">
                       <p className="text-sm text-orange-200/90 font-medium">
-                        📍 Présence multi-pays : Bénin, Togo, Côte d'Ivoire, Niger, France
+                        {language === 'fr' ? '📍 Présence multi-pays : Bénin, Togo, Côte d\'Ivoire, Niger, France' : '📍 Multi-country presence: Benin, Togo, Ivory Coast, Niger, France'}
                       </p>
                     </div>
                   </div>

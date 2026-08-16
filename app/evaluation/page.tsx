@@ -5,8 +5,10 @@ import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { CheckCircle, Loader2, FileText, Send, User, Mail, Phone, BookOpen, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
+import { useLanguage } from '@/app/components/LanguageProvider'
 
 export default function Evaluation() {
+  const { t, language } = useLanguage()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,8 +37,8 @@ export default function Evaluation() {
           pays: formData.pays,
           ville: formData.ville,
           source: 'inscription', // Pour l'afficher dans les inscriptions admin
-          formationTitre: `Évaluation d'anglais : ${formData.exam.toUpperCase()}`,
-          message: `Niveau actuel: ${formData.level} | Objectifs: ${formData.objectives}`,
+          formationTitre: language === 'fr' ? `Évaluation d'anglais : ${formData.exam.toUpperCase()}` : `English evaluation: ${formData.exam.toUpperCase()}`,
+          message: language === 'fr' ? `Niveau actuel: ${formData.level} | Objectifs: ${formData.objectives}` : `Current level: ${formData.level} | Objectives: ${formData.objectives}`,
           date: new Date().toISOString()
         })
       })
@@ -45,14 +47,16 @@ export default function Evaluation() {
         setSubmitted(true)
         // Rediriger vers WhatsApp après 1.5s
         setTimeout(() => {
-          const waMessage = `Bonjour, je viens de demander une évaluation gratuite pour le ${formData.exam.toUpperCase()}.\n\nNom: ${formData.name}\nTéléphone: ${formData.phone}\nPays/Ville: ${formData.pays}/${formData.ville}\nNiveau actuel: ${formData.level}\nObjectifs: ${formData.objectives}`
+          const waMessage = language === 'fr' 
+            ? `Bonjour, je viens de demander une évaluation gratuite pour le ${formData.exam.toUpperCase()}.\n\nNom: ${formData.name}\nTéléphone: ${formData.phone}\nPays/Ville: ${formData.pays}/${formData.ville}\nNiveau actuel: ${formData.level}\nObjectifs: ${formData.objectives}`
+            : `Hello, I'm requesting a free evaluation for ${formData.exam.toUpperCase()}.\n\nName: ${formData.name}\nPhone: ${formData.phone}\nCountry/City: ${formData.pays}/${formData.ville}\nCurrent level: ${formData.level}\nObjectives: ${formData.objectives}`
           window.open(`https://wa.me/2290129239194?text=${encodeURIComponent(waMessage)}`, '_blank')
         }, 1500)
       } else {
-        alert("Erreur lors de l'envoi de la demande.")
+        alert(language === 'fr' ? "Erreur lors de l'envoi de la demande." : "Error sending request.")
       }
     } catch {
-      alert("Une erreur est survenue lors de l'envoi.")
+      alert(language === 'fr' ? "Une erreur est survenue lors de l'envoi." : "An error occurred during sending.")
     } finally {
       setLoading(false)
     }
@@ -65,29 +69,29 @@ export default function Evaluation() {
       <main className="flex-grow container mx-auto px-4 py-16 relative z-10 max-w-4xl">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-            Évaluation de Niveau <span className="text-orange-500">Gratuite</span>
+            {language === 'fr' ? 'Évaluation de Niveau' : 'Level Evaluation'} <span className="text-orange-500">{language === 'fr' ? 'Gratuite' : 'Free'}</span>
           </h1>
           <p className="text-orange-200/60 max-w-2xl mx-auto">
-            Complétez ce formulaire d'évaluation d'anglais et nous vous contacterons pour valider votre niveau et vous proposer un plan de formation.
+            {language === 'fr' ? 'Complétez ce formulaire d\'évaluation d\'anglais et nous vous contacterons pour valider votre niveau et vous proposer un plan de formation.' : 'Complete this English evaluation form and we will contact you to validate your level and propose a training plan.'}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           {/* Form Info Panel */}
           <div className="md:col-span-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 space-y-4">
-            <h3 className="font-bold text-white text-lg">Pourquoi s'évaluer ?</h3>
+            <h3 className="font-bold text-white text-lg">{language === 'fr' ? 'Pourquoi s\'évaluer ?' : 'Why evaluate?'}</h3>
             <ul className="space-y-3 text-sm text-orange-100/70">
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
-                <span>Identifier vos lacunes</span>
+                <span>{language === 'fr' ? 'Identifier vos lacunes' : 'Identify your gaps'}</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
-                <span>Mesurer votre score théorique (TOEIC, TOEFL)</span>
+                <span>{language === 'fr' ? 'Mesurer votre score théorique (TOEIC, TOEFL)' : 'Measure your theoretical score (TOEIC, TOEFL)'}</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
-                <span>Adapter le programme de formation</span>
+                <span>{language === 'fr' ? 'Adapter le programme de formation' : 'Adapt the training program'}</span>
               </li>
             </ul>
           </div>
@@ -99,7 +103,7 @@ export default function Evaluation() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">Nom complet *</label>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.name} *</label>
                       <div className="relative">
                         <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
                         <input 
@@ -108,13 +112,13 @@ export default function Evaluation() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
-                          placeholder="Votre nom et prénom"
+                          placeholder={language === 'fr' ? 'Votre nom et prénom' : 'Your full name'}
                         />
                       </div>
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">Email *</label>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.email} *</label>
                       <div className="relative">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
                         <input 
@@ -123,7 +127,7 @@ export default function Evaluation() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
-                          placeholder="votre@email.com"
+                          placeholder="your@email.com"
                         />
                       </div>
                     </div>
@@ -131,7 +135,7 @@ export default function Evaluation() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="sm:col-span-1">
-                      <label className="block text-sm font-medium text-orange-100 mb-2">Téléphone *</label>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.phone} *</label>
                       <div className="relative">
                         <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
                         <input 
@@ -146,72 +150,72 @@ export default function Evaluation() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">Pays *</label>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Pays' : 'Country'} *</label>
                       <input 
                         type="text" 
                         required
                         value={formData.pays}
                         onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
                         className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
-                        placeholder="ex: Bénin"
+                        placeholder={language === 'fr' ? 'ex: Bénin' : 'ex: Benin'}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">Ville *</label>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Ville' : 'City'} *</label>
                       <input 
                         type="text" 
                         required
                         value={formData.ville}
                         onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
                         className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
-                        placeholder="ex: Cotonou"
+                        placeholder={language === 'fr' ? 'ex: Cotonou' : 'ex: Cotonou'}
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">Examen préparé *</label>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Examen préparé *' : 'Prepared exam *'}</label>
                       <select 
                         required
                         value={formData.exam}
                         onChange={(e) => setFormData({ ...formData, exam: e.target.value })}
                         className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm [&>option]:bg-slate-900"
                       >
-                        <option value="">Sélectionnez un examen</option>
+                        <option value="">{language === 'fr' ? 'Sélectionnez un examen' : 'Select an exam'}</option>
                         <option value="toeic">TOEIC</option>
                         <option value="toefl">TOEFL</option>
                         <option value="gre">GRE</option>
                         <option value="ielts">IELTS</option>
-                        <option value="general">Anglais Général</option>
+                        <option value="general">{language === 'fr' ? 'Anglais Général' : 'General English'}</option>
                       </select>
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">Niveau actuel estimé</label>
+                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Niveau actuel estimé' : 'Estimated current level'}</label>
                       <select 
                         value={formData.level}
                         onChange={(e) => setFormData({ ...formData, level: e.target.value })}
                         className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm [&>option]:bg-slate-900"
                       >
-                        <option value="">Sélectionnez votre niveau</option>
-                        <option value="debutant">Débutant (A1-A2)</option>
-                        <option value="intermediaire">Intermédiaire (B1-B2)</option>
-                        <option value="avance">Avancé (C1-C2)</option>
-                        <option value="incertain">Je ne sais pas</option>
+                        <option value="">{language === 'fr' ? 'Sélectionnez votre niveau' : 'Select your level'}</option>
+                        <option value="debutant">{language === 'fr' ? 'Débutant (A1-A2)' : 'Beginner (A1-A2)'}</option>
+                        <option value="intermediaire">{language === 'fr' ? 'Intermédiaire (B1-B2)' : 'Intermediate (B1-B2)'}</option>
+                        <option value="avance">{language === 'fr' ? 'Avancé (C1-C2)' : 'Advanced (C1-C2)'}</option>
+                        <option value="incertain">{language === 'fr' ? 'Je ne sais pas' : "I don't know"}</option>
                       </select>
                     </div>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-orange-100 mb-2">Objectifs & Attentes</label>
+                    <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Objectifs & Attentes' : 'Objectives & Expectations'}</label>
                     <textarea 
                       rows={4}
                       value={formData.objectives}
                       onChange={(e) => setFormData({ ...formData, objectives: e.target.value })}
                       className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
-                      placeholder="Décrivez vos objectifs professionnels ou d'études..."
+                      placeholder={language === 'fr' ? 'Décrivez vos objectifs professionnels ou d\'études...' : 'Describe your professional or study objectives...'}
                     />
                   </div>
                   
@@ -223,12 +227,12 @@ export default function Evaluation() {
                     {loading ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        Traitement...
+                        {language === 'fr' ? 'Traitement...' : 'Processing...'}
                       </>
                     ) : (
                       <>
                         <Send className="w-5 h-5" />
-                        Demander mon évaluation gratuite
+                        {language === 'fr' ? 'Demander mon évaluation gratuite' : 'Request my free evaluation'}
                       </>
                     )}
                   </button>
@@ -236,9 +240,9 @@ export default function Evaluation() {
               ) : (
                 <div className="text-center py-12">
                   <CheckCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-white mb-3">Demande Envoyée !</h3>
+                  <h3 className="text-2xl font-bold text-white mb-3">{language === 'fr' ? 'Demande Envoyée !' : 'Request Sent!'}</h3>
                   <p className="text-orange-100/70 max-w-xl mx-auto mb-6">
-                    Votre demande d'évaluation a bien été enregistrée. Nous vous redirigeons vers WhatsApp pour fixer un rendez-vous avec un conseiller.
+                    {language === 'fr' ? 'Votre demande d\'évaluation a bien été enregistrée. Nous vous redirigeons vers WhatsApp pour fixer un rendez-vous avec un conseiller.' : 'Your evaluation request has been registered. We will redirect you to WhatsApp to schedule an appointment with an advisor.'}
                   </p>
                 </div>
               )}

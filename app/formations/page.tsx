@@ -5,8 +5,10 @@ import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import Link from 'next/link'
 import { ChevronRight, Clock, Loader2 } from 'lucide-react'
+import { useLanguage } from '@/app/components/LanguageProvider'
 
 export default function FormationsList() {
+  const { t, language } = useLanguage()
   const [formations, setFormations] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -17,7 +19,7 @@ export default function FormationsList() {
         setFormations(data.formations || [])
       })
       .catch(err => {
-        console.error('Erreur lors du chargement des formations:', err)
+        console.error(language === 'fr' ? 'Erreur lors du chargement des formations:' : 'Error loading trainings:', err)
       })
       .finally(() => {
         setLoading(false)
@@ -30,9 +32,9 @@ export default function FormationsList() {
       <main className="flex-grow">
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white text-center">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-bold">Nos Formations</h1>
+            <h1 className="text-4xl md:text-5xl font-bold">{t.formations.title}</h1>
             <p className="text-xl text-orange-100 mt-4">
-              Découvrez l'ensemble de nos programmes de formation
+              {t.formations.subtitle}
             </p>
           </div>
         </section>
@@ -45,7 +47,7 @@ export default function FormationsList() {
               </div>
             ) : formations.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-orange-200/60">Aucune formation disponible pour le moment. Revenez bientôt !</p>
+                <p className="text-orange-200/60">{t.formations.noFormations}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -64,7 +66,7 @@ export default function FormationsList() {
                         {formation.duree}
                       </span>
                       <span className="text-orange-500 font-medium text-sm flex items-center gap-1">
-                        Voir plus <ChevronRight className="w-4 h-4" />
+                        {t.formations.viewMore} <ChevronRight className="w-4 h-4" />
                       </span>
                     </div>
                   </Link>
