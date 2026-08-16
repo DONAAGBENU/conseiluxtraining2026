@@ -120,7 +120,7 @@ export default function NosSolutions() {
                         alt={solution.name}
                         width={64}
                         height={64}
-                        className="object-cover w-full h-full"
+                        className="object-contain w-auto h-auto"
                       />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{solution.name}</h3>

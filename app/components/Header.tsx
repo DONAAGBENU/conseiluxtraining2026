@@ -78,7 +78,7 @@ export default function Header() {
           <Link href="/" className="flex items-center justify-center">
             <div className="w-20 h-20 rounded-full bg-white/15 flex items-center justify-center shadow-inner shadow-black/15 ring-1 ring-white/15">
               <Image
-                src="/images/logo%20conseilux%20vectoriel%20%20%5BR%C3%A9cup%C3%A9r%C3%A9%5D_Plan%20de%20travail%201.png"
+                src="/images/logo conseilux vectoriel  [Récupéré]_Plan de travail 1.png"
                 alt="Logo Conseilux Training and Developement"
                 width={56}
                 height={56}

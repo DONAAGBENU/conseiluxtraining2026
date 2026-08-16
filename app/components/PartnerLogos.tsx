@@ -48,7 +48,7 @@ export default function PartnerLogos() {
                 alt={`Partner ${index + 1}`}
                 width={120}
                 height={60}
-                className="object-contain max-w-full max-h-full"
+                className="object-contain w-auto h-auto"
               />
             </div>
           ))}

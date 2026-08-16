@@ -166,7 +166,7 @@ export default function Home() {
                     alt="Conseil"
                     width={60}
                     height={60}
-                    className="object-contain"
+                    className="object-contain w-auto h-auto"
                   />
                 </div>
                 <p className="font-semibold">{language === 'fr' ? 'Conseil' : 'Consulting'}</p>
@@ -178,7 +178,7 @@ export default function Home() {
                     alt="Formation"
                     width={60}
                     height={60}
-                    className="object-contain"
+                    className="object-contain w-auto h-auto"
                   />
                 </div>
                 <p className="font-semibold">{language === 'fr' ? 'Formation' : 'Training'}</p>
@@ -190,7 +190,7 @@ export default function Home() {
                     alt="Recrutement"
                     width={60}
                     height={60}
-                    className="object-contain"
+                    className="object-contain w-auto h-auto"
                   />
                 </div>
                 <p className="font-semibold">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</p>
@@ -202,7 +202,7 @@ export default function Home() {
                     alt="Accompagnement"
                     width={60}
                     height={60}
-                    className="object-contain"
+                    className="object-contain w-auto h-auto"
                   />
                 </div>
                 <p className="font-semibold">{language === 'fr' ? 'Accompagnement' : 'Support'}</p>
