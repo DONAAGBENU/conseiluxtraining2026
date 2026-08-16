@@ -36,12 +36,12 @@ export default function PartnerLogos() {
         <p className="text-center text-orange-200/60 text-sm">Ils nous font confiance</p>
       </div>
       
-      <div className="overflow-hidden">
-        <div className="flex gap-8 animate-scroll group-hover:pause">
+      <div className="overflow-hidden w-full">
+        <div className="flex gap-2 md:gap-6 lg:gap-8 animate-scroll group-hover:pause min-w-max">
           {duplicatedImages.map((image, index) => (
             <div 
               key={`${image}-${index}`} 
-              className="flex-shrink-0 w-32 h-20 bg-white/10 rounded-lg p-2 flex items-center justify-center border border-white/10 hover:border-orange-500/30 transition-all group"
+              className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 lg:w-32 lg:h-20 bg-white/10 rounded-lg p-1 md:p-2 flex items-center justify-center border border-white/10 hover:border-orange-500/30 transition-all group"
             >
               <Image
                 src={image}
