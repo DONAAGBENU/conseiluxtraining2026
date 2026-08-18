@@ -1,25 +1,28 @@
 "use client"
 
 import { Star } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 export default function Testimonials() {
+  const { t } = useLanguage()
+
   const testimonials = [
     {
       name: 'Marie Kouassi',
-      role: 'Directrice RH, Groupe SIB',
-      text: "Grâce à ConseiluxTraining, nous avons certifié 50 collaborateurs en gestion de projet. Un accompagnement professionnel et des résultats exceptionnels.",
+      role: t.testimonials.marieRole,
+      text: t.testimonials.marieText,
       rating: 5
     },
     {
       name: 'Jean Adé',
-      role: 'CEO, Tech Solutions Africa',
-      text: "La formation en cybersécurité a transformé notre approche de la sécurité. Nos équipes sont désormais certifiées et opérationnelles.",
+      role: t.testimonials.jeanRole,
+      text: t.testimonials.jeanText,
       rating: 5
     },
     {
       name: 'Fatima Diallo',
-      role: 'Responsable Formation, Groupe BIA',
-      text: "Un partenaire de confiance qui comprend nos enjeux. Les formations TOEIC ont permis à nos équipes d'atteindre leurs objectifs.",
+      role: t.testimonials.fatimaRole,
+      text: t.testimonials.fatimaText,
       rating: 5
     },
   ]
@@ -28,9 +31,9 @@ export default function Testimonials() {
     <section className="py-20 bg-transparent">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="section-title text-orange-100">Ce que disent nos clients</h2>
+          <h2 className="section-title text-orange-100">{t.testimonials.title}</h2>
           <p className="section-subtitle text-orange-200">
-            Des entreprises qui nous font confiance pour former et développer leurs équipes
+            {t.testimonials.subtitle}
           </p>
         </div>
 

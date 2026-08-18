@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Menu, X, Phone, ChevronDown, Globe } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { Menu, X, Phone, ChevronDown, Globe, FileText } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from './LanguageProvider'
 
 // SVG Icons for social media
@@ -29,35 +29,29 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [animatedText, setAnimatedText] = useState('')
+  const [animDone, setAnimDone] = useState(false)
+  const animRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { language, setLanguage, t } = useLanguage()
-  const fullText = 'Conseilux Training and Development'
+  const fullText = 'Conseilux Training & Development'
 
   useEffect(() => {
-    const animateText = () => {
-      let index = 0
-      setAnimatedText('')
-      
-      const interval = setInterval(() => {
-        if (index < fullText.length) {
-          setAnimatedText(fullText.slice(0, index + 1))
-          index++
-        } else {
-          clearInterval(interval)
-        }
-      }, 100)
-      
-      return () => clearInterval(interval)
+    // Clean up any previous animation
+    if (animRef.current) clearTimeout(animRef.current)
+    setAnimatedText('')
+    setAnimDone(false)
+    let i = 0
+    const type = () => {
+      if (i < fullText.length) {
+        setAnimatedText(fullText.slice(0, i + 1))
+        i++
+        animRef.current = setTimeout(type, 75)
+      } else {
+        setAnimDone(true)
+      }
     }
-    
-    // Animation initiale
-    animateText()
-    
-    // Rejouer l'animation toutes les 10 secondes
-    const repeatInterval = setInterval(() => {
-      animateText()
-    }, 10000)
-    
-    return () => clearInterval(repeatInterval)
+    // Small delay so re-mount feels intentional
+    animRef.current = setTimeout(type, 200)
+    return () => { if (animRef.current) clearTimeout(animRef.current) }
   }, [])
 
   const navItems = [
@@ -90,7 +84,7 @@ export default function Header() {
   ]
 
   return (
-    <header className="bg-white/5 backdrop-blur-sm shadow-md sticky top-0 z-50">
+    <header className="bg-slate-950/85 backdrop-blur-md shadow-md sticky top-0 z-50 w-full">
       <nav className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           {/* Logo */}
@@ -104,16 +98,18 @@ export default function Header() {
                 className="object-contain w-full h-full"
               />
             </div>
-            <div className="ml-3 hidden md:block">
-              <h1 className="text-lg font-bold text-white leading-tight" style={{ width: '240px', minHeight: '24px' }}>
+            <div className="ml-2 hidden md:block">
+              <h1 className="text-base font-bold text-white leading-tight" style={{ width: '220px', minHeight: '22px' }}>
                 {animatedText}
-                <span className="animate-pulse">|</span>
+                {!animDone && (
+                  <span className="animate-pulse text-orange-400">|</span>
+                )}
               </h1>
             </div>
           </Link>
 
           {/* Menu Desktop */}
-          <ul className="hidden lg:flex items-center space-x-6">
+          <ul className="hidden xl:flex items-center space-x-6">
             {navItems.map((item) => (
               <li key={item.href} className="relative group">
                 {item.dropdown ? (
@@ -188,12 +184,11 @@ export default function Header() {
             </li>
             
             {/* Language Switcher */}
-            <li className="flex items-center gap-2">
+            <li className="flex items-center">
               <button
                 onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
-                className="flex items-center gap-2 text-orange-100 hover:text-white transition-colors font-medium px-3 py-2 rounded-lg border border-white/20 hover:border-orange-500/50"
+                className="text-orange-100 hover:text-white transition-colors font-bold text-xs px-2 py-1 rounded border border-white/20 hover:border-orange-500/50 tracking-wider"
               >
-                <Globe className="w-4 h-4" />
                 {language === 'fr' ? 'FR' : 'EN'}
               </button>
             </li>
@@ -201,8 +196,9 @@ export default function Header() {
             <li>
               <Link 
                 href="/catalogue"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-7 py-3 rounded-full font-semibold shadow-lg shadow-orange-500/30 hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
+                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-orange-500/30 hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
               >
+                <FileText className="w-4 h-4 shrink-0" />
                 {t.nav.downloadCatalogue}
               </Link>
             </li>
@@ -210,7 +206,7 @@ export default function Header() {
 
           {/* Menu Mobile Button */}
           <button 
-            className="lg:hidden text-orange-100"
+            className="xl:hidden text-orange-100"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -220,7 +216,7 @@ export default function Header() {
 
         {/* Menu Mobile */}
         {isMenuOpen && (
-          <div className="lg:hidden mt-4 border-t border-white/5 pt-4 space-y-3">
+          <div className="xl:hidden mt-4 border-t border-white/5 pt-4 space-y-3">
             {navItems.map((item) => (
               <div key={item.href}>
                 {item.dropdown ? (

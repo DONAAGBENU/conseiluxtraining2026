@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useLanguage } from './LanguageProvider'
 
 const partnerImages = [
   '/images/Ecobank.jpeg',
@@ -22,6 +23,7 @@ const partnerImages = [
 ]
 
 export default function PartnerLogos() {
+  const { t } = useLanguage()
   const [duplicatedImages, setDuplicatedImages] = useState<string[]>([])
 
   useEffect(() => {
@@ -32,8 +34,8 @@ export default function PartnerLogos() {
   return (
     <div className="bg-slate-900/50 py-8 border-t border-white/5">
       <div className="container mx-auto px-4 mb-6">
-        <h3 className="text-center text-xl font-bold text-white mb-2">Nos Partenaires</h3>
-        <p className="text-center text-orange-200/60 text-sm">Ils nous font confiance</p>
+        <h3 className="text-center text-xl font-bold text-white mb-2">{t.partnerLogos.title}</h3>
+        <p className="text-center text-orange-200/60 text-sm">{t.partnerLogos.subtitle}</p>
       </div>
       
       <div className="overflow-hidden w-full">

@@ -53,10 +53,10 @@ export default function CataloguePage() {
       newErrors.phone = language === 'fr' ? 'Le téléphone est requis' : 'Phone is required'
     }
     if (!formData.pays.trim()) {
-      newErrors.pays = 'Le pays est requis'
+      newErrors.pays = language === 'fr' ? 'Le pays est requis' : 'Country is required'
     }
     if (!formData.ville.trim()) {
-      newErrors.ville = 'La ville est requise'
+      newErrors.ville = language === 'fr' ? 'La ville est requise' : 'City is required'
     }
 
     setErrors(newErrors)
@@ -219,13 +219,13 @@ export default function CataloguePage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-orange-100 mb-2">
-                        Ville <span className="text-orange-500">*</span>
+                        {language === 'fr' ? 'Ville' : 'City'} <span className="text-orange-500">*</span>
                       </label>
                       <input
                         type="text"
                         name="ville"
                         required
-                        placeholder="ex: Lomé"
+                        placeholder={language === 'fr' ? 'ex: Lomé' : 'e.g. Lome'}
                         className={`w-full px-4 py-3 rounded-2xl border bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
                           errors.ville ? 'border-red-400' : 'border-white/10'
                         }`}
@@ -267,7 +267,7 @@ export default function CataloguePage() {
                   {/* Téléphone */}
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-2">
-                      Numéro de téléphone <span className="text-orange-500">*</span>
+                      {language === 'fr' ? 'Numéro de téléphone' : 'Phone number'} <span className="text-orange-500">*</span>
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
@@ -275,7 +275,7 @@ export default function CataloguePage() {
                         type="tel"
                         name="phone"
                         required
-                        placeholder="ex: +228 90 00 00 00"
+                        placeholder={language === 'fr' ? 'ex: +228 90 00 00 00' : 'e.g. +228 90 00 00 00'}
                         className={`w-full pl-11 pr-4 rounded-2xl border py-3 bg-black/35 text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm ${
                           errors.phone
                             ? 'border-red-400'
@@ -299,18 +299,18 @@ export default function CataloguePage() {
                     {loading ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        Préparation...
+                        {language === 'fr' ? 'Préparation...' : 'Preparing...'}
                       </>
                     ) : (
                       <>
                         <Download className="w-5 h-5" />
-                        Télécharger le catalogue
+                        {t.catalogue.download}
                       </>
                     )}
                   </button>
 
                   <p className="text-center text-xs text-orange-200/40 mt-2">
-                    Vos données sont confidentielles et ne seront jamais partagées.
+                    {language === 'fr' ? 'Vos données sont confidentielles et ne seront jamais partagées.' : 'Your data is confidential and will never be shared.'}
                   </p>
                 </form>
 
@@ -318,9 +318,9 @@ export default function CataloguePage() {
                 /* ── État succès ── */
                 <div className="text-center py-12">
                   <CheckCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-white mb-3">Merci !</h3>
+                  <h3 className="text-2xl font-bold text-white mb-3">{language === 'fr' ? 'Merci !' : 'Thank you!'}</h3>
                   <p className="text-orange-200/80 max-w-xl mx-auto mb-6">
-                    Votre demande a été enregistrée. Le téléchargement va commencer automatiquement.
+                    {language === 'fr' ? 'Votre demande a été enregistrée. Le téléchargement va commencer automatiquement.' : 'Your request has been registered. The download will start automatically.'}
                   </p>
                   <a
                     href="/catalogue.pdf"
@@ -328,7 +328,7 @@ export default function CataloguePage() {
                     className="inline-flex items-center gap-2 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 px-8 transition-colors shadow-lg shadow-orange-500/20"
                   >
                     <Download className="w-5 h-5" />
-                    Cliquez ici si le téléchargement ne démarre pas
+                    {language === 'fr' ? 'Cliquez ici si le téléchargement ne démarre pas' : 'Click here if the download does not start'}
                   </a>
                 </div>
               )}

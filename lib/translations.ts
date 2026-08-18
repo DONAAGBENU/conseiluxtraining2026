@@ -182,6 +182,56 @@ export const translations = {
       quickLinks: 'Liens Rapides',
       ourFormations: 'Nos Formations',
       rights: 'Tous droits réservés'
+    },
+    // Testimonials
+    testimonials: {
+      title: 'Ce que disent nos clients',
+      subtitle: 'Des entreprises qui nous font confiance pour former et développer leurs équipes',
+      marieText: "Grâce à ConseiluxTraining, nous avons certifié 50 collaborateurs en gestion de projet. Un accompagnement professionnel et des résultats exceptionnels.",
+      marieRole: "Directrice RH, Groupe SIB",
+      jeanText: "La formation en cybersécurité a transformé notre approche de la sécurité. Nos équipes sont désormais certifiées et opérationnelles.",
+      jeanRole: "CEO, Tech Solutions Africa",
+      fatimaText: "Un partenaire de confiance qui comprend nos enjeux. Les formations TOEIC ont permis à nos équipes d'atteindre leurs objectifs.",
+      fatimaRole: "Responsable Formation, Groupe BIA"
+    },
+    // Partners
+    partners: {
+      title: 'Ils nous font confiance',
+      subtitle: 'Des entreprises et organisations qui ont choisi ConseiluxTraining pour leur développement',
+      note: '* Les logos affichés correspondent aux entreprises ayant déposé un avis'
+    },
+    // Partner Logos
+    partnerLogos: {
+      title: 'Nos Partenaires',
+      subtitle: 'Ils nous font confiance'
+    },
+    // Training Dates
+    trainingDates: {
+      title: 'Dates de Formation',
+      subtitle: 'Inscrivez-vous dès maintenant à nos prochaines sessions',
+      noDates: 'Aucune date de formation disponible pour le moment.',
+      checkBack: 'Revenez plus tard pour découvrir nos prochaines sessions.',
+      places: 'places',
+      complet: 'Complet',
+      maxParticipants: 'participants max',
+      register: "S'inscrire",
+      registration: 'Inscription',
+      fullName: 'Nom et Prénom *',
+      fullNamePlaceholder: 'Votre nom complet',
+      phone: 'Numéro de téléphone *',
+      phonePlaceholder: 'ex: +229 01 29 23 91 94',
+      country: 'Pays *',
+      countryPlaceholder: 'ex: Bénin',
+      city: 'Ville *',
+      cityPlaceholder: 'ex: Cotonou',
+      email: 'Email *',
+      emailPlaceholder: 'votre@email.com',
+      company: 'Entreprise',
+      companyPlaceholder: 'ex: SIB (Optionnel)',
+      message: 'Message (optionnel)',
+      messagePlaceholder: 'Précisez vos besoins...',
+      submit: "S'inscrire via WhatsApp",
+      loading: 'Enregistrement...'
     }
   },
   en: {
@@ -367,6 +417,56 @@ export const translations = {
       quickLinks: 'Quick Links',
       ourFormations: 'Our Trainings',
       rights: 'All rights reserved'
+    },
+    // Testimonials
+    testimonials: {
+      title: 'What our clients say',
+      subtitle: 'Companies that trust us to train and develop their teams',
+      marieText: "Thanks to ConseiluxTraining, we certified 50 employees in project management. Professional support and exceptional results.",
+      marieRole: "HR Director, SIB Group",
+      jeanText: "Cybersecurity training transformed our approach to security. Our teams are now certified and operational.",
+      jeanRole: "CEO, Tech Solutions Africa",
+      fatimaText: "A trusted partner that understands our challenges. TOEIC training allowed our teams to achieve their goals.",
+      fatimaRole: "Training Manager, BIA Group"
+    },
+    // Partners
+    partners: {
+      title: 'They trust us',
+      subtitle: 'Companies and organizations that chose ConseiluxTraining for their development',
+      note: '* The displayed logos correspond to companies that have submitted a review'
+    },
+    // Partner Logos
+    partnerLogos: {
+      title: 'Our Partners',
+      subtitle: 'They trust us'
+    },
+    // Training Dates
+    trainingDates: {
+      title: 'Training Dates',
+      subtitle: 'Register now for our upcoming sessions',
+      noDates: 'No training dates available at the moment.',
+      checkBack: 'Check back later to discover our next sessions.',
+      places: 'seats',
+      complet: 'Full',
+      maxParticipants: 'participants max',
+      register: 'Register',
+      registration: 'Registration',
+      fullName: 'Full Name *',
+      fullNamePlaceholder: 'Your full name',
+      phone: 'Phone number *',
+      phonePlaceholder: 'e.g. +229 01 29 23 91 94',
+      country: 'Country *',
+      countryPlaceholder: 'e.g. Benin',
+      city: 'City *',
+      cityPlaceholder: 'e.g. Cotonou',
+      email: 'Email *',
+      emailPlaceholder: 'your@email.com',
+      company: 'Company',
+      companyPlaceholder: 'e.g. SIB (Optional)',
+      message: 'Message (optional)',
+      messagePlaceholder: 'Specify your needs...',
+      submit: 'Register via WhatsApp',
+      loading: 'Registering...'
     }
   }
 }

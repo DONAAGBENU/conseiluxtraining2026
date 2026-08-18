@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, MapPin, Users, Clock, ChevronRight, Send, Loader2, Globe } from 'lucide-react'
+import { Calendar, MapPin, Users, Clock, ChevronRight, Send, Loader2 } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 interface Training {
   id: string
@@ -15,6 +16,7 @@ interface Training {
 }
 
 export default function TrainingDates() {
+  const { t, language } = useLanguage()
   const [trainings, setTrainings] = useState<Training[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -40,7 +42,7 @@ export default function TrainingDates() {
       const data = await res.json()
       setTrainings(data.dates || [])
     } catch (err) {
-      console.error('Erreur lors du chargement des sessions:', err)
+      console.error(language === 'fr' ? 'Erreur lors du chargement des sessions:' : 'Error loading sessions:', err)
     } finally {
       setLoading(false)
     }
@@ -75,15 +77,18 @@ export default function TrainingDates() {
       })
 
       // 2. Rediriger vers WhatsApp
-      const messageText = `Bonjour, je souhaite m'inscrire à la formation : ${selectedTraining?.formationTitre}\n\nNom: ${formData.name}\nTéléphone: ${formData.phone}\nEmail: ${formData.email}\nPays: ${formData.pays}\nVille: ${formData.ville}\nEntreprise: ${formData.company}\n\n${formData.message}`
+      const messageText = language === 'fr'
+        ? `Bonjour, je souhaite m'inscrire à la formation : ${selectedTraining?.formationTitre}\n\nNom: ${formData.name}\nTéléphone: ${formData.phone}\nEmail: ${formData.email}\nPays: ${formData.pays}\nVille: ${formData.ville}\nEntreprise: ${formData.company}\n\nMessage: ${formData.message}`
+        : `Hello, I would like to register for the training: ${selectedTraining?.formationTitre}\n\nName: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email}\nCountry: ${formData.pays}\nCity: ${formData.ville}\nCompany: ${formData.company}\n\nMessage: ${formData.message}`
+        
       const phoneNumber = '2290129239194'
       window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageText)}`, '_blank')
 
       setShowForm(false)
       setFormData({ name: '', phone: '', email: '', company: '', message: '', pays: '', ville: '' })
     } catch (err) {
-      console.error("Erreur lors de l'inscription:", err)
-      alert("Une erreur est survenue lors de l'enregistrement.")
+      console.error("Erreur:", err)
+      alert(language === 'fr' ? "Une erreur est survenue lors de l'enregistrement." : "An error occurred during registration.")
     } finally {
       setFormLoading(false)
     }
@@ -103,9 +108,9 @@ export default function TrainingDates() {
     return (
       <section className="py-20 bg-transparent">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="section-title">Dates de Formation</h2>
-          <p className="text-orange-200/60 mt-4">Aucune date de formation disponible pour le moment.</p>
-          <p className="text-orange-200/40 text-sm mt-2">Revenez plus tard pour découvrir nos prochaines sessions.</p>
+          <h2 className="section-title">{t.trainingDates.title}</h2>
+          <p className="text-orange-200/60 mt-4">{t.trainingDates.noDates}</p>
+          <p className="text-orange-200/40 text-sm mt-2">{t.trainingDates.checkBack}</p>
         </div>
       </section>
     )
@@ -115,9 +120,9 @@ export default function TrainingDates() {
     <section className="py-20 bg-transparent border-t border-white/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="section-title">Dates de Formation</h2>
+          <h2 className="section-title">{t.trainingDates.title}</h2>
           <p className="section-subtitle text-orange-200/60">
-            Inscrivez-vous dès maintenant à nos prochaines sessions
+            {t.trainingDates.subtitle}
           </p>
         </div>
 
@@ -134,7 +139,7 @@ export default function TrainingDates() {
                       ? 'bg-orange-500/20 text-orange-400'
                       : 'bg-red-500/20 text-red-400'
                   }`}>
-                    {training.disponibles > 0 ? `${training.disponibles} places` : 'Complet'}
+                    {training.disponibles > 0 ? `${training.disponibles} ${t.trainingDates.places}` : t.trainingDates.complet}
                   </span>
                 </div>
                 
@@ -153,7 +158,7 @@ export default function TrainingDates() {
                   </p>
                   <p className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-orange-500 shrink-0" />
-                    {training.places} participants max
+                    {training.places} {t.trainingDates.maxParticipants}
                   </p>
                 </div>
               </div>
@@ -169,11 +174,11 @@ export default function TrainingDates() {
               >
                 {training.disponibles > 0 ? (
                   <>
-                    S'inscrire
+                    {t.trainingDates.register}
                     <ChevronRight className="w-4 h-4" />
                   </>
                 ) : (
-                  'Complet'
+                  t.trainingDates.complet
                 )}
               </button>
             </div>
@@ -186,7 +191,7 @@ export default function TrainingDates() {
             <div className="bg-slate-900 border border-white/10 rounded-3xl max-w-md w-full p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white">Inscription</h3>
+                  <h3 className="text-xl font-bold text-white">{t.trainingDates.registration}</h3>
                   <p className="text-sm text-orange-400 font-semibold mt-1">{selectedTraining.formationTitre}</p>
                   <p className="text-xs text-orange-200/50 mt-0.5">{selectedTraining.lieu} - {selectedTraining.date}</p>
                 </div>
@@ -201,7 +206,7 @@ export default function TrainingDates() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-orange-100 mb-2">
-                    Nom et Prénom *
+                    {t.trainingDates.fullName}
                   </label>
                   <input
                     type="text"
@@ -209,13 +214,13 @@ export default function TrainingDates() {
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Votre nom complet"
+                    placeholder={t.trainingDates.fullNamePlaceholder}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-orange-100 mb-2">
-                    Numéro de téléphone *
+                    {t.trainingDates.phone}
                   </label>
                   <input
                     type="tel"
@@ -223,14 +228,14 @@ export default function TrainingDates() {
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="ex: +229 01 29 23 91 94"
+                    placeholder={t.trainingDates.phonePlaceholder}
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-2">
-                      Pays *
+                      {t.trainingDates.country}
                     </label>
                     <input
                       type="text"
@@ -238,12 +243,12 @@ export default function TrainingDates() {
                       className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
                       value={formData.pays}
                       onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
-                      placeholder="ex: Bénin"
+                      placeholder={t.trainingDates.countryPlaceholder}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-orange-100 mb-2">
-                      Ville *
+                      {t.trainingDates.city}
                     </label>
                     <input
                       type="text"
@@ -251,14 +256,14 @@ export default function TrainingDates() {
                       className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
                       value={formData.ville}
                       onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
-                      placeholder="ex: Cotonou"
+                      placeholder={t.trainingDates.cityPlaceholder}
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-orange-100 mb-2">
-                    Email *
+                    {t.trainingDates.email}
                   </label>
                   <input
                     type="email"
@@ -266,33 +271,33 @@ export default function TrainingDates() {
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="votre@email.com"
+                    placeholder={t.trainingDates.emailPlaceholder}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-orange-100 mb-2">
-                    Entreprise
+                    {t.trainingDates.company}
                   </label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    placeholder="ex: SIB (Optionnel)"
+                    placeholder={t.trainingDates.companyPlaceholder}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-orange-100 mb-2">
-                    Message (optionnel)
+                    {t.trainingDates.message}
                   </label>
                   <textarea
                     rows={3}
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Précisez vos besoins..."
+                    placeholder={t.trainingDates.messagePlaceholder}
                   />
                 </div>
 
@@ -304,12 +309,12 @@ export default function TrainingDates() {
                   {formLoading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Enregistrement...
+                      {t.trainingDates.loading}
                     </>
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      S'inscrire via WhatsApp
+                      {t.trainingDates.submit}
                     </>
                   )}
                 </button>

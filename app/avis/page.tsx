@@ -206,7 +206,7 @@ export default function Avis() {
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
-                    placeholder={language === 'fr' ? 'ex: Directeur, Consultant...' : 'ex: Director, Consultant...'}
+                    placeholder={language === 'fr' ? 'ex: Directeur, Consultant...' : 'e.g. Director, Consultant...'}
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   />

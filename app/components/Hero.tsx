@@ -1,157 +1,192 @@
 "use client"
 
 import Link from 'next/link'
-import { FileText, Phone, CheckCircle, Award, Users, TrendingUp, ArrowRight, Sparkles, Target, Zap } from 'lucide-react'
+import { FileText, Phone, CheckCircle, Award, Users, TrendingUp } from 'lucide-react'
 import { useLanguage } from './LanguageProvider'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const heroImage = "https://plus.unsplash.com/premium_photo-1661490222612-f6702049e9d1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
 export default function Hero() {
   const { t, language } = useLanguage()
-  const [animatedTitle, setAnimatedTitle] = useState('')
-  const [animatedSubtitle, setAnimatedSubtitle] = useState('')
-  
-  const fullTitle = language === 'fr' ? 'Conseilux Training and Development' : 'Conseilux Training and Development'
-  const fullSubtitle = language === 'fr' ? 'Votre partenaire stratégique pour développer la performance durable' : 'Your strategic partner for sustainable performance development'
-  
+  const [displayedTitle, setDisplayedTitle] = useState('')
+  const [displayedSubtitle, setDisplayedSubtitle] = useState('')
+  const [titleDone, setTitleDone] = useState(false)
+  const [subtitleDone, setSubtitleDone] = useState(false)
+  const animRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const fullTitle = 'Conseilux Training & Development'
+  const fullSubtitle = language === 'fr'
+    ? 'Partenaire stratégique en formation & conseil'
+    : 'Strategic partner in training & consulting'
+
   useEffect(() => {
-    const animateText = () => {
-      // Reset animation when language changes
-      setAnimatedTitle('')
-      setAnimatedSubtitle('')
-      
-      let titleIndex = 0
-      const titleInterval = setInterval(() => {
-        if (titleIndex < fullTitle.length) {
-          setAnimatedTitle(fullTitle.slice(0, titleIndex + 1))
-          titleIndex++
-        } else {
-          clearInterval(titleInterval)
-          
-          // Start subtitle animation after title completes
-          let subtitleIndex = 0
-          const subtitleInterval = setInterval(() => {
-            if (subtitleIndex < fullSubtitle.length) {
-              setAnimatedSubtitle(fullSubtitle.slice(0, subtitleIndex + 1))
-              subtitleIndex++
-            } else {
-              clearInterval(subtitleInterval)
-            }
-          }, 30)
-          
-          return () => clearInterval(subtitleInterval)
+    if (animRef.current) clearTimeout(animRef.current)
+    setDisplayedTitle('')
+    setDisplayedSubtitle('')
+    setTitleDone(false)
+    setSubtitleDone(false)
+
+    let ti = 0
+    const typeTitle = () => {
+      if (ti < fullTitle.length) {
+        setDisplayedTitle(fullTitle.slice(0, ti + 1))
+        ti++
+        animRef.current = setTimeout(typeTitle, 48)
+      } else {
+        setTitleDone(true)
+        let si = 0
+        const typeSub = () => {
+          if (si < fullSubtitle.length) {
+            setDisplayedSubtitle(fullSubtitle.slice(0, si + 1))
+            si++
+            animRef.current = setTimeout(typeSub, 24)
+          } else {
+            setSubtitleDone(true)
+          }
         }
-      }, 50)
-      
-      return () => clearInterval(titleInterval)
+        animRef.current = setTimeout(typeSub, 100)
+      }
     }
-    
-    // Animation initiale
-    animateText()
-    
-    // Rejouer l'animation toutes les 10 secondes
-    const repeatInterval = setInterval(() => {
-      animateText()
-    }, 10000)
-    
-    return () => clearInterval(repeatInterval)
-  }, [language, fullTitle, fullSubtitle])
-  
-  const stats = [
-    { icon: <Award className="w-6 h-6" />, value: '130+', label: language === 'fr' ? 'Certifications déployées' : 'Certifications Deployed' },
-    { icon: <Users className="w-6 h-6" />, value: '75%', label: language === 'fr' ? 'Taux de réussite' : 'Success Rate' },
-    { icon: <TrendingUp className="w-6 h-6" />, value: '15+', label: language === 'fr' ? "Années d'expertise" : 'Years of Expertise' },
-  ]
+    animRef.current = setTimeout(typeTitle, 150)
+    return () => { if (animRef.current) clearTimeout(animRef.current) }
+  }, [language, fullSubtitle])
 
   return (
-    <section className="relative min-h-[70vh] overflow-hidden text-white">
+    <section
+      className="relative flex flex-col justify-center text-white overflow-hidden"
+      style={{ height: 'calc(100svh - 88px)', minHeight: '500px' }}
+    >
+      {/* Background */}
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroImage})` }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950/92 via-slate-900/85 to-orange-950/65" />
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroImage})` }}
+        className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)',
+          backgroundSize: '44px 44px'
+        }}
       />
-      <div className="absolute inset-0 bg-slate-950/80" />
 
-      <div className="relative z-10 container mx-auto px-4 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <span className="text-sm font-medium">🚀 {language === 'fr' ? 'Cabinet de conseil & formation' : 'Consulting & Training Firm'}</span>
+      {/* Content */}
+      <div className="relative z-10 w-full px-5 sm:px-8 lg:px-12 xl:px-16 max-w-screen-xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+
+          {/* ── LEFT ── */}
+          <div className="flex flex-col items-start">
+
+            {/* Badge — hidden on very small screens */}
+            <div className="hidden sm:inline-flex items-center gap-1.5 bg-orange-500/20 border border-orange-500/30 px-3 py-1 rounded-full mb-3 text-orange-200 text-xs font-medium">
+              🚀 {language === 'fr' ? 'Cabinet de conseil & formation' : 'Consulting & Training Firm'}
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-orange-100" style={{ minHeight: '80px' }}>
-              <span className="text-orange-200">{animatedTitle}</span>
-              <span className="animate-pulse">|</span>
+            {/* Animated title */}
+            <h1
+              className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-extrabold mb-2 leading-snug"
+              style={{ minHeight: '2rem' }}
+            >
+              <span className="bg-gradient-to-r from-orange-200 via-white to-orange-300 bg-clip-text text-transparent">
+                {displayedTitle}
+              </span>
+              {!titleDone && (
+                <span className="inline-block w-[3px] h-[0.8em] bg-orange-400 ml-1 align-middle animate-blink" />
+              )}
             </h1>
-            <p className="text-xl md:text-2xl mb-4 text-orange-100" style={{ minHeight: '60px' }}>
-              {animatedSubtitle}
-            </p>
-            <p className="text-lg text-orange-200/80 mb-8">
-              {language === 'fr' ? 'Conseil stratégique • Formation • Recrutement • Accompagnement commercial terrain' : 'Strategic Consulting • Training • Recruitment • Commercial Field Support'}
+
+            {/* Animated subtitle */}
+            <p
+              className="text-sm sm:text-base md:text-lg text-orange-100/85 mb-3 leading-snug"
+              style={{ minHeight: '1.4rem' }}
+            >
+              {displayedSubtitle}
+              {titleDone && !subtitleDone && (
+                <span className="inline-block w-[2px] h-[1em] bg-orange-300 ml-0.5 align-middle animate-blink" />
+              )}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/*
-                ✅ Redirige vers /catalogue (page formulaire)
-                Le PDF se télécharge automatiquement APRÈS soumission du formulaire
-                Flux : Hero → /catalogue (formulaire) → PDF téléchargé
-              */}
+            {/* Services line — hidden on small mobile */}
+            <p className="hidden sm:block text-xs text-orange-200/50 mb-4">
+              {language === 'fr'
+                ? 'Conseil • Formation • Recrutement • Accompagnement'
+                : 'Consulting • Training • Recruitment • Support'}
+            </p>
+
+            {/* ── CTA BUTTONS ── */}
+            <div className="flex flex-row gap-2 mb-4 flex-wrap">
               <Link
                 href="/catalogue"
-                className="inline-flex items-center gap-2 bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors text-lg"
+                id="hero-catalogue-btn"
+                className="group relative inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm overflow-hidden shadow-lg shadow-orange-600/40 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap"
+                style={{ background: 'linear-gradient(135deg, #f97316 0%, #ea580c 55%, #c2410c 100%)' }}
               >
-                <FileText className="w-5 h-5" />
-                {t.nav.downloadCatalogue}
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-600 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none" />
+                <FileText className="w-4 h-4 shrink-0" />
+                <span>{t.nav.downloadCatalogue}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse shrink-0" />
               </Link>
 
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-600 transition-colors text-lg"
+                className="inline-flex items-center justify-center gap-2 border border-white/30 text-white px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-white/10 hover:border-white/55 transition-all duration-300 whitespace-nowrap"
               >
-                <Phone className="w-5 h-5" />
-                {language === 'fr' ? 'Nous contacter' : 'Contact Us'}
+                <Phone className="w-4 h-4" />
+                {language === 'fr' ? 'Contacter' : 'Contact'}
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-6">
-              {stats.map((stat, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <div className="text-orange-200">{stat.icon}</div>
+            {/* Stats — hidden on mobile, shown from sm */}
+            <div className="hidden sm:flex flex-wrap gap-2">
+              {[
+                { icon: <Award className="w-3.5 h-3.5" />, value: '130+', label: language === 'fr' ? 'Certifications' : 'Certifications' },
+                { icon: <Users className="w-3.5 h-3.5" />, value: '75%', label: language === 'fr' ? 'Réussite' : 'Success' },
+                { icon: <TrendingUp className="w-3.5 h-3.5" />, value: '15+', label: language === 'fr' ? 'Années' : 'Years' },
+              ].map((stat, i) => (
+                <div key={i} className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-md px-2.5 py-1.5">
+                  <div className="text-orange-400">{stat.icon}</div>
                   <div>
-                    <div className="text-2xl font-bold text-orange-100">{stat.value}</div>
-                    <div className="text-sm text-orange-200">{stat.label}</div>
+                    <div className="text-sm font-bold text-orange-100 leading-none">{stat.value}</div>
+                    <div className="text-[9px] text-orange-200/50 mt-0.5">{stat.label}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="hidden lg:block">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <CheckCircle className="text-orange-200 w-8 h-8 mb-3" />
-                <h3 className="font-semibold text-white mb-1">{language === 'fr' ? 'Conseil Stratégique' : 'Strategic Consulting'}</h3>
-                <p className="text-sm text-orange-200">{language === 'fr' ? 'Diagnostic, audit, stratégie' : 'Diagnostic, audit, strategy'}</p>
+          {/* ── RIGHT — feature cards (desktop only) ── */}
+          <div className="hidden lg:grid grid-cols-2 gap-3">
+            {[
+              { Icon: CheckCircle, titleFr: 'Conseil Stratégique', titleEn: 'Strategic Consulting', descFr: 'Diagnostic, audit, stratégie', descEn: 'Diagnostic, audit, strategy' },
+              { Icon: Award, titleFr: 'Certifications', titleEn: 'Certifications', descFr: 'PMP, ITIL, TOEIC, ISO...', descEn: 'PMP, ITIL, TOEIC, ISO...' },
+              { Icon: Users, titleFr: 'Recrutement', titleEn: 'Recruitment', descFr: 'Talents sur mesure', descEn: 'Custom talent sourcing' },
+              { Icon: TrendingUp, titleFr: 'Accompagnement', titleEn: 'Field Support', descFr: 'Ventes & développement', descEn: 'Sales & development' },
+            ].map(({ Icon, titleFr, titleEn, descFr, descEn }, i) => (
+              <div
+                key={i}
+                className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-orange-500/40 transition-all duration-300 hover:-translate-y-1"
+              >
+                <Icon className="text-orange-400 w-6 h-6 mb-2 group-hover:scale-110 transition-transform" />
+                <h3 className="font-semibold text-white mb-0.5 text-sm">{language === 'fr' ? titleFr : titleEn}</h3>
+                <p className="text-xs text-orange-200/55">{language === 'fr' ? descFr : descEn}</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <Award className="text-orange-200 w-8 h-8 mb-3" />
-                <h3 className="font-semibold text-white mb-1">{language === 'fr' ? 'Certifications' : 'Certifications'}</h3>
-                <p className="text-sm text-orange-200">PMP, ITIL, TOEIC, ISO...</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <Users className="text-orange-200 w-8 h-8 mb-3" />
-                <h3 className="font-semibold text-white mb-1">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</h3>
-                <p className="text-sm text-orange-200">{language === 'fr' ? 'Talents sur mesure' : 'Custom talents'}</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <TrendingUp className="text-orange-200 w-8 h-8 mb-3" />
-                <h3 className="font-semibold text-white mb-1">{language === 'fr' ? 'Accompagnement' : 'Support'}</h3>
-                <p className="text-sm text-orange-200">{language === 'fr' ? 'Ventes & développement' : 'Sales & development'}</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-25 animate-bounce">
+        <div className="w-px h-5 bg-white/50" />
+      </div>
+
+      <style jsx>{`
+        .animate-blink {
+          animation: blink 0.65s step-end infinite;
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+      `}</style>
     </section>
   )
 }

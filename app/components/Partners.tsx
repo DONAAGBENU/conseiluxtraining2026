@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Star } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 interface Avis {
   id: string
@@ -16,6 +17,7 @@ interface Avis {
 }
 
 export default function Partners() {
+  const { t, language } = useLanguage()
   const [avis, setAvis] = useState<Avis[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -23,9 +25,9 @@ export default function Partners() {
     fetch('/api/avis?approved=true')
       .then(res => res.json())
       .then(data => setAvis(data.avis || []))
-      .catch(err => console.error('Erreur chargement avis:', err))
+      .catch(err => console.error(language === 'fr' ? 'Erreur chargement avis:' : 'Error loading reviews:', err))
       .finally(() => setLoading(false))
-  }, [])
+  }, [language])
 
   // Extraire les logos uniques des partenaires
   const partenaires = avis.reduce((acc, current) => {
@@ -48,9 +50,9 @@ export default function Partners() {
     <section className="py-16 bg-transparent border-t border-white/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Ils nous font confiance</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">{t.partners.title}</h2>
           <p className="text-orange-200/60 max-w-2xl mx-auto">
-            Des entreprises et organisations qui ont choisi ConseiluxTraining pour leur développement
+            {t.partners.subtitle}
           </p>
         </div>
 
@@ -88,7 +90,7 @@ export default function Partners() {
 
         <div className="mt-12 text-center">
           <p className="text-sm text-orange-200/30">
-            * Les logos affichés correspondent aux entreprises ayant déposé un avis
+            {t.partners.note}
           </p>
         </div>
       </div>
