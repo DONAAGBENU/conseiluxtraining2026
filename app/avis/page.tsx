@@ -92,7 +92,7 @@ export default function Avis() {
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.reviews.title}</h1>
-            <p className="text-xl text-orange-100 max-w-2xl mx-auto">
+            <p className="text-xl text-orange-800 max-w-2xl mx-auto">
               {language === 'fr' ? 'Ce que nos clients disent de leurs expériences avec ConseiluxTraining' : 'What our clients say about their experiences with ConseiluxTraining'}
             </p>
           </div>
@@ -103,7 +103,7 @@ export default function Avis() {
             <div className="flex justify-center mb-8">
               <button
                 onClick={() => setShowForm(true)}
-                className="bg-orange-600 hover:bg-orange-500 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg shadow-orange-600/10"
+                className="bg-orange-800 hover:bg-orange-700 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg shadow-orange-800/10"
               >
                 <MessageSquare className="w-5 h-5" />
                 {t.reviews.addReview}
@@ -112,46 +112,46 @@ export default function Avis() {
 
             {loading ? (
               <div className="flex items-center justify-center min-h-[30vh]">
-                <Loader2 className="w-10 h-10 animate-spin text-orange-500" />
+                <Loader2 className="w-10 h-10 animate-spin text-orange-800" />
               </div>
             ) : testimonials.length === 0 ? (
               <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl max-w-xl mx-auto">
-                <MessageSquare className="w-16 h-16 text-orange-200/20 mx-auto mb-4" />
-                <p className="text-orange-200/60 font-medium">{t.reviews.noReviews}</p>
+                <MessageSquare className="w-16 h-16 text-orange-800/20 mx-auto mb-4" />
+                <p className="text-orange-800/60 font-medium">{t.reviews.noReviews}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {testimonials.map((testimonial) => (
                   <div 
                     key={testimonial.id} 
-                    className="card border-t-4 border-orange-600 hover:-translate-y-1 transition-all bg-white/10 backdrop-blur-md border-white/10 flex flex-col justify-between"
+                    className="card border-t-4 border-orange-800 hover:-translate-y-1 transition-all bg-white/10 backdrop-blur-md border-white/10 flex flex-col justify-between"
                   >
                     <div>
-                      <div className="flex text-orange-400 mb-3">
+                      <div className="flex text-orange-800 mb-3">
                         {[...Array(testimonial.note)].map((_, i) => (
                           <Star key={i} className="w-4 h-4 fill-current" />
                         ))}
                       </div>
-                      <p className="text-orange-100/90 mb-6 italic text-sm font-light leading-relaxed">
+                      <p className="text-orange-800/90 mb-6 italic text-sm font-light leading-relaxed">
                         &quot;{testimonial.texte}&quot;
                       </p>
                     </div>
 
                     <div className="border-t border-white/5 pt-4 mt-auto">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-orange-600/20 border border-orange-500/20 rounded-full flex items-center justify-center text-orange-400 font-bold text-base">
+                        <div className="w-10 h-10 bg-orange-800/20 border border-orange-500/20 rounded-full flex items-center justify-center text-orange-800 font-bold text-base">
                           {testimonial.nom.charAt(0)}
                         </div>
                         <div>
                           <p className="font-semibold text-white">{testimonial.nom}</p>
-                          <div className="flex flex-wrap items-center gap-1.5 text-xs text-orange-200/60 mt-0.5">
+                          <div className="flex flex-wrap items-center gap-1.5 text-xs text-orange-800/60 mt-0.5">
                             <span>{testimonial.role}</span>
                             {testimonial.role && testimonial.entreprise && <span>•</span>}
                             <span>{testimonial.entreprise}</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-[10px] text-orange-200/40 mt-3 flex items-center gap-1">
+                      <p className="text-[10px] text-orange-800/40 mt-3 flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" />
                         {testimonial.date}
                       </p>
@@ -174,7 +174,7 @@ export default function Avis() {
               <h2 className="text-2xl font-bold text-white">{t.reviews.reviewFormTitle}</h2>
               <button 
                 onClick={() => setShowForm(false)} 
-                className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
+                className="text-orange-800/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -189,11 +189,11 @@ export default function Avis() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">{t.reviews.yourName} *</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">{t.reviews.yourName} *</label>
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                   placeholder={language === 'fr' ? 'Votre nom complet' : 'Your full name'}
                   value={formData.nom}
                   onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
@@ -202,20 +202,20 @@ export default function Avis() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Votre rôle' : 'Your role'}</label>
+                  <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Votre rôle' : 'Your role'}</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                     placeholder={language === 'fr' ? 'ex: Directeur, Consultant...' : 'e.g. Director, Consultant...'}
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Entreprise' : 'Company'}</label>
+                  <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Entreprise' : 'Company'}</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                     placeholder={language === 'fr' ? 'Nom de votre entreprise' : 'Your company name'}
                     value={formData.entreprise}
                     onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
@@ -225,20 +225,20 @@ export default function Avis() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Email (optionnel)' : 'Email (optional)'}</label>
+                  <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Email (optionnel)' : 'Email (optional)'}</label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                     placeholder="your@email.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Téléphone (optionnel)' : 'Phone (optional)'}</label>
+                  <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Téléphone (optionnel)' : 'Phone (optional)'}</label>
                   <input
                     type="tel"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                     placeholder="+228 90 54 64 64"
                     value={formData.telephone}
                     onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
@@ -247,7 +247,7 @@ export default function Avis() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">{t.reviews.yourRating} *</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">{t.reviews.yourRating} *</label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -259,8 +259,8 @@ export default function Avis() {
                       <Star 
                         className={`w-8 h-8 ${
                           star <= formData.note 
-                            ? 'text-orange-400 fill-current' 
-                            : 'text-orange-200/40'
+                            ? 'text-orange-800 fill-current' 
+                            : 'text-orange-800/40'
                         }`}
                       />
                     </button>
@@ -269,11 +269,11 @@ export default function Avis() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">{t.reviews.yourComment} *</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">{t.reviews.yourComment} *</label>
                 <textarea
                   rows={4}
                   required
-                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                   placeholder={language === 'fr' ? 'Partagez votre expérience avec ConseiluxTraining...' : 'Share your experience with ConseiluxTraining...'}
                   value={formData.texte}
                   onChange={(e) => setFormData({ ...formData, texte: e.target.value })}
@@ -283,7 +283,7 @@ export default function Avis() {
               <button
                 type="submit"
                 disabled={formLoading}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors mt-4"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors mt-4"
               >
                 {formLoading ? (
                   <>

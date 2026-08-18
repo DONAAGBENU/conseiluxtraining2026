@@ -51,7 +51,7 @@ export default function Partners() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-white mb-4">{t.partners.title}</h2>
-          <p className="text-orange-200/60 max-w-2xl mx-auto">
+          <p className="text-orange-800/60 max-w-2xl mx-auto">
             {t.partners.subtitle}
           </p>
         </div>
@@ -69,15 +69,15 @@ export default function Partners() {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-20 bg-orange-500/10 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl font-bold text-orange-400">
+                  <div className="w-full h-20 bg-orange-800/10 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl font-bold text-orange-800">
                       {partenaire.entreprise.charAt(0)}
                     </span>
                   </div>
                 )}
                 <div className="mt-3 text-center">
                   <p className="text-sm font-semibold text-white">{partenaire.entreprise}</p>
-                  <div className="flex justify-center text-orange-400 mt-1">
+                  <div className="flex justify-center text-orange-800 mt-1">
                     {[...Array(partenaire.note)].map((_, i) => (
                       <Star key={i} className="w-3 h-3 fill-current" />
                     ))}
@@ -89,7 +89,7 @@ export default function Partners() {
         </div>
 
         <div className="mt-12 text-center">
-          <p className="text-sm text-orange-200/30">
+          <p className="text-sm text-orange-800/30">
             {t.partners.note}
           </p>
         </div>

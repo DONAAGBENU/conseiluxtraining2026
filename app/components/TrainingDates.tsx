@@ -98,7 +98,7 @@ export default function TrainingDates() {
     return (
       <section className="py-20 bg-transparent">
         <div className="flex items-center justify-center">
-          <Loader2 className="w-10 h-10 animate-spin text-orange-500" />
+          <Loader2 className="w-10 h-10 animate-spin text-orange-800" />
         </div>
       </section>
     )
@@ -109,8 +109,8 @@ export default function TrainingDates() {
       <section className="py-20 bg-transparent">
         <div className="container mx-auto px-4 text-center">
           <h2 className="section-title">{t.trainingDates.title}</h2>
-          <p className="text-orange-200/60 mt-4">{t.trainingDates.noDates}</p>
-          <p className="text-orange-200/40 text-sm mt-2">{t.trainingDates.checkBack}</p>
+          <p className="text-orange-800/60 mt-4">{t.trainingDates.noDates}</p>
+          <p className="text-orange-800/40 text-sm mt-2">{t.trainingDates.checkBack}</p>
         </div>
       </section>
     )
@@ -121,14 +121,14 @@ export default function TrainingDates() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="section-title">{t.trainingDates.title}</h2>
-          <p className="section-subtitle text-orange-200/60">
+          <p className="section-subtitle text-orange-800/60">
             {t.trainingDates.subtitle}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {trainings.map((training) => (
-            <div key={training.id} className="card border-t-4 border-orange-600 hover:-translate-y-1 transition-all bg-white/10 backdrop-blur-md border-white/10 flex flex-col justify-between">
+            <div key={training.id} className="card border-t-4 border-orange-800 hover:-translate-y-1 transition-all bg-white/10 backdrop-blur-md border-white/10 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start gap-4 mb-4">
                   <h3 className="text-lg font-bold text-white leading-snug">{training.formationTitre}</h3>
@@ -136,28 +136,28 @@ export default function TrainingDates() {
                     training.disponibles > 5 
                       ? 'bg-green-500/20 text-green-400' 
                       : training.disponibles > 0 
-                      ? 'bg-orange-500/20 text-orange-400'
+                      ? 'bg-orange-800/20 text-orange-800'
                       : 'bg-red-500/20 text-red-400'
                   }`}>
                     {training.disponibles > 0 ? `${training.disponibles} ${t.trainingDates.places}` : t.trainingDates.complet}
                   </span>
                 </div>
                 
-                <div className="space-y-2.5 text-sm text-orange-100/70">
+                <div className="space-y-2.5 text-sm text-orange-800/70">
                   <p className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
+                    <MapPin className="w-4 h-4 text-orange-800 shrink-0" />
                     {training.lieu}
                   </p>
                   <p className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-orange-500 shrink-0" />
+                    <Calendar className="w-4 h-4 text-orange-800 shrink-0" />
                     {training.date}
                   </p>
                   <p className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-orange-500 shrink-0" />
+                    <Clock className="w-4 h-4 text-orange-800 shrink-0" />
                     {training.duree}
                   </p>
                   <p className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-orange-500 shrink-0" />
+                    <Users className="w-4 h-4 text-orange-800 shrink-0" />
                     {training.places} {t.trainingDates.maxParticipants}
                   </p>
                 </div>
@@ -168,8 +168,8 @@ export default function TrainingDates() {
                 disabled={training.disponibles === 0}
                 className={`w-full mt-6 px-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors ${
                   training.disponibles > 0
-                    ? 'bg-orange-600 text-white hover:bg-orange-500 shadow-lg shadow-orange-600/10'
-                    : 'bg-white/5 text-orange-200/20 border border-white/5 cursor-not-allowed'
+                    ? 'bg-orange-800 text-white hover:bg-orange-700 shadow-lg shadow-orange-800/10'
+                    : 'bg-white/5 text-orange-800/20 border border-white/5 cursor-not-allowed'
                 }`}
               >
                 {training.disponibles > 0 ? (
@@ -192,12 +192,12 @@ export default function TrainingDates() {
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="text-xl font-bold text-white">{t.trainingDates.registration}</h3>
-                  <p className="text-sm text-orange-400 font-semibold mt-1">{selectedTraining.formationTitre}</p>
-                  <p className="text-xs text-orange-200/50 mt-0.5">{selectedTraining.lieu} - {selectedTraining.date}</p>
+                  <p className="text-sm text-orange-800 font-semibold mt-1">{selectedTraining.formationTitre}</p>
+                  <p className="text-xs text-orange-800/50 mt-0.5">{selectedTraining.lieu} - {selectedTraining.date}</p>
                 </div>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
+                  className="text-orange-800/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
                 >
                   ✕
                 </button>
@@ -205,13 +205,13 @@ export default function TrainingDates() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">
+                  <label className="block text-sm font-medium text-orange-800 mb-2">
                     {t.trainingDates.fullName}
                   </label>
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder={t.trainingDates.fullNamePlaceholder}
@@ -219,13 +219,13 @@ export default function TrainingDates() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">
+                  <label className="block text-sm font-medium text-orange-800 mb-2">
                     {t.trainingDates.phone}
                   </label>
                   <input
                     type="tel"
                     required
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder={t.trainingDates.phonePlaceholder}
@@ -234,26 +234,26 @@ export default function TrainingDates() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-orange-100 mb-2">
+                    <label className="block text-sm font-medium text-orange-800 mb-2">
                       {t.trainingDates.country}
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                      className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                       value={formData.pays}
                       onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
                       placeholder={t.trainingDates.countryPlaceholder}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-orange-100 mb-2">
+                    <label className="block text-sm font-medium text-orange-800 mb-2">
                       {t.trainingDates.city}
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                      className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                       value={formData.ville}
                       onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
                       placeholder={t.trainingDates.cityPlaceholder}
@@ -262,13 +262,13 @@ export default function TrainingDates() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">
+                  <label className="block text-sm font-medium text-orange-800 mb-2">
                     {t.trainingDates.email}
                   </label>
                   <input
                     type="email"
                     required
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder={t.trainingDates.emailPlaceholder}
@@ -276,12 +276,12 @@ export default function TrainingDates() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">
+                  <label className="block text-sm font-medium text-orange-800 mb-2">
                     {t.trainingDates.company}
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     placeholder={t.trainingDates.companyPlaceholder}
@@ -289,12 +289,12 @@ export default function TrainingDates() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">
+                  <label className="block text-sm font-medium text-orange-800 mb-2">
                     {t.trainingDates.message}
                   </label>
                   <textarea
                     rows={3}
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder={t.trainingDates.messagePlaceholder}
@@ -304,7 +304,7 @@ export default function TrainingDates() {
                 <button
                   type="submit"
                   disabled={formLoading}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors mt-4"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-800/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors mt-4"
                 >
                   {formLoading ? (
                     <>

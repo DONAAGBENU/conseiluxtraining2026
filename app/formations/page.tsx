@@ -33,7 +33,7 @@ export default function FormationsList() {
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white text-center">
           <div className="container mx-auto px-4">
             <h1 className="text-4xl md:text-5xl font-bold">{t.formations.title}</h1>
-            <p className="text-xl text-orange-100 mt-4">
+            <p className="text-xl text-orange-800 mt-4">
               {t.formations.subtitle}
             </p>
           </div>
@@ -43,11 +43,11 @@ export default function FormationsList() {
           <div className="container mx-auto px-4">
             {loading ? (
               <div className="flex items-center justify-center min-h-[30vh]">
-                <Loader2 className="w-10 h-10 animate-spin text-orange-500" />
+                <Loader2 className="w-10 h-10 animate-spin text-orange-800" />
               </div>
             ) : formations.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-orange-200/60">{t.formations.noFormations}</p>
+                <p className="text-orange-800/60">{t.formations.noFormations}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -58,14 +58,14 @@ export default function FormationsList() {
                     className="card border-t-4 border-primary hover:-translate-y-2 transition-all bg-white/10 backdrop-blur-md border-white/10"
                   >
                     <h3 className="text-xl font-bold text-white mb-2">{formation.titre}</h3>
-                    <p className="text-sm text-orange-400 mb-2">{formation.categorie}</p>
-                    <p className="text-orange-200/70 text-sm">{formation.description.slice(0, 100)}...</p>
+                    <p className="text-sm text-orange-800 mb-2">{formation.categorie}</p>
+                    <p className="text-orange-800/70 text-sm">{formation.description.slice(0, 100)}...</p>
                     <div className="flex items-center justify-between mt-4">
-                      <span className="text-sm text-orange-200/50 flex items-center gap-1">
+                      <span className="text-sm text-orange-800/50 flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {formation.duree}
                       </span>
-                      <span className="text-orange-500 font-medium text-sm flex items-center gap-1">
+                      <span className="text-orange-800 font-medium text-sm flex items-center gap-1">
                         {t.formations.viewMore} <ChevronRight className="w-4 h-4" />
                       </span>
                     </div>

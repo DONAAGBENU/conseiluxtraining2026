@@ -98,11 +98,11 @@ export default function Header() {
                 className="object-contain w-full h-full"
               />
             </div>
-            <div className="ml-2 hidden md:block">
-              <h1 className="text-base font-bold text-white leading-tight" style={{ width: '220px', minHeight: '22px' }}>
+            <div className="ml-2 hidden md:block" style={{ width: '220px' }}>
+              <h1 className="text-base font-bold text-white leading-tight" style={{ minHeight: '22px', width: '100%', overflow: 'hidden' }}>
                 {animatedText}
                 {!animDone && (
-                  <span className="animate-pulse text-orange-400">|</span>
+                  <span className="animate-pulse text-orange-800">|</span>
                 )}
               </h1>
             </div>
@@ -114,7 +114,7 @@ export default function Header() {
               <li key={item.href} className="relative group">
                 {item.dropdown ? (
                   <button
-                    className="text-orange-100 hover:text-white transition-colors font-medium flex items-center gap-1"
+                    className="text-orange-800 hover:text-white transition-colors font-medium flex items-center gap-1"
                     onMouseEnter={() => setOpenDropdown(item.label)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
@@ -124,7 +124,7 @@ export default function Header() {
                 ) : (
                   <Link 
                     href={item.href} 
-                    className="text-orange-100 hover:text-white transition-colors font-medium"
+                    className="text-orange-800 hover:text-white transition-colors font-medium"
                   >
                     {item.label}
                   </Link>
@@ -141,7 +141,7 @@ export default function Header() {
                       <Link
                         key={subItem.href}
                         href={subItem.href}
-                        className="block px-4 py-2 text-orange-100 hover:bg-white/20 hover:text-white transition-colors"
+                        className="block px-4 py-2 text-orange-800 hover:bg-white/20 hover:text-white transition-colors"
                         onClick={() => setOpenDropdown(null)}
                       >
                         {subItem.label}
@@ -158,7 +158,7 @@ export default function Header() {
                 href="https://www.linkedin.com/company/conseilux-training-and-development/about/?viewAsMember=true"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-100 hover:text-orange-500 transition-colors"
+                className="text-orange-800 hover:text-orange-900 transition-colors"
                 title="LinkedIn"
               >
                 <LinkedInIcon />
@@ -167,7 +167,7 @@ export default function Header() {
                 href="https://www.facebook.com/share/1EqDD3THTx/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-100 hover:text-orange-500 transition-colors"
+                className="text-orange-800 hover:text-orange-900 transition-colors"
                 title="Facebook"
               >
                 <FacebookIcon />
@@ -176,7 +176,7 @@ export default function Header() {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-100 hover:text-orange-500 transition-colors"
+                className="text-orange-800 hover:text-orange-900 transition-colors"
                 title="Twitter"
               >
                 <TwitterIcon />
@@ -187,7 +187,7 @@ export default function Header() {
             <li className="flex items-center">
               <button
                 onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
-                className="text-orange-100 hover:text-white transition-colors font-bold text-xs px-2 py-1 rounded border border-white/20 hover:border-orange-500/50 tracking-wider"
+                className="text-orange-800 hover:text-white transition-colors font-bold text-xs px-2 py-1 rounded border border-white/20 hover:border-orange-900/50 tracking-wider"
               >
                 {language === 'fr' ? 'FR' : 'EN'}
               </button>
@@ -196,7 +196,7 @@ export default function Header() {
             <li>
               <Link 
                 href="/catalogue"
-                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-orange-500/30 hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
+                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-800 to-orange-900 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-orange-800/30 hover:from-orange-700 hover:to-orange-800 transition-all duration-300"
               >
                 <FileText className="w-4 h-4 shrink-0" />
                 {t.nav.downloadCatalogue}
@@ -206,7 +206,7 @@ export default function Header() {
 
           {/* Menu Mobile Button */}
           <button 
-            className="xl:hidden text-orange-100"
+            className="xl:hidden text-orange-800"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -221,13 +221,13 @@ export default function Header() {
               <div key={item.href}>
                 {item.dropdown ? (
                   <div className="space-y-2">
-                    <span className="font-semibold text-orange-100">{item.label}</span>
+                    <span className="font-semibold text-orange-800">{item.label}</span>
                     <div className="pl-4 space-y-1">
                       {item.dropdown.map((subItem) => (
                         <Link
                           key={subItem.href}
                           href={subItem.href}
-                          className="block text-orange-200 hover:text-white transition-colors py-1 text-sm"
+                          className="block text-orange-800 hover:text-white transition-colors py-1 text-sm"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {subItem.label}
@@ -238,7 +238,7 @@ export default function Header() {
                 ) : (
                   <Link 
                     href={item.href} 
-                    className="block text-orange-100 hover:text-white transition-colors font-medium"
+                    className="block text-orange-800 hover:text-white transition-colors font-medium"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}
@@ -253,7 +253,7 @@ export default function Header() {
                 href="https://www.linkedin.com/company/conseilux-training-and-development/about/?viewAsMember=true"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-100 hover:text-orange-500 transition-colors"
+                className="text-orange-800 hover:text-orange-900 transition-colors"
                 title="LinkedIn"
               >
                 <LinkedInIcon />
@@ -262,7 +262,7 @@ export default function Header() {
                 href="https://www.facebook.com/share/1EqDD3THTx/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-100 hover:text-orange-500 transition-colors"
+                className="text-orange-800 hover:text-orange-900 transition-colors"
                 title="Facebook"
               >
                 <FacebookIcon />
@@ -271,7 +271,7 @@ export default function Header() {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-100 hover:text-orange-500 transition-colors"
+                className="text-orange-800 hover:text-orange-900 transition-colors"
                 title="Twitter"
               >
                 <TwitterIcon />
@@ -282,7 +282,7 @@ export default function Header() {
             <div className="flex items-center gap-2 pt-4 border-t border-white/5">
               <button
                 onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
-                className="flex items-center gap-2 text-orange-100 hover:text-white transition-colors font-medium px-3 py-2 rounded-lg border border-white/20 hover:border-orange-500/50"
+                className="flex items-center gap-2 text-orange-800 hover:text-white transition-colors font-medium px-3 py-2 rounded-lg border border-white/20 hover:border-orange-900/50"
               >
                 <Globe className="w-4 h-4" />
                 {language === 'fr' ? 'FR' : 'EN'}

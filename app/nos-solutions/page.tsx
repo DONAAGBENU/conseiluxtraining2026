@@ -17,28 +17,28 @@ export default function NosSolutions() {
       description: language === 'fr' ? 'ERP complet pour la gestion d\'entreprise' : 'Complete ERP for business management',
       features: language === 'fr' ? ['Finance & Comptabilité', 'RH & Paie', 'Logistique', 'Ventes'] : ['Finance & Accounting', 'HR & Payroll', 'Logistics', 'Sales'],
       image: '/images/conseil.jpeg',
-      color: 'border-orange-200 hover:border-orange-600'
+      color: 'border-orange-800 hover:border-orange-900'
     },
     {
       name: 'Sage 100',
       description: language === 'fr' ? 'Gestion commerciale et comptabilité' : 'Commercial management and accounting',
       features: language === 'fr' ? ['Comptabilité', 'Facturation', 'Gestion de stock', 'CRM'] : ['Accounting', 'Invoicing', 'Stock management', 'CRM'],
       image: '/images/formation.jpeg',
-      color: 'border-orange-200 hover:border-orange-600'
+      color: 'border-orange-800 hover:border-orange-900'
     },
     {
       name: 'Microsoft 365',
       description: language === 'fr' ? 'Suite collaborative et productive' : 'Collaborative and productive suite',
       features: ['Teams', 'SharePoint', 'Power BI', 'Office'],
       image: '/images/recrutement.jpeg',
-      color: 'border-orange-200 hover:border-orange-600'
+      color: 'border-orange-800 hover:border-orange-900'
     },
     {
       name: 'Power Platform',
       description: language === 'fr' ? 'Automatisation et analyse de données' : 'Automation and data analysis',
       features: ['Power BI', 'Power Apps', 'Power Automate', 'Power Virtual Agents'],
       image: '/images/accompagnement.jpeg',
-      color: 'border-orange-200 hover:border-orange-600'
+      color: 'border-orange-800 hover:border-orange-900'
     },
   ]
 
@@ -78,7 +78,7 @@ export default function NosSolutions() {
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.solutions.title}</h1>
-            <p className="text-xl text-orange-100 max-w-2xl mx-auto">
+            <p className="text-xl text-orange-800 max-w-2xl mx-auto">
               {t.solutions.subtitle}
             </p>
           </div>
@@ -92,11 +92,11 @@ export default function NosSolutions() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service, index) => (
-                <div key={index} className="card border-l-4 border-orange-600 flex items-start gap-4 bg-white/10 backdrop-blur-md border-white/10">
-                  <CheckCircle className="w-6 h-6 text-orange-500 flex-shrink-0 mt-1" />
+                <div key={index} className="card border-l-4 border-orange-800 flex items-start gap-4 bg-white/10 backdrop-blur-md border-white/10">
+                  <CheckCircle className="w-6 h-6 text-orange-800 flex-shrink-0 mt-1" />
                   <div>
                     <h3 className="font-semibold text-white mb-1">{service.title}</h3>
-                    <p className="text-sm text-orange-200/80">{service.description}</p>
+                    <p className="text-sm text-orange-800/80">{service.description}</p>
                   </div>
                 </div>
               ))}
@@ -110,7 +110,7 @@ export default function NosSolutions() {
             <h2 className="text-3xl font-bold text-center text-white mb-4">
               {t.solutions.software}
             </h2>
-            <p className="text-center text-orange-200/60 mb-12 max-w-2xl mx-auto">
+            <p className="text-center text-orange-800/60 mb-12 max-w-2xl mx-auto">
               {language === 'fr' ? 'Des logiciels de gestion adaptés à tous les secteurs d\'activité' : 'Management software adapted to all business sectors'}
             </p>
 
@@ -118,7 +118,7 @@ export default function NosSolutions() {
               {softwareSolutions.map((solution, index) => (
                 <div key={index} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
                   <div>
-                    <div className="text-orange-500 mb-4 h-16 w-16 rounded-lg overflow-hidden">
+                    <div className="text-orange-800 mb-4 h-16 w-16 rounded-lg overflow-hidden">
                       <Image 
                         src={solution.image} 
                         alt={solution.name}
@@ -128,11 +128,11 @@ export default function NosSolutions() {
                       />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{solution.name}</h3>
-                    <p className="text-orange-200/80 mb-4 text-sm">{solution.description}</p>
+                    <p className="text-orange-800/80 mb-4 text-sm">{solution.description}</p>
                     <ul className="space-y-2">
                       {solution.features.map((feature, idx) => (
-                        <li key={idx} className="text-sm text-orange-100 flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-orange-500 shrink-0" />
+                        <li key={idx} className="text-sm text-orange-800 flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-orange-800 shrink-0" />
                           {feature}
                         </li>
                       ))}
@@ -140,7 +140,7 @@ export default function NosSolutions() {
                   </div>
                   <Link 
                     href="/contact"
-                    className="inline-flex items-center gap-2 mt-6 text-orange-500 font-semibold hover:text-white transition-colors"
+                    className="inline-flex items-center gap-2 mt-6 text-orange-800 font-semibold hover:text-white transition-colors"
                   >
                     {t.solutions.learnMore} <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -151,15 +151,15 @@ export default function NosSolutions() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 bg-orange-600 text-white">
+        <section className="py-16 bg-orange-800 text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-4">{t.solutions.ctaTitle}</h2>
-            <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-orange-800 mb-8 max-w-2xl mx-auto">
               {t.solutions.ctaSubtitle}
             </p>
             <Link 
               href="/contact"
-              className="inline-flex items-center gap-2 bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors"
+              className="inline-flex items-center gap-2 bg-white text-orange-800 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors"
             >
               {t.solutions.consultUs}
               <ArrowRight className="w-5 h-5" />

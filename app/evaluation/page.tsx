@@ -69,9 +69,9 @@ export default function Evaluation() {
       <main className="flex-grow container mx-auto px-4 py-16 relative z-10 max-w-4xl">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-            {language === 'fr' ? 'Évaluation de Niveau' : 'Level Evaluation'} <span className="text-orange-500">{language === 'fr' ? 'Gratuite' : 'Free'}</span>
+            {language === 'fr' ? 'Évaluation de Niveau' : 'Level Evaluation'} <span className="text-orange-800">{language === 'fr' ? 'Gratuite' : 'Free'}</span>
           </h1>
-          <p className="text-orange-200/60 max-w-2xl mx-auto">
+          <p className="text-orange-800/60 max-w-2xl mx-auto">
             {language === 'fr' ? 'Complétez ce formulaire d\'évaluation d\'anglais et nous vous contacterons pour valider votre niveau et vous proposer un plan de formation.' : 'Complete this English evaluation form and we will contact you to validate your level and propose a training plan.'}
           </p>
         </div>
@@ -80,17 +80,17 @@ export default function Evaluation() {
           {/* Form Info Panel */}
           <div className="md:col-span-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 space-y-4">
             <h3 className="font-bold text-white text-lg">{language === 'fr' ? 'Pourquoi s\'évaluer ?' : 'Why evaluate?'}</h3>
-            <ul className="space-y-3 text-sm text-orange-100/70">
+            <ul className="space-y-3 text-sm text-orange-800/70">
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-orange-800 shrink-0 mt-0.5" />
                 <span>{language === 'fr' ? 'Identifier vos lacunes' : 'Identify your gaps'}</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-orange-800 shrink-0 mt-0.5" />
                 <span>{language === 'fr' ? 'Mesurer votre score théorique (TOEIC, TOEFL)' : 'Measure your theoretical score (TOEIC, TOEFL)'}</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-orange-800 shrink-0 mt-0.5" />
                 <span>{language === 'fr' ? 'Adapter le programme de formation' : 'Adapt the training program'}</span>
               </li>
             </ul>
@@ -103,30 +103,30 @@ export default function Evaluation() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.name} *</label>
+                      <label className="block text-sm font-medium text-orange-800 mb-2">{t.contact.name} *</label>
                       <div className="relative">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-800/40" />
                         <input 
                           type="text" 
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                          className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                           placeholder={language === 'fr' ? 'Votre nom et prénom' : 'Your full name'}
                         />
                       </div>
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.email} *</label>
+                      <label className="block text-sm font-medium text-orange-800 mb-2">{t.contact.email} *</label>
                       <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-800/40" />
                         <input 
                           type="email" 
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                          className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                           placeholder="your@email.com"
                         />
                       </div>
@@ -135,40 +135,40 @@ export default function Evaluation() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="sm:col-span-1">
-                      <label className="block text-sm font-medium text-orange-100 mb-2">{t.contact.phone} *</label>
+                      <label className="block text-sm font-medium text-orange-800 mb-2">{t.contact.phone} *</label>
                       <div className="relative">
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-200/40" />
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-800/40" />
                         <input 
                           type="tel" 
                           required
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                          className="w-full pl-11 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                           placeholder="+229 01..."
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Pays' : 'Country'} *</label>
+                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Pays' : 'Country'} *</label>
                       <input 
                         type="text" 
                         required
                         value={formData.pays}
                         onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
-                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                         placeholder={language === 'fr' ? 'ex: Bénin' : 'ex: Benin'}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Ville' : 'City'} *</label>
+                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Ville' : 'City'} *</label>
                       <input 
                         type="text" 
                         required
                         value={formData.ville}
                         onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
-                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                         placeholder={language === 'fr' ? 'ex: Cotonou' : 'ex: Cotonou'}
                       />
                     </div>
@@ -176,12 +176,12 @@ export default function Evaluation() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Examen préparé *' : 'Prepared exam *'}</label>
+                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Examen préparé *' : 'Prepared exam *'}</label>
                       <select 
                         required
                         value={formData.exam}
                         onChange={(e) => setFormData({ ...formData, exam: e.target.value })}
-                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm [&>option]:bg-slate-900"
+                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm [&>option]:bg-slate-900"
                       >
                         <option value="">{language === 'fr' ? 'Sélectionnez un examen' : 'Select an exam'}</option>
                         <option value="toeic">TOEIC</option>
@@ -193,11 +193,11 @@ export default function Evaluation() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Niveau actuel estimé' : 'Estimated current level'}</label>
+                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Niveau actuel estimé' : 'Estimated current level'}</label>
                       <select 
                         value={formData.level}
                         onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm [&>option]:bg-slate-900"
+                        className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm [&>option]:bg-slate-900"
                       >
                         <option value="">{language === 'fr' ? 'Sélectionnez votre niveau' : 'Select your level'}</option>
                         <option value="debutant">{language === 'fr' ? 'Débutant (A1-A2)' : 'Beginner (A1-A2)'}</option>
@@ -209,12 +209,12 @@ export default function Evaluation() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-orange-100 mb-2">{language === 'fr' ? 'Objectifs & Attentes' : 'Objectives & Expectations'}</label>
+                    <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Objectifs & Attentes' : 'Objectives & Expectations'}</label>
                     <textarea 
                       rows={4}
                       value={formData.objectives}
                       onChange={(e) => setFormData({ ...formData, objectives: e.target.value })}
-                      className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-sm"
+                      className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all text-sm"
                       placeholder={language === 'fr' ? 'Décrivez vos objectifs professionnels ou d\'études...' : 'Describe your professional or study objectives...'}
                     />
                   </div>
@@ -222,7 +222,7 @@ export default function Evaluation() {
                   <button 
                     type="submit"
                     disabled={loading}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors"
                   >
                     {loading ? (
                       <>
@@ -239,9 +239,9 @@ export default function Evaluation() {
                 </form>
               ) : (
                 <div className="text-center py-12">
-                  <CheckCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
+                  <CheckCircle className="w-16 h-16 text-orange-800 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-white mb-3">{language === 'fr' ? 'Demande Envoyée !' : 'Request Sent!'}</h3>
-                  <p className="text-orange-100/70 max-w-xl mx-auto mb-6">
+                  <p className="text-orange-800/70 max-w-xl mx-auto mb-6">
                     {language === 'fr' ? 'Votre demande d\'évaluation a bien été enregistrée. Nous vous redirigeons vers WhatsApp pour fixer un rendez-vous avec un conseiller.' : 'Your evaluation request has been registered. We will redirect you to WhatsApp to schedule an appointment with an advisor.'}
                   </p>
                 </div>
