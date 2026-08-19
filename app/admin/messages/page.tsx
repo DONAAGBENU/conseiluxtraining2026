@@ -96,14 +96,14 @@ export default function AdminMessages() {
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white">Messages de contact</h1>
-          <p className="text-orange-200/60 text-sm mt-1">Gérez les messages envoyés via le formulaire de contact</p>
+          <p className="text-orange-800/60 text-sm mt-1">Gérez les messages envoyés via le formulaire de contact</p>
         </div>
       </div>
 
       {/* Barre de recherche */}
       <div className="bg-white/5 border border-white/10 rounded-3xl p-6 mb-8">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-200/40" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-800/40" />
           <input
             type="text"
             placeholder="Rechercher par nom, email, sujet..."
@@ -120,8 +120,8 @@ export default function AdminMessages() {
         </div>
       ) : filteredMessages.length === 0 ? (
         <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl">
-          <MessageSquare className="w-16 h-16 text-orange-200/20 mx-auto mb-4" />
-          <p className="text-orange-200/60 font-medium">Aucun message ne correspond aux critères.</p>
+          <MessageSquare className="w-16 h-16 text-orange-800/20 mx-auto mb-4" />
+          <p className="text-orange-800/60 font-medium">Aucun message ne correspond aux critères.</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -138,7 +138,7 @@ export default function AdminMessages() {
                     <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-orange-500/20 text-orange-400">
                       {msg.sujet}
                     </span>
-                    <span className="text-xs text-orange-200/40 flex items-center gap-1">
+                    <span className="text-xs text-orange-800/40 flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5" />
                       {new Date(msg.date).toLocaleString('fr-FR', {
                         day: 'numeric',
@@ -157,7 +157,7 @@ export default function AdminMessages() {
 
                   <h3 className="text-xl font-bold text-white mb-2">{msg.nom}</h3>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4 mt-2 text-sm text-orange-100/70">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4 mt-2 text-sm text-orange-800/70">
                     <p className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-orange-500 shrink-0" />
                       <span className="break-all">{msg.email}</span>
@@ -171,7 +171,7 @@ export default function AdminMessages() {
                   </div>
 
                   <div className="mt-4 bg-black/25 rounded-2xl p-4">
-                    <p className="text-orange-100/90 text-sm italic">&quot;{msg.message}&quot;</p>
+                    <p className="text-orange-800/90 text-sm italic">&quot;{msg.message}&quot;</p>
                   </div>
                 </div>
 

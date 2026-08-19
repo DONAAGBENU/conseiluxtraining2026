@@ -105,8 +105,8 @@ export default function AdminAvis() {
         </div>
       ) : avis.length === 0 ? (
         <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl">
-          <MessageSquare className="w-16 h-16 text-orange-200/20 mx-auto mb-4" />
-          <p className="text-orange-200/60 font-medium">Aucun avis client enregistré.</p>
+          <MessageSquare className="w-16 h-16 text-orange-800/20 mx-auto mb-4" />
+          <p className="text-orange-800/60 font-medium">Aucun avis client enregistré.</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -120,12 +120,12 @@ export default function AdminAvis() {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div className="flex-grow">
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="w-12 h-12 bg-orange-600/20 border border-orange-500/20 rounded-full flex items-center justify-center text-orange-400 font-bold text-lg">
+                    <div className="w-12 h-12 bg-orange-800/20 border border-orange-500/20 rounded-full flex items-center justify-center text-orange-400 font-bold text-lg">
                       {a.nom.charAt(0)}
                     </div>
                     <div>
                       <h3 className="font-bold text-white text-lg">{a.nom}</h3>
-                      <p className="text-sm text-orange-200/60">
+                      <p className="text-sm text-orange-800/60">
                         {a.role} {a.role && a.entreprise ? 'chez' : ''} {a.entreprise}
                       </p>
                     </div>
@@ -137,9 +137,9 @@ export default function AdminAvis() {
                     ))}
                   </div>
                   
-                  <p className="text-orange-100/80 text-sm italic font-light">&quot;{a.texte}&quot;</p>
+                  <p className="text-orange-800/80 text-sm italic font-light">&quot;{a.texte}&quot;</p>
                   
-                  <div className="flex flex-wrap gap-4 text-xs text-orange-200/40 mt-3">
+                  <div className="flex flex-wrap gap-4 text-xs text-orange-800/40 mt-3">
                     <span>Soumis le : {a.date}</span>
                     <span>•</span>
                     <span className={`font-semibold ${a.approuve ? 'text-green-400' : 'text-yellow-400'}`}>

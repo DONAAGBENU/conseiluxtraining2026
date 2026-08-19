@@ -4,33 +4,38 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useLanguage } from './LanguageProvider'
 
-const partnerImages = [
-  '/images/partenaire1.jpeg',
-  '/images/partenaire2.jpeg',
-  '/images/partenaire3.jpeg',
-  '/images/partenaire4.jpeg',
-  '/images/partenaire5.jpeg',
-  '/images/partenaire6.jpeg',
-  '/images/partenaire7.jpeg',
-  '/images/partenaire8.jpeg',
-  '/images/partenaire9.jpeg',
-  '/images/partenaire10.jpeg'
+const oldPartnerImages = [
+  '/images/Ecobank.jpeg',
+  '/images/MHA.jpeg',
+  '/images/SOCIETE GENERAL.jpeg',
+  '/images/bank of Africa.jpeg',
+  '/images/banque Atlantique.jpeg',
+  '/images/caterpillar.jpeg',
+  '/images/cimco.jpeg',
+  '/images/coris bank.jpeg',
+  '/images/coris messo finance.jpeg',
+  '/images/ieng.jpeg',
+  '/images/ofmas.jpeg',
+  '/images/orabank.jpeg',
+  '/images/plan international.jpeg',
+  '/images/sogemef.jpeg',
+  '/images/sonibank.jpeg'
 ]
 
-export default function PartnerLogos() {
-  const { language } = useLanguage()
+export default function PartnersSlider() {
+  const { t } = useLanguage()
   const [duplicatedImages, setDuplicatedImages] = useState<string[]>([])
 
   useEffect(() => {
     // Duplicate images for infinite scroll effect
-    setDuplicatedImages([...partnerImages, ...partnerImages, ...partnerImages])
+    setDuplicatedImages([...oldPartnerImages, ...oldPartnerImages, ...oldPartnerImages])
   }, [])
 
   return (
-    <div className="bg-slate-900/50 py-6 md:py-8 border-t border-white/5">
+    <div className="bg-transparent py-6 md:py-8">
       <div className="container mx-auto px-4 mb-4 md:mb-6">
-        <h3 className="text-center text-lg md:text-xl font-bold text-white mb-1 md:mb-2">{language === 'fr' ? 'Nos Partenaires' : 'Our Partners'}</h3>
-        <p className="text-center text-orange-500/60 text-xs md:text-sm">{language === 'fr' ? 'Ils nous font confiance' : 'They trust us'}</p>
+        <h3 className="text-center text-lg md:text-xl font-bold text-white mb-1 md:mb-2">{t.partners.title}</h3>
+        <p className="text-center text-orange-500/60 text-xs md:text-sm">{t.partners.subtitle}</p>
       </div>
       
       <div className="overflow-hidden w-full">

@@ -80,8 +80,8 @@ export default function AdminLayout({
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-orange-500 mx-auto mb-4" />
-          <p className="text-orange-200 font-medium">Chargement du panel d'administration...</p>
+          <Loader2 className="w-12 h-12 animate-spin text-orange-800 mx-auto mb-4" />
+          <p className="text-orange-800 font-medium">Chargement du panel d'administration...</p>
         </div>
       </div>
     )
@@ -91,7 +91,7 @@ export default function AdminLayout({
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden">
         {/* Background blobs for premium styling */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-800/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-800/10 rounded-full blur-3xl" />
 
         <div className="relative z-10 w-full max-w-md p-4">
@@ -108,9 +108,9 @@ export default function AdminLayout({
                 />
               </div>
               <h2 className="text-2xl font-bold text-white text-center">
-                Espace <span className="text-orange-500">Administration</span>
+                Espace <span className="text-orange-800">Administration</span>
               </h2>
-              <p className="text-orange-200/60 text-sm mt-1">Connectez-vous pour gérer votre site</p>
+              <p className="text-orange-800/60 text-sm mt-1">Connectez-vous pour gérer votre site</p>
             </div>
 
             {error && (
@@ -121,36 +121,36 @@ export default function AdminLayout({
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Adresse E-mail</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Adresse E-mail</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-200/40" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-800/40" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="contact@conseiluxtraining.com"
-                    className="w-full pl-12 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Mot de passe</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Mot de passe</label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-200/40" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-800/40" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full pl-12 pr-12 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    className="w-full pl-12 pr-12 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-orange-200/40 hover:text-white"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-orange-800/40 hover:text-white"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -160,7 +160,7 @@ export default function AdminLayout({
               <button
                 type="submit"
                 disabled={formLoading}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors mt-2"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-800/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors mt-2"
               >
                 {formLoading ? (
                   <>
@@ -181,7 +181,7 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen bg-slate-950 text-white relative">
       {/* Background patterns */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-orange-600/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-orange-800/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-64 w-96 h-96 bg-orange-800/5 rounded-full blur-3xl pointer-events-none" />
 
       <AdminSidebar onLogout={() => setAuthenticated(false)} />

@@ -11,7 +11,7 @@ export default function APropos() {
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8 text-white">{t.about.title}</h1>
-        <p className="text-orange-200/80">
+        <p className="text-orange-800/80">
           {language === 'fr' ? 'Découvrez l\'histoire et les valeurs de ConseiluxTraining.' : 'Discover the history and values of ConseiluxTraining.'}
         </p>
       </main>

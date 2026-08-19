@@ -57,7 +57,7 @@ export default function Footer() {
             {/* About */}
             <div>
               <h3 className="text-2xl font-bold mb-4">
-                <span className="text-orange-600">Conseilux</span> Training and Development
+                <span className="text-orange-800">Conseilux</span> Training and Development
               </h3>
               <p className="text-gray-400 mb-4 text-sm">
                 {t.footer.about}
@@ -67,7 +67,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/company/conseilux-training-and-development/about/?viewAsMember=true" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-600 transition-colors"
+                  className="text-gray-400 hover:text-orange-800 transition-colors"
                   title="LinkedIn"
                 >
                   <LinkedInIcon />
@@ -76,7 +76,7 @@ export default function Footer() {
                   href="https://www.facebook.com/share/1EqDD3THTx/" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-600 transition-colors"
+                  className="text-gray-400 hover:text-orange-800 transition-colors"
                   title="Facebook"
                 >
                   <FacebookIcon />
@@ -85,7 +85,7 @@ export default function Footer() {
                   href="#" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-600 transition-colors"
+                  className="text-gray-400 hover:text-orange-800 transition-colors"
                   title="Twitter"
                 >
                   <TwitterIcon />
@@ -95,7 +95,7 @@ export default function Footer() {
 
             {/* Formations */}
             <div>
-              <h4 className="font-semibold mb-4 text-orange-600">{t.footer.ourFormations}</h4>
+              <h4 className="font-semibold mb-4 text-orange-800">{t.footer.ourFormations}</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li><Link href="/formations/technologies-numeriques" className="hover:text-white transition-colors">{t.categories.technology}</Link></li>
                 <li><Link href="/formations/gestion-projet" className="hover:text-white transition-colors">{t.categories.projectManagement}</Link></li>
@@ -108,22 +108,22 @@ export default function Footer() {
 
             {/* Contact */}
             <div>
-              <h4 className="font-semibold mb-4 text-orange-600">{language === 'fr' ? 'Nos Bureaux' : 'Our Offices'}</h4>
+              <h4 className="font-semibold mb-4 text-orange-800">{language === 'fr' ? 'Nos Bureaux' : 'Our Offices'}</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 {phoneNumbers.map((phone) => (
                   <li key={phone.country} className="flex items-center gap-2">
-                    <Phone size={14} className="text-orange-600 flex-shrink-0" />
+                    <Phone size={14} className="text-orange-800 flex-shrink-0" />
                     <span>{phone.country}: {phone.number}</span>
                   </li>
                 ))}
               </ul>
               <div className="mt-4 space-y-2 text-gray-400 text-sm">
                 <p className="flex items-center gap-2">
-                  <Mail size={14} className="text-orange-600" />
+                  <Mail size={14} className="text-orange-800" />
                   contact@conseiluxtraining.com
                 </p>
                 <p className="flex items-center gap-2">
-                  <Clock size={14} className="text-orange-600" />
+                  <Clock size={14} className="text-orange-800" />
                   Lun-Ven: 8h-18h
                 </p>
               </div>
@@ -131,7 +131,7 @@ export default function Footer() {
 
             {/* Liens */}
             <div>
-              <h4 className="font-semibold mb-4 text-orange-600">{t.footer.quickLinks}</h4>
+              <h4 className="font-semibold mb-4 text-orange-800">{t.footer.quickLinks}</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li><Link href="/nos-solutions" className="hover:text-white transition-colors">{t.nav.solutions}</Link></li>
                 <li><Link href="/catalogue" className="hover:text-white transition-colors">{t.nav.downloadCatalogue}</Link></li>
@@ -147,7 +147,7 @@ export default function Footer() {
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm relative">
             <p>© 2026 Conseilux Training and Development. {t.footer.rights}.</p>
-            <div className="absolute bottom-0 right-4 text-orange-400/60 text-xs font-medium">
+            <div className="absolute bottom-0 right-4 text-orange-800/60 text-xs font-medium">
               by DONA
             </div>
           </div>
@@ -158,7 +158,7 @@ export default function Footer() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-orange-600 hover:bg-orange-500 text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50"
+          className="fixed bottom-8 right-8 bg-orange-800 hover:bg-orange-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50"
           aria-label="Remonter en haut"
         >
           <ArrowUp className="w-6 h-6" />

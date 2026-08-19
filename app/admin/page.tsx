@@ -86,7 +86,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-10 h-10 animate-spin text-orange-500" />
+        <Loader2 className="w-10 h-10 animate-spin text-orange-800" />
       </div>
     )
   }
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
       label: 'Inscriptions / Leads',
       value: stats.inscriptions,
       icon: <Users className="w-8 h-8" />,
-      color: 'bg-orange-600/20 text-orange-400 border-orange-500/20',
+      color: 'bg-orange-800/20 text-orange-800 border-orange-800/20',
       href: '/admin/inscriptions',
     },
   ]
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-200/60 text-sm font-medium">{stat.label}</p>
+                <p className="text-orange-800/60 text-sm font-medium">{stat.label}</p>
                 <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
               </div>
               <div className={`${stat.color.split(' ')[0]} ${stat.color.split(' ')[1]} p-4 rounded-2xl`}>
@@ -152,12 +152,12 @@ export default function AdminDashboard() {
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-white text-lg">Dernières inscriptions</h3>
-            <Link href="/admin/inscriptions" className="text-orange-500 text-sm hover:underline font-medium">
+            <Link href="/admin/inscriptions" className="text-orange-800 text-sm hover:underline font-medium">
               Voir tout
             </Link>
           </div>
           {recentLeads.length === 0 ? (
-            <p className="text-orange-200/40 text-sm py-4">Aucune inscription enregistrée pour le moment.</p>
+            <p className="text-orange-800/40 text-sm py-4">Aucune inscription enregistrée pour le moment.</p>
           ) : (
             <div className="space-y-3">
               {recentLeads.map((lead) => (
@@ -167,12 +167,12 @@ export default function AdminDashboard() {
                 >
                   <div>
                     <p className="font-semibold text-white">{lead.nom}</p>
-                    <p className="text-xs text-orange-200/60 mt-0.5">
+                    <p className="text-xs text-orange-800/60 mt-0.5">
                       {lead.formationTitre ? `Formation : ${lead.formationTitre}` : 'Téléchargement Catalogue'}
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs text-orange-200/40">
+                    <span className="text-xs text-orange-800/40">
                       {new Date(lead.date).toLocaleDateString('fr-FR', {
                         day: 'numeric',
                         month: 'short',
@@ -181,7 +181,7 @@ export default function AdminDashboard() {
                     <span
                       className={`block text-[10px] px-2 py-0.5 rounded-full mt-1 font-semibold text-center ${
                         lead.source === 'inscription'
-                          ? 'bg-orange-500/20 text-orange-400'
+                          ? 'bg-orange-800/20 text-orange-800'
                           : 'bg-blue-500/20 text-blue-400'
                       }`}
                     >
@@ -198,21 +198,21 @@ export default function AdminDashboard() {
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-white text-lg">Avis en attente ({stats.avisEnAttente})</h3>
-            <Link href="/admin/avis" className="text-orange-500 text-sm hover:underline font-medium">
+            <Link href="/admin/avis" className="text-orange-800 text-sm hover:underline font-medium">
               Gérer les avis
             </Link>
           </div>
           {stats.avisEnAttente === 0 ? (
-            <p className="text-orange-200/40 text-sm py-4">Aucun avis en attente d'approbation.</p>
+            <p className="text-orange-800/40 text-sm py-4">Aucun avis en attente d'approbation.</p>
           ) : (
-            <div className="bg-orange-500/10 border border-orange-500/20 rounded-2xl p-4 text-center">
+            <div className="bg-orange-800/10 border border-orange-800/20 rounded-2xl p-4 text-center">
               <span className="text-2xl">⭐</span>
-              <p className="text-orange-200 text-sm mt-2">
+              <p className="text-orange-800 text-sm mt-2">
                 Vous avez {stats.avisEnAttente} avis client{stats.avisEnAttente > 1 ? 's' : ''} en attente de modération.
               </p>
               <Link
                 href="/admin/avis"
-                className="inline-block mt-3 bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-orange-500 transition-colors"
+                className="inline-block mt-3 bg-orange-800 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-orange-700 transition-colors"
               >
                 Modérer maintenant
               </Link>

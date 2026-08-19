@@ -294,7 +294,7 @@ export default function CataloguePage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-800/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors"
                   >
                     {loading ? (
                       <>
@@ -325,7 +325,7 @@ export default function CataloguePage() {
                   <a
                     href="/catalogue.pdf"
                     download="Catalogue-Conseilux-Training.pdf"
-                    className="inline-flex items-center gap-2 rounded-2xl bg-orange-800 hover:bg-orange-700 text-white font-semibold py-3 px-8 transition-colors shadow-lg shadow-orange-500/20"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-orange-800 hover:bg-orange-700 text-white font-semibold py-3 px-8 transition-colors shadow-lg shadow-orange-800/20"
                   >
                     <Download className="w-5 h-5" />
                     {language === 'fr' ? 'Cliquez ici si le téléchargement ne démarre pas' : 'Click here if the download does not start'}

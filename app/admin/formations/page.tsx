@@ -172,7 +172,7 @@ export default function AdminFormations() {
         <h1 className="text-3xl font-bold text-white">Gestion des formations</h1>
         <button
           onClick={() => setShowForm(true)}
-          className="bg-orange-600 hover:bg-orange-500 text-white px-5 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 font-semibold shadow-lg shadow-orange-600/10"
+          className="bg-orange-800 hover:bg-orange-700 text-white px-5 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 font-semibold shadow-lg shadow-orange-600/10"
         >
           <Plus className="w-5 h-5" />
           Ajouter une formation
@@ -185,8 +185,8 @@ export default function AdminFormations() {
         </div>
       ) : formations.length === 0 ? (
         <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl">
-          <BookOpen className="w-16 h-16 text-orange-200/20 mx-auto mb-4" />
-          <p className="text-orange-200/60 font-medium">Aucune formation enregistrée.</p>
+          <BookOpen className="w-16 h-16 text-orange-800/20 mx-auto mb-4" />
+          <p className="text-orange-800/60 font-medium">Aucune formation enregistrée.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
@@ -207,8 +207,8 @@ export default function AdminFormations() {
                   )}
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">{formation.titre}</h3>
-                <p className="text-orange-100/70 text-sm mb-4 max-w-3xl">{formation.description}</p>
-                <div className="flex flex-wrap gap-4 text-xs text-orange-200/50">
+                <p className="text-orange-800/70 text-sm mb-4 max-w-3xl">{formation.description}</p>
+                <div className="flex flex-wrap gap-4 text-xs text-orange-800/50">
                   <span>Duree: <strong className="text-white font-medium">{formation.duree}</strong></span>
                   <span>|</span>
                   <span>Prix: <strong className="text-white font-medium">{formation.prix}</strong></span>
@@ -248,7 +248,7 @@ export default function AdminFormations() {
               </h2>
               <button 
                 onClick={resetForm} 
-                className="text-orange-200/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
+                className="text-orange-800/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -256,7 +256,7 @@ export default function AdminFormations() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Titre *</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Titre *</label>
                 <input
                   type="text"
                   required
@@ -268,7 +268,7 @@ export default function AdminFormations() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Catégorie *</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Catégorie *</label>
                 <select
                   required
                   className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all [&>option]:bg-slate-900"
@@ -283,7 +283,7 @@ export default function AdminFormations() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Description *</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Description *</label>
                 <textarea
                   required
                   rows={3}
@@ -296,7 +296,7 @@ export default function AdminFormations() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Durée</label>
+                  <label className="block text-sm font-medium text-orange-800 mb-2">Durée</label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
@@ -306,7 +306,7 @@ export default function AdminFormations() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-orange-100 mb-2">Prix</label>
+                  <label className="block text-sm font-medium text-orange-800 mb-2">Prix</label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
@@ -325,12 +325,12 @@ export default function AdminFormations() {
                     checked={formData.certifiante}
                     onChange={(e) => setFormData({ ...formData, certifiante: e.target.checked })}
                   />
-                  <span className="text-sm font-medium text-orange-100 select-none">Formation certifiante</span>
+                  <span className="text-sm font-medium text-orange-800 select-none">Formation certifiante</span>
                 </label>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-orange-100 mb-2">Modules</label>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Modules</label>
                 {formData.modules.map((module, index) => (
                   <div key={index} className="flex gap-2 mb-2">
                     <input
@@ -363,7 +363,7 @@ export default function AdminFormations() {
               <button
                 type="submit"
                 disabled={formLoading}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-500 disabled:bg-orange-600/50 disabled:cursor-not-allowed transition-colors mt-4"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors mt-4"
               >
                 {formLoading ? (
                   <>
