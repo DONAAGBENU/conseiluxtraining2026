@@ -32,8 +32,8 @@ export default function FormationsList() {
       <main className="flex-grow">
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white text-center">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-bold">{t.formations.title}</h1>
-            <p className="text-xl text-orange-800 mt-4">
+            <h1 className="text-4xl md:text-5xl font-bold" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>{t.formations.title}</h1>
+            <p className="text-xl text-white/90 mt-4">
               {t.formations.subtitle}
             </p>
           </div>
@@ -47,25 +47,25 @@ export default function FormationsList() {
               </div>
             ) : formations.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-orange-800/60">{t.formations.noFormations}</p>
+                <p className="text-white/60">{t.formations.noFormations}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {formations.map((formation) => (
-                  <Link 
-                    key={formation.id} 
+                  <Link
+                    key={formation.id}
                     href={`/formations/${formation.id}`}
                     className="card border-t-4 border-primary hover:-translate-y-2 transition-all bg-white/10 backdrop-blur-md border-white/10"
                   >
-                    <h3 className="text-xl font-bold text-white mb-2">{formation.titre}</h3>
-                    <p className="text-sm text-orange-800 mb-2">{formation.categorie}</p>
-                    <p className="text-orange-800/70 text-sm">{formation.description.slice(0, 100)}...</p>
+                    <h3 className="text-xl font-bold text-white mb-2" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{formation.titre}</h3>
+                    <p className="text-sm text-white mb-2">{formation.categorie}</p>
+                    <p className="text-white/70 text-sm">{formation.description.slice(0, 100)}...</p>
                     <div className="flex items-center justify-between mt-4">
-                      <span className="text-sm text-orange-800/50 flex items-center gap-1">
+                      <span className="text-sm text-white/50 flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {formation.duree}
                       </span>
-                      <span className="text-orange-800 font-medium text-sm flex items-center gap-1">
+                      <span className="text-white font-medium text-sm flex items-center gap-1">
                         {t.formations.viewMore} <ChevronRight className="w-4 h-4" />
                       </span>
                     </div>

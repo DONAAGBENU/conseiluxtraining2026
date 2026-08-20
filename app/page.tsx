@@ -90,7 +90,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      
+
       <main className="flex-grow">
         <Hero />
         <section className="py-4 bg-transparent">
@@ -102,24 +102,24 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="section-title">{t.home.domainsTitle}</h2>
-              <p className="section-subtitle text-orange-800">
+              <p className="section-subtitle text-white/80">
                 {t.home.domainsSubtitle}
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {domains.map((domain, index) => (
-                <Link 
+                <Link
                   key={index}
                   href={domain.href}
                   className={`bg-white/10 border border-white/10 ${domain.color} rounded-3xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group backdrop-blur-sm`}
                 >
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="text-orange-800">{domain.icon}</div>
-                    <h3 className="text-lg font-semibold text-orange-800">{domain.title}</h3>
+                    <div className="text-orange-500">{domain.icon}</div>
+                    <h3 className="text-lg font-semibold text-white">{domain.title}</h3>
                   </div>
-                  <p className="text-orange-800 text-sm">{domain.description}</p>
-                  <div className="mt-3 text-orange-800 font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                  <p className="text-white/80 text-sm">{domain.description}</p>
+                  <div className="mt-3 text-white font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
                     {t.home.seeFormations} <ChevronRight className="w-4 h-4" />
                   </div>
                 </Link>
@@ -133,18 +133,18 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="section-title">{t.home.valuesTitle}</h2>
-              <p className="section-subtitle text-orange-800/70">
+              <p className="section-subtitle text-white/80">
                 {t.home.valuesSubtitle}
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {values.map((value, index) => (
                 <div key={index} className="text-center group">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-800/20 border border-orange-800/30 rounded-full text-orange-800 mb-4 group-hover:bg-orange-800/30 transition-colors">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500/20 border border-orange-500/30 rounded-full text-orange-500 mb-4 group-hover:bg-orange-500/30 transition-colors">
                     {value.icon}
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-2">{value.title}</h3>
-                  <p className="text-orange-800/70 text-sm">{value.description}</p>
+                  <p className="text-white/80 text-sm">{value.description}</p>
                 </div>
               ))}
             </div>
@@ -155,7 +155,7 @@ export default function Home() {
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.home.solutionsTitle}</h2>
-            <p className="text-xl text-orange-800 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
               {t.home.solutionsSubtitle}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
@@ -169,7 +169,7 @@ export default function Home() {
                     className="object-contain w-auto h-auto"
                   />
                 </div>
-                <p className="font-semibold">{language === 'fr' ? 'Conseil' : 'Consulting'}</p>
+                <p className="font-semibold text-white">{language === 'fr' ? 'Conseil' : 'Consulting'}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
                 <div className="h-16 mb-2 flex items-center justify-center">
@@ -181,7 +181,7 @@ export default function Home() {
                     className="object-contain w-auto h-auto"
                   />
                 </div>
-                <p className="font-semibold">{language === 'fr' ? 'Formation' : 'Training'}</p>
+                <p className="font-semibold text-white">{language === 'fr' ? 'Formation' : 'Training'}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
                 <div className="h-16 mb-2 flex items-center justify-center">
@@ -193,7 +193,7 @@ export default function Home() {
                     className="object-contain w-auto h-auto"
                   />
                 </div>
-                <p className="font-semibold">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</p>
+                <p className="font-semibold text-white">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
                 <div className="h-16 mb-2 flex items-center justify-center">
@@ -205,12 +205,12 @@ export default function Home() {
                     className="object-contain w-auto h-auto"
                   />
                 </div>
-                <p className="font-semibold">{language === 'fr' ? 'Accompagnement' : 'Support'}</p>
+                <p className="font-semibold text-white">{language === 'fr' ? 'Accompagnement' : 'Support'}</p>
               </div>
             </div>
-            <Link 
+            <Link
               href="/nos-solutions"
-              className="inline-flex items-center gap-2 mt-8 bg-white text-orange-800 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors"
+              className="inline-flex items-center gap-2 mt-8 bg-orange-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-900 transition-colors"
             >
               {t.home.discoverSolutions}
               <ChevronRight className="w-5 h-5" />
@@ -225,20 +225,20 @@ export default function Home() {
         <Testimonials />
 
         {/* CTA */}
-        <section className="py-16 bg-navy text-white">
+        <section className="py-16 bg-transparent text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-4">{t.home.readyTitle}</h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
               {t.home.readySubtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
+              <Link
                 href="/contact"
-                className="bg-orange-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-slate-900 transition-colors"
+                className="bg-orange-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-900 transition-colors"
               >
                 {t.home.contactUs}
               </Link>
-              <Link 
+              <Link
                 href="/catalogue"
                 className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-slate-900 transition-colors"
               >

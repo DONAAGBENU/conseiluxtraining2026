@@ -40,7 +40,7 @@ export default function RootLayout({
             }}
           />
 
-          <div className="fixed inset-0 -z-10 bg-slate-900/70" />
+          <div className="fixed inset-0 -z-10 bg-blue-900/90" />
 
           <div className="relative">
             <LanguageProvider>

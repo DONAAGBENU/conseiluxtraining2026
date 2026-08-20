@@ -68,10 +68,10 @@ export default function Evaluation() {
       
       <main className="flex-grow container mx-auto px-4 py-16 relative z-10 max-w-4xl">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-            {language === 'fr' ? 'Évaluation de Niveau' : 'Level Evaluation'} <span className="text-orange-800">{language === 'fr' ? 'Gratuite' : 'Free'}</span>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+            {language === 'fr' ? 'Évaluation de Niveau' : 'Level Evaluation'} <span className="text-orange-300">{language === 'fr' ? 'Gratuite' : 'Free'}</span>
           </h1>
-          <p className="text-orange-800/60 max-w-2xl mx-auto">
+          <p className="text-white/60 max-w-2xl mx-auto">
             {language === 'fr' ? 'Complétez ce formulaire d\'évaluation d\'anglais et nous vous contacterons pour valider votre niveau et vous proposer un plan de formation.' : 'Complete this English evaluation form and we will contact you to validate your level and propose a training plan.'}
           </p>
         </div>
@@ -79,18 +79,18 @@ export default function Evaluation() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           {/* Form Info Panel */}
           <div className="md:col-span-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 space-y-4">
-            <h3 className="font-bold text-white text-lg">{language === 'fr' ? 'Pourquoi s\'évaluer ?' : 'Why evaluate?'}</h3>
-            <ul className="space-y-3 text-sm text-orange-800/70">
+            <h3 className="font-bold text-white text-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{language === 'fr' ? 'Pourquoi s\'évaluer ?' : 'Why evaluate?'}</h3>
+            <ul className="space-y-3 text-sm text-white/70">
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-orange-800 shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
                 <span>{language === 'fr' ? 'Identifier vos lacunes' : 'Identify your gaps'}</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-orange-800 shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
                 <span>{language === 'fr' ? 'Mesurer votre score théorique (TOEIC, TOEFL)' : 'Measure your theoretical score (TOEIC, TOEFL)'}</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-orange-800 shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
                 <span>{language === 'fr' ? 'Adapter le programme de formation' : 'Adapt the training program'}</span>
               </li>
             </ul>
@@ -103,9 +103,9 @@ export default function Evaluation() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-orange-800 mb-2">{t.contact.name} *</label>
+                      <label className="block text-sm font-medium text-white mb-2">{t.contact.name} *</label>
                       <div className="relative">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-800/40" />
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                         <input 
                           type="text" 
                           required
@@ -118,9 +118,9 @@ export default function Evaluation() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-orange-800 mb-2">{t.contact.email} *</label>
+                      <label className="block text-sm font-medium text-white mb-2">{t.contact.email} *</label>
                       <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-800/40" />
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                         <input 
                           type="email" 
                           required
@@ -135,9 +135,9 @@ export default function Evaluation() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="sm:col-span-1">
-                      <label className="block text-sm font-medium text-orange-800 mb-2">{t.contact.phone} *</label>
+                      <label className="block text-sm font-medium text-white mb-2">{t.contact.phone} *</label>
                       <div className="relative">
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-800/40" />
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                         <input 
                           type="tel" 
                           required
@@ -150,7 +150,7 @@ export default function Evaluation() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Pays' : 'Country'} *</label>
+                      <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Pays' : 'Country'} *</label>
                       <input 
                         type="text" 
                         required
@@ -162,7 +162,7 @@ export default function Evaluation() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Ville' : 'City'} *</label>
+                      <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Ville' : 'City'} *</label>
                       <input 
                         type="text" 
                         required
@@ -176,7 +176,7 @@ export default function Evaluation() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Examen préparé *' : 'Prepared exam *'}</label>
+                      <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Examen préparé *' : 'Prepared exam *'}</label>
                       <select 
                         required
                         value={formData.exam}
@@ -193,7 +193,7 @@ export default function Evaluation() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-orange-800 mb-2">{language === 'fr' ? 'Niveau actuel estimé' : 'Estimated current level'}</label>
+                      <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Niveau actuel estimé' : 'Estimated current level'}</label>
                       <select 
                         value={formData.level}
                         onChange={(e) => setFormData({ ...formData, level: e.target.value })}

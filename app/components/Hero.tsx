@@ -76,7 +76,7 @@ export default function Hero() {
   ]
 
   return (
-    <section className="relative min-h-[70vh] md:min-h-[80vh] overflow-hidden text-white">
+    <section className="relative min-h-[70vh] md:min-h-[80vh] overflow-hidden text-white bg-transparent">
       {/* Background slideshow */}
       {heroImages.map((image, index) => (
         <div
@@ -87,7 +87,7 @@ export default function Hero() {
           style={{ backgroundImage: `url(${image})` }}
         />
       ))}
-      <div className="absolute inset-0 bg-slate-950/75" />
+      <div className="absolute inset-0 bg-slate-950/20" />
 
       <div className="relative z-10 container mx-auto px-4 py-12 md:py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -97,7 +97,7 @@ export default function Hero() {
             </div>
 
             {/* Animated title */}
-            <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 md:mb-6 leading-tight text-white" style={{ minHeight: '60px', width: '100%', maxWidth: '600px' }}>
+            <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 md:mb-6 leading-tight text-white" style={{ minHeight: '60px', width: '100%', maxWidth: '600px', textShadow: '2px 2px 8px rgba(0,0,0,0.8)' }}>
               <span className="text-white">{displayedTitle}</span>
               {!subtitleDone && (
                 <span
@@ -108,7 +108,7 @@ export default function Hero() {
             </h1>
 
             {/* Animated subtitle */}
-            <p className="text-base md:text-xl lg:text-2xl mb-3 md:mb-4 text-white" style={{ minHeight: '50px', width: '100%', maxWidth: '600px' }}>
+            <p className="text-base md:text-xl lg:text-2xl mb-3 md:mb-4 text-white" style={{ minHeight: '50px', width: '100%', maxWidth: '600px', textShadow: '2px 2px 6px rgba(0,0,0,0.8)' }}>
               {displayedSubtitle}
               {titleDone && !subtitleDone && (
                 <span
@@ -118,7 +118,7 @@ export default function Hero() {
               )}
             </p>
 
-            <p className="text-sm md:text-lg text-white/90 mb-6 md:mb-8">
+            <p className="text-sm md:text-lg text-white/90 mb-6 md:mb-8" style={{ textShadow: '1px 1px 4px rgba(0,0,0,0.8)' }}>
               {language === 'fr'
                 ? 'Conseil stratégique • Formation • Recrutement • Accompagnement commercial terrain'
                 : 'Strategic Consulting • Training • Recruitment • Commercial Field Support'}

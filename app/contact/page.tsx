@@ -82,8 +82,8 @@ export default function Contact() {
       <main className="flex-grow">
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.contact.title}</h1>
-            <p className="text-xl text-orange-800 max-w-2xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>{t.contact.title}</h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
               {t.contact.subtitle}
             </p>
           </div>
@@ -94,7 +94,7 @@ export default function Contact() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Formulaire */}
               <div className="card border-t-4 border-orange-800 bg-white/10 backdrop-blur-md border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-6">{t.contact.sendMessage}</h2>
+                <h2 className="text-2xl font-bold text-white mb-6" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.contact.sendMessage}</h2>
                 
                 {success && (
                   <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
@@ -105,13 +105,13 @@ export default function Contact() {
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-orange-800 mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       {t.contact.name} *
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
                       placeholder={language === 'fr' ? 'Votre nom complet' : 'Your full name'}
                       value={formData.nom}
                       onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
@@ -119,13 +119,13 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-orange-800 mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       {t.contact.email} *
                     </label>
                     <input
                       type="email"
                       required
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
                       placeholder="your@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -133,12 +133,12 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-orange-800 mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       {t.contact.phone}
                     </label>
                     <input
                       type="tel"
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
                       placeholder="+229 01 23 45 67"
                       value={formData.telephone}
                       onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
@@ -146,11 +146,11 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-orange-800 mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       {t.contact.subject}
                     </label>
-                    <select 
-                      className="w-full px-4 py-2 bg-black/35 text-white border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none [&>option]:bg-slate-900"
+                    <select
+                      className="w-full px-4 py-2 bg-black/35 text-white border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none [&>option]:bg-blue-900"
                       value={formData.sujet}
                       onChange={(e) => setFormData({ ...formData, sujet: e.target.value })}
                     >
@@ -164,13 +164,13 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-orange-800 mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       {t.contact.message} *
                     </label>
                     <textarea
                       rows={5}
                       required
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-orange-200/20 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
+                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
                       placeholder={language === 'fr' ? 'Décrivez votre demande...' : 'Describe your request...'}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -200,17 +200,17 @@ export default function Contact() {
               {/* Informations de contact */}
               <div className="space-y-6">
                 <div className="card border-t-4 border-orange-800 bg-white/10 backdrop-blur-md border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4">{t.contact.offices}</h3>
+                  <h3 className="text-xl font-bold text-white mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.contact.offices}</h3>
                   <div className="space-y-4">
                     {offices.map((office, index) => (
                       <div key={index} className="border-b border-white/10 last:border-0 pb-3 last:pb-0">
-                        <h4 className="font-semibold text-orange-800">{office.city}, {office.country}</h4>
-                        <p className="text-sm text-orange-800/80 flex items-center gap-2 mt-1">
-                          <Phone className="w-4 h-4 text-orange-800" />
+                        <h4 className="font-semibold text-white">{office.city}, {office.country}</h4>
+                        <p className="text-sm text-white/80 flex items-center gap-2 mt-1">
+                          <Phone className="w-4 h-4 text-white" />
                           {office.phone}
                         </p>
-                        <p className="text-sm text-orange-800/80 flex items-center gap-2 mt-1">
-                          <MapPin className="w-4 h-4 text-orange-800" />
+                        <p className="text-sm text-white/80 flex items-center gap-2 mt-1">
+                          <MapPin className="w-4 h-4 text-white" />
                           {office.address}
                         </p>
                       </div>
@@ -219,18 +219,18 @@ export default function Contact() {
                 </div>
 
                 <div className="card border-t-4 border-orange-800 bg-white/10 backdrop-blur-md border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4">{t.contact.generalInfo}</h3>
+                  <h3 className="text-xl font-bold text-white mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.contact.generalInfo}</h3>
                   <div className="space-y-4">
-                    <p className="flex items-center gap-3 text-sm text-orange-800">
-                      <Mail className="w-5 h-5 text-orange-800 flex-shrink-0" />
+                    <p className="flex items-center gap-3 text-sm text-white">
+                      <Mail className="w-5 h-5 text-white flex-shrink-0" />
                       <span>contact@conseiluxtraining.com</span>
                     </p>
-                    <p className="flex items-center gap-3 text-sm text-orange-800">
-                      <Clock className="w-5 h-5 text-orange-800 flex-shrink-0" />
+                    <p className="flex items-center gap-3 text-sm text-white">
+                      <Clock className="w-5 h-5 text-white flex-shrink-0" />
                       <span>{language === 'fr' ? 'Lundi - Vendredi : 8h00 - 18h00' : 'Monday - Friday: 8:00 AM - 6:00 PM'}</span>
                     </p>
                     <div className="mt-4 border-t border-white/5 pt-4">
-                      <p className="text-sm text-orange-800/90 font-medium">
+                      <p className="text-sm text-white/90 font-medium">
                         {language === 'fr' ? '📍 Présence multi-pays : Bénin, Togo, Côte d\'Ivoire, Niger, France' : '📍 Multi-country presence: Benin, Togo, Ivory Coast, Niger, France'}
                       </p>
                     </div>

@@ -77,8 +77,8 @@ export default function NosSolutions() {
         {/* Hero */}
         <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.solutions.title}</h1>
-            <p className="text-xl text-orange-800 max-w-2xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>{t.solutions.title}</h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
               {t.solutions.subtitle}
             </p>
           </div>
@@ -87,16 +87,16 @@ export default function NosSolutions() {
         {/* Services */}
         <section className="py-16 bg-transparent">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-white mb-12">
+            <h2 className="text-3xl font-bold text-center text-white mb-12" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
               {t.solutions.services}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service, index) => (
                 <div key={index} className="card border-l-4 border-orange-800 flex items-start gap-4 bg-white/10 backdrop-blur-md border-white/10">
-                  <CheckCircle className="w-6 h-6 text-orange-800 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-white flex-shrink-0 mt-1" />
                   <div>
                     <h3 className="font-semibold text-white mb-1">{service.title}</h3>
-                    <p className="text-sm text-orange-800/80">{service.description}</p>
+                    <p className="text-sm text-white/80">{service.description}</p>
                   </div>
                 </div>
               ))}
@@ -107,10 +107,10 @@ export default function NosSolutions() {
         {/* Logiciels */}
         <section className="py-16 bg-transparent border-t border-white/5">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-white mb-4">
+            <h2 className="text-3xl font-bold text-center text-white mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
               {t.solutions.software}
             </h2>
-            <p className="text-center text-orange-800/60 mb-12 max-w-2xl mx-auto">
+            <p className="text-center text-white/60 mb-12 max-w-2xl mx-auto">
               {language === 'fr' ? 'Des logiciels de gestion adaptés à tous les secteurs d\'activité' : 'Management software adapted to all business sectors'}
             </p>
 
@@ -118,7 +118,7 @@ export default function NosSolutions() {
               {softwareSolutions.map((solution, index) => (
                 <div key={index} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
                   <div>
-                    <div className="text-orange-800 mb-4 h-16 w-16 rounded-lg overflow-hidden">
+                    <div className="text-white mb-4 h-16 w-16 rounded-lg overflow-hidden">
                       <Image 
                         src={solution.image} 
                         alt={solution.name}
@@ -128,19 +128,19 @@ export default function NosSolutions() {
                       />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{solution.name}</h3>
-                    <p className="text-orange-800/80 mb-4 text-sm">{solution.description}</p>
+                    <p className="text-white/80 mb-4 text-sm">{solution.description}</p>
                     <ul className="space-y-2">
                       {solution.features.map((feature, idx) => (
-                        <li key={idx} className="text-sm text-orange-800 flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-orange-800 shrink-0" />
+                        <li key={idx} className="text-sm text-white flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-white shrink-0" />
                           {feature}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <Link 
+                  <Link
                     href="/contact"
-                    className="inline-flex items-center gap-2 mt-6 text-orange-800 font-semibold hover:text-white transition-colors"
+                    className="inline-flex items-center gap-2 mt-6 text-white font-semibold hover:text-orange-300 transition-colors"
                   >
                     {t.solutions.learnMore} <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -153,8 +153,8 @@ export default function NosSolutions() {
         {/* CTA */}
         <section className="py-16 bg-orange-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">{t.solutions.ctaTitle}</h2>
-            <p className="text-xl text-orange-800 mb-8 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.solutions.ctaTitle}</h2>
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               {t.solutions.ctaSubtitle}
             </p>
             <Link 
