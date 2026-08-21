@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from './components/LanguageProvider'
+import AnalyticsTracker from './components/AnalyticsTracker'
 
 const inter = Inter({ subsets: ['latin'] })
 const poppins = Poppins({ 
@@ -44,6 +45,7 @@ export default function RootLayout({
 
           <div className="relative">
             <LanguageProvider>
+              <AnalyticsTracker />
               {children}
             </LanguageProvider>
           </div>

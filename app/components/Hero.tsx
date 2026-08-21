@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from 'react'
 
 const heroImages = [
   '/images/hero3.jpeg',
-  '/images/hero5.jpeg'
+  '/images/hero6.jpeg'
 ]
 
 export default function Hero() {

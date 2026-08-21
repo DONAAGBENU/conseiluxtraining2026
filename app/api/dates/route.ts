@@ -9,6 +9,14 @@ function getSupabase() {
     return null
   }
 
+  // Validate URL format
+  try {
+    new URL(supabaseUrl)
+  } catch (e) {
+    console.error('Invalid Supabase URL format:', supabaseUrl)
+    return null
+  }
+
   return createClient(supabaseUrl, supabaseAnonKey)
 }
 

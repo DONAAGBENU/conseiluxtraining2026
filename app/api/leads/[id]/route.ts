@@ -29,22 +29,20 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 
     const { id } = await props.params
     const body = await request.json()
-    const { formationId, formationTitre, lieu, date, duree, places, disponibles } = body
 
-    if (!formationId || !formationTitre || !lieu || !date) {
-      return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
-    }
-
-    const { data: dateRecord, error } = await supabase
-      .from('dates_formation')
+    const { data: lead, error } = await supabase
+      .from('leads')
       .update({
-        formation_id: formationId,
-        formation_titre: formationTitre,
-        lieu,
-        date,
-        duree: duree || '5 jours',
-        places: typeof places === 'number' ? places : 15,
-        disponibles: typeof disponibles === 'number' ? disponibles : (typeof places === 'number' ? places : 15)
+        nom: body.nom,
+        email: body.email,
+        telephone: body.telephone,
+        entreprise: body.entreprise,
+        source: body.source,
+        pays: body.pays,
+        ville: body.ville,
+        formation_titre: body.formationTitre,
+        message: body.message,
+        contact_preference: body.contactPreference
       })
       .eq('id', id)
       .select()
@@ -55,9 +53,9 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
       return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true, date: dateRecord })
+    return NextResponse.json({ success: true, lead })
   } catch (error) {
-    console.error('Erreur PUT /api/dates/[id]:', error)
+    console.error('Erreur PUT /api/leads/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
@@ -72,7 +70,7 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
     const { id } = await props.params
 
     const { error } = await supabase
-      .from('dates_formation')
+      .from('leads')
       .delete()
       .eq('id', id)
 
@@ -81,9 +79,9 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
       return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true, message: 'Date supprimée' })
+    return NextResponse.json({ success: true, message: 'Lead supprimé' })
   } catch (error) {
-    console.error('Erreur DELETE /api/dates/[id]:', error)
+    console.error('Erreur DELETE /api/leads/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

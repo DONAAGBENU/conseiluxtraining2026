@@ -86,6 +86,21 @@ export default function CataloguePage() {
           date: new Date().toISOString(),
         }),
       })
+
+      // Track catalogue download in analytics
+      await fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'catalogue_download',
+          page: '/catalogue',
+          metadata: {
+            user_email: formData.email,
+            user_name: formData.name,
+            timestamp: new Date().toISOString()
+          }
+        })
+      })
     } catch {
       // En cas d'erreur API on continue quand même le téléchargement
     } finally {

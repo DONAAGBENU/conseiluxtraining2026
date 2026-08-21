@@ -139,6 +139,7 @@ export default function FormationDetail() {
     setFormLoading(true)
 
     try {
+      // Save lead data
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -151,6 +152,57 @@ export default function FormationDetail() {
       })
 
       if (res.ok) {
+        // Send notification to admin based on contact preference
+        const adminEmail = 'contact@conseiluxtraining.com'
+        const adminWhatsApp = '+22890546464'
+        
+        if (formData.contactPreference === 'email') {
+          // Send email notification to admin
+          const emailSubject = `Nouvelle inscription: ${formData.nom} - ${selectedFormation.titre}`
+          const emailBody = `
+Nouvelle inscription reçue:
+
+Nom: ${formData.nom}
+Email: ${formData.email}
+Téléphone: ${formData.telephone}
+Entreprise: ${formData.entreprise || 'Non spécifié'}
+Pays: ${formData.pays || 'Non spécifié'}
+Ville: ${formData.ville || 'Non spécifié'}
+Formation: ${selectedFormation.titre}
+Message: ${formData.message || 'Aucun message'}
+Date: ${new Date().toLocaleString('fr-FR')}
+
+Contact préférence: Email
+          `
+          
+          // In a real implementation, you would use an email service here
+          console.log('Email notification to admin:', { adminEmail, subject: emailSubject, body: emailBody })
+        } else if (formData.contactPreference === 'whatsapp') {
+          // Send WhatsApp notification to admin
+          const message = `Nouvelle inscription reçue:%0A%0ANom: ${formData.nom}%0AEmail: ${formData.email}%0ATéléphone: ${formData.telephone}%0AFormation: ${selectedFormation.titre}%0AMessage: ${formData.message || 'Aucun'}%0A%0ADate: ${new Date().toLocaleString('fr-FR')}`
+          const whatsappUrl = `https://wa.me/${adminWhatsApp.replace(/[^0-9]/g, '')}?text=${message}`
+          
+          // Open WhatsApp with pre-filled message
+          window.open(whatsappUrl, '_blank')
+        }
+
+        // Track form submission in analytics
+        await fetch('/api/analytics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'form_submission',
+            page: `/formations/${slug}`,
+            metadata: {
+              formation: selectedFormation.titre,
+              user_email: formData.email,
+              user_name: formData.nom,
+              contact_preference: formData.contactPreference,
+              timestamp: new Date().toISOString()
+            }
+          })
+        })
+
         setSuccess(true)
         setFormData({
           nom: '',

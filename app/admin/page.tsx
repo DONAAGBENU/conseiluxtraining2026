@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { BookOpen, Calendar, Star, Users, Loader2 } from 'lucide-react'
+import { BookOpen, Calendar, Star, Users, Loader2, Download } from 'lucide-react'
 import Link from 'next/link'
 
 export default function AdminDashboard() {
@@ -12,6 +12,8 @@ export default function AdminDashboard() {
     avis: 0,
     avisEnAttente: 0,
     inscriptions: 0,
+    visitors: { total: 0, today: 0, thisWeek: 0, thisMonth: 0 },
+    catalogueDownloads: { total: 0, today: 0, thisWeek: 0, thisMonth: 0 },
   })
   const [recentLeads, setRecentLeads] = useState<any[]>([])
 
@@ -55,11 +57,12 @@ export default function AdminDashboard() {
         }
       }
 
-      const [dataFormations, dataDates, dataAvis, dataLeads] = await Promise.all([
+      const [dataFormations, dataDates, dataAvis, dataLeads, dataAnalytics] = await Promise.all([
         fetchWithTimeout('/api/formations'),
         fetchWithTimeout('/api/dates'),
         fetchWithTimeout('/api/avis'),
         fetchWithTimeout('/api/leads'),
+        fetchWithTimeout('/api/analytics'),
       ])
 
       const listFormations = dataFormations?.formations || []
@@ -73,6 +76,8 @@ export default function AdminDashboard() {
         avis: listAvis.length,
         avisEnAttente: listAvis.filter((a: any) => !a.approuve).length,
         inscriptions: listLeads.length,
+        visitors: dataAnalytics?.visitors || { total: 0, today: 0, thisWeek: 0, thisMonth: 0 },
+        catalogueDownloads: dataAnalytics?.catalogueDownloads || { total: 0, today: 0, thisWeek: 0, thisMonth: 0 },
       })
 
       setRecentLeads(listLeads.slice(0, 5))
@@ -93,25 +98,25 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
+      label: 'Visiteurs (aujourd\'hui)',
+      value: stats.visitors.today,
+      icon: <Users className="w-8 h-8" />,
+      color: 'bg-purple-600/20 text-purple-400 border-purple-500/20',
+      href: '#',
+    },
+    {
+      label: 'Téléchargements catalogue',
+      value: stats.catalogueDownloads.total,
+      icon: <Download className="w-8 h-8" />,
+      color: 'bg-pink-600/20 text-pink-400 border-pink-500/20',
+      href: '#',
+    },
+    {
       label: 'Formations',
       value: stats.formations,
       icon: <BookOpen className="w-8 h-8" />,
       color: 'bg-blue-600/20 text-blue-400 border-blue-500/20',
       href: '/admin/formations',
-    },
-    {
-      label: 'Dates programmées',
-      value: stats.dates,
-      icon: <Calendar className="w-8 h-8" />,
-      color: 'bg-green-600/20 text-green-400 border-green-500/20',
-      href: '/admin/dates',
-    },
-    {
-      label: 'Avis clients',
-      value: stats.avis,
-      icon: <Star className="w-8 h-8" />,
-      color: 'bg-yellow-600/20 text-yellow-400 border-yellow-500/20',
-      href: '/admin/avis',
     },
     {
       label: 'Inscriptions / Leads',
