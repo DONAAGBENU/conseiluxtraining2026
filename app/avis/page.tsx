@@ -34,6 +34,7 @@ export default function Avis() {
   })
   const [formLoading, setFormLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     fetchApprovedAvis()
@@ -54,18 +55,27 @@ export default function Avis() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setFormLoading(true)
+    setError('')
 
     try {
       const res = await fetch('/api/avis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
+          nom: formData.nom.trim(),
+          role: formData.role.trim(),
+          entreprise: formData.entreprise.trim(),
+          texte: formData.texte.trim(),
+          note: formData.note,
+          email: formData.email.trim(),
+          telephone: formData.telephone.trim(),
           date: new Date().toLocaleDateString('fr-FR'),
           logo: '',
           approuve: false
         })
       })
+
+      const data = await res.json()
 
       if (res.ok) {
         setSuccess(true)
@@ -75,10 +85,10 @@ export default function Avis() {
           setShowForm(false)
         }, 3000)
       } else {
-        alert(language === 'fr' ? 'Erreur lors de l\'envoi de l\'avis' : 'Error sending review')
+        setError(data.error || (language === 'fr' ? 'Erreur lors de l\'envoi de l\'avis' : 'Error sending review'))
       }
     } catch (err) {
-      alert(language === 'fr' ? 'Une erreur est survenue' : 'An error occurred')
+      setError(language === 'fr' ? 'Une erreur est survenue. Veuillez réessayer.' : 'An error occurred. Please try again.')
     } finally {
       setFormLoading(false)
     }
@@ -184,6 +194,13 @@ export default function Avis() {
               <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-green-400" />
                 <p className="text-green-400 text-sm font-medium">{language === 'fr' ? 'Avis envoyé avec succès ! Il sera publié après modération.' : 'Review sent successfully! It will be published after moderation.'}</p>
+              </div>
+            )}
+
+            {error && (
+              <div className="mb-6 bg-red-500/20 border border-red-500/30 rounded-2xl p-4 flex items-center gap-3">
+                <X className="w-5 h-5 text-red-400" />
+                <p className="text-red-400 text-sm font-medium">{error}</p>
               </div>
             )}
 

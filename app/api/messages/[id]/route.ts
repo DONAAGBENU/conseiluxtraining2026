@@ -1,55 +1,65 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 
-const MESSAGES_FILE = path.join(process.cwd(), 'data', 'messages.json')
+function getSupabase() {
+  const { createClient } = require('@supabase/supabase-js')
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-function readMessages() {
-  try {
-    if (!fs.existsSync(MESSAGES_FILE)) return []
-    const content = fs.readFileSync(MESSAGES_FILE, 'utf-8')
-    return JSON.parse(content)
-  } catch {
-    return []
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
   }
-}
 
-function writeMessages(messages: any[]) {
-  const dir = path.dirname(MESSAGES_FILE)
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
-  }
-  fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2), 'utf-8')
+  return createClient(supabaseUrl, supabaseAnonKey)
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const messages = readMessages()
-    const index = messages.findIndex((m: any) => m.id === id)
-    
-    if (index === -1) {
-      return NextResponse.json({ error: 'Message non trouvé' }, { status: 404 })
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
     }
 
-    messages[index].lu = true
-    writeMessages(messages)
+    const { id } = await params
+
+    const { error } = await supabase
+      .from('messages')
+      .update({ lu: true })
+      .eq('id', id)
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error('Erreur PUT /api/messages/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
+    }
+
     const { id } = await params
-    const messages = readMessages()
-    const filtered = messages.filter((m: any) => m.id !== id)
-    writeMessages(filtered)
+
+    const { error } = await supabase
+      .from('messages')
+      .delete()
+      .eq('id', id)
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error('Erreur DELETE /api/messages/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

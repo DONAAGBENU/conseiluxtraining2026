@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import { supabase } from '@/lib/supabaseClient'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,11 +10,8 @@ export async function POST(request: NextRequest) {
     const adminPassword = process.env.ADMIN_PASSWORD || 'Admin2345conseil'
 
     if (email === adminEmail && password === adminPassword) {
-      const secret = process.env.JWT_SECRET || 'fallback_secret'
-      const token = jwt.sign({ email }, secret, { expiresIn: '1d' })
-
       const response = NextResponse.json({ success: true, message: 'Connexion réussie' })
-      response.cookies.set('token', token, {
+      response.cookies.set('admin_session', 'true', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
@@ -27,6 +24,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Identifiants de connexion incorrects' }, { status: 401 })
   } catch (error) {
+    console.error('Erreur POST /api/auth/login:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

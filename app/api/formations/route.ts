@@ -1,71 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 
-const FORMATIONS_FILE = path.join(process.cwd(), 'data', 'formations.json')
+function getSupabase() {
+  const { createClient } = require('@supabase/supabase-js')
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-function ensureDataDir() {
-  const dir = path.dirname(FORMATIONS_FILE)
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
   }
-}
 
-const defaultFormations = [
-  {
-    id: '1',
-    titre: 'Gestion de Projet PMP',
-    description: 'Préparez-vous à la certification PMP avec notre programme complet',
-    categorie: 'Gestion de projet',
-    duree: '5 jours',
-    prix: '1 500 000 FCFA',
-    certifiante: true,
-    modules: ['Introduction au PMP', 'Planification', 'Exécution', 'Suivi et contrôle', 'Clôture'],
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: '2',
-    titre: 'Cybersécurité CISSP',
-    description: 'Formation complète pour la certification CISSP',
-    categorie: 'Technologie numérique',
-    duree: '5 jours',
-    prix: '2 000 000 FCFA',
-    certifiante: true,
-    modules: ['Sécurité des réseaux', 'Cryptographie', 'Gestion des risques', 'Audit sécurité'],
-    createdAt: new Date().toISOString()
-  }
-]
-
-function readFormations() {
-  try {
-    ensureDataDir()
-    if (!fs.existsSync(FORMATIONS_FILE)) {
-      fs.writeFileSync(FORMATIONS_FILE, JSON.stringify(defaultFormations, null, 2), 'utf-8')
-      return defaultFormations
-    }
-    const content = fs.readFileSync(FORMATIONS_FILE, 'utf-8')
-    return JSON.parse(content)
-  } catch {
-    return defaultFormations
-  }
-}
-
-function writeFormations(formations: any[]) {
-  ensureDataDir()
-  fs.writeFileSync(FORMATIONS_FILE, JSON.stringify(formations, null, 2), 'utf-8')
+  return createClient(supabaseUrl, supabaseAnonKey)
 }
 
 export async function GET() {
   try {
-    const list = readFormations()
-    return NextResponse.json({ formations: list, total: list.length })
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ formations: [], total: 0 })
+    }
+
+    const { data: formations, error } = await supabase
+      .from('formations')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    }
+
+    return NextResponse.json({ formations: formations || [], total: formations?.length || 0 })
   } catch (error) {
+    console.error('Erreur GET /api/formations:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
+    }
+
     const body = await request.json()
     const { titre, description, categorie, duree, prix, certifiante, modules } = body
 
@@ -73,24 +50,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
     }
 
-    const list = readFormations()
-    const newFormation = {
-      id: Date.now().toString(),
-      titre,
-      description,
-      categorie,
-      duree: duree || 'À définir',
-      prix: prix || 'À définir',
-      certifiante: !!certifiante,
-      modules: Array.isArray(modules) ? modules : [],
-      createdAt: new Date().toISOString()
+    const { data: formation, error } = await supabase
+      .from('formations')
+      .insert({
+        titre,
+        description,
+        categorie,
+        duree: duree || 'À définir',
+        prix: prix || 'À définir',
+        certifiante: !!certifiante,
+        modules: Array.isArray(modules) ? modules : []
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur lors de la création' }, { status: 500 })
     }
 
-    list.push(newFormation)
-    writeFormations(list)
-
-    return NextResponse.json({ success: true, formation: newFormation }, { status: 201 })
+    return NextResponse.json({ success: true, formation }, { status: 201 })
   } catch (error) {
+    console.error('Erreur POST /api/formations:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

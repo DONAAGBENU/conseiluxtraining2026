@@ -1,71 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 
-const DATES_FILE = path.join(process.cwd(), 'data', 'dates.json')
+function getSupabase() {
+  const { createClient } = require('@supabase/supabase-js')
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-function ensureDataDir() {
-  const dir = path.dirname(DATES_FILE)
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
   }
-}
 
-const defaultDates = [
-  {
-    id: '1',
-    formationId: '1',
-    formationTitre: 'Gestion de Projet PMP',
-    lieu: 'Cotonou, Bénin',
-    date: '15-19 Septembre 2024',
-    duree: '5 jours',
-    places: 15,
-    disponibles: 8,
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: '2',
-    formationId: '2',
-    formationTitre: 'Cybersécurité CISSP',
-    lieu: 'Lomé, Togo',
-    date: '22-26 Septembre 2024',
-    duree: '5 jours',
-    places: 12,
-    disponibles: 5,
-    createdAt: new Date().toISOString()
-  }
-]
-
-function readDates() {
-  try {
-    ensureDataDir()
-    if (!fs.existsSync(DATES_FILE)) {
-      fs.writeFileSync(DATES_FILE, JSON.stringify(defaultDates, null, 2), 'utf-8')
-      return defaultDates
-    }
-    const content = fs.readFileSync(DATES_FILE, 'utf-8')
-    return JSON.parse(content)
-  } catch {
-    return defaultDates
-  }
-}
-
-function writeDates(dates: any[]) {
-  ensureDataDir()
-  fs.writeFileSync(DATES_FILE, JSON.stringify(dates, null, 2), 'utf-8')
+  return createClient(supabaseUrl, supabaseAnonKey)
 }
 
 export async function GET() {
   try {
-    const list = readDates()
-    return NextResponse.json({ dates: list, total: list.length })
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ dates: [], total: 0 })
+    }
+
+    const { data: dates, error } = await supabase
+      .from('dates_formation')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    }
+
+    return NextResponse.json({ dates: dates || [], total: dates?.length || 0 })
   } catch (error) {
+    console.error('Erreur GET /api/dates:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
+    }
+
     const body = await request.json()
     const { formationId, formationTitre, lieu, date, duree, places, disponibles } = body
 
@@ -73,24 +50,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
     }
 
-    const list = readDates()
-    const newDate = {
-      id: Date.now().toString(),
-      formationId,
-      formationTitre,
-      lieu,
-      date,
-      duree: duree || '5 jours',
-      places: typeof places === 'number' ? places : 15,
-      disponibles: typeof disponibles === 'number' ? disponibles : (typeof places === 'number' ? places : 15),
-      createdAt: new Date().toISOString()
+    const { data: dateRecord, error } = await supabase
+      .from('dates_formation')
+      .insert({
+        formation_id: formationId,
+        formation_titre: formationTitre,
+        lieu,
+        date,
+        duree: duree || '5 jours',
+        places: typeof places === 'number' ? places : 15,
+        disponibles: typeof disponibles === 'number' ? disponibles : (typeof places === 'number' ? places : 15)
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur lors de la création' }, { status: 500 })
     }
 
-    list.push(newDate)
-    writeDates(list)
-
-    return NextResponse.json({ success: true, date: newDate }, { status: 201 })
+    return NextResponse.json({ success: true, date: dateRecord }, { status: 201 })
   } catch (error) {
+    console.error('Erreur POST /api/dates:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

@@ -6,10 +6,7 @@ import { useLanguage } from './LanguageProvider'
 import { useState, useEffect, useRef } from 'react'
 
 const heroImages = [
-  '/images/hero1.jpeg',
-  '/images/hero2.jpeg',
   '/images/hero3.jpeg',
-  '/images/hero4.jpeg',
   '/images/hero5.jpeg'
 ]
 
@@ -67,7 +64,7 @@ export default function Hero() {
     }, 5000) // Change image every 5 seconds
 
     return () => clearInterval(interval)
-  }, [])
+  }, [heroImages.length])
 
   const stats = [
     { icon: <Award className="w-6 h-6" />, value: '130+', label: language === 'fr' ? 'Certifications déployées' : 'Certifications Deployed' },

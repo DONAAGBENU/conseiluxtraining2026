@@ -1,59 +1,67 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 
-const AVIS_FILE = path.join(process.cwd(), 'data', 'avis.json')
+function getSupabase() {
+  const { createClient } = require('@supabase/supabase-js')
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-function readAvis() {
-  try {
-    if (!fs.existsSync(AVIS_FILE)) return []
-    const content = fs.readFileSync(AVIS_FILE, 'utf-8')
-    return JSON.parse(content)
-  } catch {
-    return []
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
   }
-}
 
-function writeAvis(avis: any[]) {
-  const dir = path.dirname(AVIS_FILE)
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
-  }
-  fs.writeFileSync(AVIS_FILE, JSON.stringify(avis, null, 2), 'utf-8')
+  return createClient(supabaseUrl, supabaseAnonKey)
 }
 
 export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await props.params
-    const list = readAvis()
-    const index = list.findIndex((a: any) => a.id === id)
-
-    if (index === -1) {
-      return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
     }
 
-    list[index].approuve = true
+    const { id } = await props.params
 
-    writeAvis(list)
-    return NextResponse.json({ success: true, avis: list[index] })
+    const { data: avis, error } = await supabase
+      .from('avis')
+      .update({ approuve: true })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, avis })
   } catch (error) {
+    console.error('Erreur PUT /api/avis/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
 export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await props.params
-    const list = readAvis()
-    const filtered = list.filter((a: any) => a.id !== id)
-
-    if (list.length === filtered.length) {
-      return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
+    const supabase = getSupabase()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
     }
 
-    writeAvis(filtered)
+    const { id } = await props.params
+
+    const { error } = await supabase
+      .from('avis')
+      .delete()
+      .eq('id', id)
+
+    if (error) {
+      console.error('Erreur Supabase:', error)
+      return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
+    }
+
     return NextResponse.json({ success: true, message: 'Avis supprimé' })
   } catch (error) {
+    console.error('Erreur DELETE /api/avis/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
