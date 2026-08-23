@@ -153,8 +153,8 @@ export default function FormationDetail() {
 
       if (res.ok) {
         // Send notification to admin based on contact preference
-        const adminEmail = 'contact@conseiluxtraining.com'
-        const adminWhatsApp = '+22890546464'
+        const adminEmail = 'Formations@conseiluxtraining.com'
+        const adminWhatsApp = '+228 90 54 64 64'
         
         if (formData.contactPreference === 'email') {
           // Send email notification to admin
@@ -175,15 +175,21 @@ Date: ${new Date().toLocaleString('fr-FR')}
 Contact préférence: Email
           `
           
-          // In a real implementation, you would use an email service here
-          console.log('Email notification to admin:', { adminEmail, subject: emailSubject, body: emailBody })
+          // Open email client with pre-filled message to admin
+          const mailtoUrl = `mailto:${adminEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`
+          window.open(mailtoUrl, '_blank')
+          
+          setSuccess(true)
         } else if (formData.contactPreference === 'whatsapp') {
           // Send WhatsApp notification to admin
           const message = `Nouvelle inscription reçue:%0A%0ANom: ${formData.nom}%0AEmail: ${formData.email}%0ATéléphone: ${formData.telephone}%0AFormation: ${selectedFormation.titre}%0AMessage: ${formData.message || 'Aucun'}%0A%0ADate: ${new Date().toLocaleString('fr-FR')}`
-          const whatsappUrl = `https://wa.me/${adminWhatsApp.replace(/[^0-9]/g, '')}?text=${message}`
+          const cleanWhatsApp = adminWhatsApp.replace(/[^0-9]/g, '')
+          const whatsappUrl = `https://wa.me/${cleanWhatsApp}?text=${message}`
           
-          // Open WhatsApp with pre-filled message
+          // Open WhatsApp with pre-filled message to admin
           window.open(whatsappUrl, '_blank')
+          
+          setSuccess(true)
         }
 
         // Track form submission in analytics
@@ -309,6 +315,20 @@ Contact préférence: Email
                           )}
                         </div>
 
+                        {item.objectif && (
+                          <div className="mb-4 bg-orange-500/10 border border-orange-500/20 rounded-xl p-3">
+                            <h4 className="text-xs font-semibold text-orange-400 mb-1">Objectif</h4>
+                            <p className="text-orange-800/80 text-xs line-clamp-2">{item.objectif}</p>
+                          </div>
+                        )}
+
+                        {item.prerequis && (
+                          <div className="mb-4 bg-blue-500/10 border border-blue-500/20 rounded-xl p-3">
+                            <h4 className="text-xs font-semibold text-blue-400 mb-1">Pré-requis</h4>
+                            <p className="text-orange-800/80 text-xs line-clamp-2">{item.prerequis}</p>
+                          </div>
+                        )}
+
                         {item.modules && item.modules.length > 0 && (
                           <div className="mb-6">
                             <h4 className="text-xs font-semibold text-white uppercase tracking-wider mb-2">{t.formations.modules}</h4>
@@ -420,6 +440,20 @@ Contact préférence: Email
                   </div>
                 )}
               </div>
+
+              {formation.objectif && (
+                <div className="mt-6 bg-orange-500/10 border border-orange-500/20 rounded-2xl p-4">
+                  <h3 className="font-bold text-orange-400 mb-2 text-lg">Objectif de la formation</h3>
+                  <p className="text-orange-800/90 text-sm leading-relaxed">{formation.objectif}</p>
+                </div>
+              )}
+
+              {formation.prerequis && (
+                <div className="mt-6 bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4">
+                  <h3 className="font-bold text-blue-400 mb-2 text-lg">Pré-requis</h3>
+                  <p className="text-orange-800/90 text-sm leading-relaxed">{formation.prerequis}</p>
+                </div>
+              )}
 
               {formation.modules && formation.modules.length > 0 && (
                 <div className="mt-6">
@@ -598,7 +632,7 @@ function RegistrationModal({
               >
                 <Mail className="w-6 h-6 text-orange-800" />
                 <span className="text-sm font-medium">Email</span>
-                <span className="text-xs text-orange-800/50">contact@conseiluxtraining.com</span>
+                <span className="text-xs text-orange-800/50">Formations@conseiluxtraining.com</span>
               </button>
               <button
                 type="button"

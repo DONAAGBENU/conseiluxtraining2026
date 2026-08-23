@@ -96,7 +96,7 @@ export default function AdminInscriptions() {
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white">Inscriptions & Téléchargements</h1>
-          <p className="text-orange-800/60 text-sm mt-1">Gérez les demandes de contact de vos prospects et clients</p>
+          <p className="text-orange-800/80 text-sm mt-1">Gérez les demandes de contact de vos prospects et clients</p>
         </div>
       </div>
 
@@ -106,7 +106,7 @@ export default function AdminInscriptions() {
           <button
             onClick={() => setFilter('all')}
             className={`flex-1 lg:flex-none px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-              filter === 'all' ? 'bg-orange-800 text-white shadow' : 'text-orange-800/60 hover:text-white'
+              filter === 'all' ? 'bg-orange-800 text-white shadow' : 'text-orange-800/80 hover:text-white'
             }`}
           >
             Tous ({leads.length})
@@ -114,7 +114,7 @@ export default function AdminInscriptions() {
           <button
             onClick={() => setFilter('inscription')}
             className={`flex-1 lg:flex-none px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-              filter === 'inscription' ? 'bg-orange-800 text-white shadow' : 'text-orange-800/60 hover:text-white'
+              filter === 'inscription' ? 'bg-orange-800 text-white shadow' : 'text-orange-800/80 hover:text-white'
             }`}
           >
             Inscriptions ({leads.filter(l => l.source === 'inscription').length})
@@ -122,7 +122,7 @@ export default function AdminInscriptions() {
           <button
             onClick={() => setFilter('catalogue')}
             className={`flex-1 lg:flex-none px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-              filter === 'catalogue' ? 'bg-orange-800 text-white shadow' : 'text-orange-800/60 hover:text-white'
+              filter === 'catalogue' ? 'bg-orange-800 text-white shadow' : 'text-orange-800/80 hover:text-white'
             }`}
           >
             Catalogues ({leads.filter(l => l.source === 'catalogue').length})
@@ -130,7 +130,7 @@ export default function AdminInscriptions() {
         </div>
 
         <div className="relative w-full lg:max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-800/40" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-800/70" />
           <input
             type="text"
             placeholder="Rechercher par nom, email, ville, formation..."
@@ -147,8 +147,8 @@ export default function AdminInscriptions() {
         </div>
       ) : filteredLeads.length === 0 ? (
         <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl">
-          <Search className="w-16 h-16 text-orange-800/20 mx-auto mb-4" />
-          <p className="text-orange-800/60 font-medium">Aucune inscription ne correspond aux critères.</p>
+          <Search className="w-16 h-16 text-orange-800/40 mx-auto mb-4" />
+          <p className="text-orange-800/80 font-medium">Aucune inscription ne correspond aux critères.</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -170,7 +170,7 @@ export default function AdminInscriptions() {
                     >
                       {lead.source === 'inscription' ? '🎓 Inscription formation' : '📖 Téléchargement catalogue'}
                     </span>
-                    <span className="text-xs text-orange-800/40 flex items-center gap-1">
+                    <span className="text-xs text-orange-800/70 flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5" />
                       {new Date(lead.date).toLocaleString('fr-FR', {
                         day: 'numeric',
@@ -185,7 +185,7 @@ export default function AdminInscriptions() {
                   {/* Coordonnées Client */}
                   <div>
                     <h3 className="text-xl font-bold text-white">{lead.nom}</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-2 gap-x-4 mt-2 text-sm text-orange-800/70">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-2 gap-x-4 mt-2 text-sm text-orange-800/90">
                       <p className="flex items-center gap-2">
                         <Mail className="w-4 h-4 text-orange-500 shrink-0" />
                         <span className="break-all">{lead.email}</span>
@@ -233,7 +233,7 @@ export default function AdminInscriptions() {
                       {lead.message && (
                         <div className="mt-2 border-t border-orange-500/10 pt-2">
                           <h4 className="font-semibold text-orange-400 text-xs">Message du client :</h4>
-                          <p className="text-orange-800/90 text-sm mt-1 italic">&quot;{lead.message}&quot;</p>
+                          <p className="text-orange-800 text-sm mt-1 italic">&quot;{lead.message}&quot;</p>
                         </div>
                       )}
                     </div>

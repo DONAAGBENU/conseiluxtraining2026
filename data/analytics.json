@@ -1,0 +1,42 @@
+[
+  {
+    "type": "catalogue_download",
+    "page": "/catalogue",
+    "metadata": {
+      "user_email": "donaagb8enu2000@gmail.com",
+      "user_name": "dodo",
+      "timestamp": "2026-08-23T23:10:51.432Z"
+    },
+    "createdAt": "2026-08-23T23:10:51.625Z",
+    "ip_address": "::1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "id": "1787526651625-of3ck5",
+    "deletedAt": null
+  },
+  {
+    "type": "visitor",
+    "page": "/",
+    "metadata": {
+      "timestamp": "2026-08-23T23:01:22.623Z",
+      "referrer": ""
+    },
+    "createdAt": "2026-08-23T23:01:23.134Z",
+    "ip_address": "::1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "id": "1787526083135-452s55",
+    "deletedAt": null
+  },
+  {
+    "type": "visitor",
+    "page": "/",
+    "metadata": {
+      "timestamp": "2026-08-21T23:15:06.603Z",
+      "referrer": ""
+    },
+    "createdAt": "2026-08-21T23:15:06.709Z",
+    "ip_address": "::1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/3.16.29 Chrome/144.0.7559.236 Electron/40.10.3 Safari/537.36",
+    "id": "1787354106710-pf3072",
+    "deletedAt": null
+  }
+]

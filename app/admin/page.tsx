@@ -119,11 +119,25 @@ export default function AdminDashboard() {
       href: '/admin/formations',
     },
     {
-      label: 'Inscriptions / Leads',
-      value: stats.inscriptions,
+      label: 'Inscriptions formations',
+      value: recentLeads.filter(l => l.source === 'inscription').length,
       icon: <Users className="w-8 h-8" />,
       color: 'bg-orange-800/20 text-orange-800 border-orange-800/20',
       href: '/admin/inscriptions',
+    },
+    {
+      label: 'Téléchargements clients',
+      value: recentLeads.filter(l => l.source === 'catalogue').length,
+      icon: <Download className="w-8 h-8" />,
+      color: 'bg-green-600/20 text-green-400 border-green-500/20',
+      href: '/admin/inscriptions',
+    },
+    {
+      label: 'Total clients',
+      value: stats.inscriptions,
+      icon: <Users className="w-8 h-8" />,
+      color: 'bg-teal-600/20 text-teal-400 border-teal-500/20',
+      href: '/admin/clients',
     },
   ]
 
@@ -132,7 +146,7 @@ export default function AdminDashboard() {
       <h1 className="text-3xl font-bold text-white mb-8">Tableau de bord</h1>
 
       {/* Cartes statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {statCards.map((stat, index) => (
           <Link
             key={index}
@@ -141,7 +155,7 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-800/60 text-sm font-medium">{stat.label}</p>
+                <p className="text-orange-800/80 text-sm font-medium">{stat.label}</p>
                 <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
               </div>
               <div className={`${stat.color.split(' ')[0]} ${stat.color.split(' ')[1]} p-4 rounded-2xl`}>
@@ -162,7 +176,7 @@ export default function AdminDashboard() {
             </Link>
           </div>
           {recentLeads.length === 0 ? (
-            <p className="text-orange-800/40 text-sm py-4">Aucune inscription enregistrée pour le moment.</p>
+            <p className="text-orange-800/70 text-sm py-4">Aucune inscription enregistrée pour le moment.</p>
           ) : (
             <div className="space-y-3">
               {recentLeads.map((lead) => (
@@ -172,12 +186,12 @@ export default function AdminDashboard() {
                 >
                   <div>
                     <p className="font-semibold text-white">{lead.nom}</p>
-                    <p className="text-xs text-orange-800/60 mt-0.5">
+                    <p className="text-xs text-orange-800/80 mt-0.5">
                       {lead.formationTitre ? `Formation : ${lead.formationTitre}` : 'Téléchargement Catalogue'}
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs text-orange-800/40">
+                    <span className="text-xs text-orange-800/70">
                       {new Date(lead.date).toLocaleDateString('fr-FR', {
                         day: 'numeric',
                         month: 'short',
@@ -208,7 +222,7 @@ export default function AdminDashboard() {
             </Link>
           </div>
           {stats.avisEnAttente === 0 ? (
-            <p className="text-orange-800/40 text-sm py-4">Aucun avis en attente d'approbation.</p>
+            <p className="text-orange-800/70 text-sm py-4">Aucun avis en attente d'approbation.</p>
           ) : (
             <div className="bg-orange-800/10 border border-orange-800/20 rounded-2xl p-4 text-center">
               <span className="text-2xl">⭐</span>

@@ -1,45 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-function getSupabase() {
-  const { createClient } = require('@supabase/supabase-js')
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return null
-  }
-
-  // Validate URL format
-  try {
-    new URL(supabaseUrl)
-  } catch (e) {
-    console.error('Invalid Supabase URL format:', supabaseUrl)
-    return null
-  }
-
-  return createClient(supabaseUrl, supabaseAnonKey)
-}
+import { permanentDelete, softDelete, updateItem } from '@/lib/jsonDb'
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = getSupabase()
-    if (!supabase) {
-      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
-    }
-
     const { id } = await params
-
-    const { error } = await supabase
-      .from('messages')
-      .update({ lu: true })
-      .eq('id', id)
-
-    if (error) {
-      console.error('Erreur Supabase:', error)
-      return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
+    let body: Record<string, unknown> = {}
+    try {
+      body = await request.json()
+    } catch {
+      body = {}
     }
 
-    return NextResponse.json({ success: true })
+    const hasUpdateFields = ['nom', 'email', 'telephone', 'sujet', 'message'].some((key) => key in body)
+
+    const message = hasUpdateFields
+      ? updateItem('messages', id, body)
+      : updateItem('messages', id, { lu: body.lu !== undefined ? body.lu : true })
+
+    if (!message) {
+      return NextResponse.json({ error: 'Message introuvable' }, { status: 404 })
+    }
+
+    return NextResponse.json({ success: true, message })
   } catch (error) {
     console.error('Erreur PUT /api/messages/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
@@ -48,21 +30,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = getSupabase()
-    if (!supabase) {
-      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
+    const { id } = await params
+    const { searchParams } = new URL(request.url)
+    const permanent = searchParams.get('permanent') === 'true'
+
+    if (permanent) {
+      const ok = permanentDelete('messages', id)
+      if (!ok) return NextResponse.json({ error: 'Message introuvable' }, { status: 404 })
+      return NextResponse.json({ success: true })
     }
 
-    const { id } = await params
-
-    const { error } = await supabase
-      .from('messages')
-      .delete()
-      .eq('id', id)
-
-    if (error) {
-      console.error('Erreur Supabase:', error)
-      return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
+    const message = softDelete('messages', id)
+    if (!message) {
+      return NextResponse.json({ error: 'Message introuvable' }, { status: 404 })
     }
 
     return NextResponse.json({ success: true })

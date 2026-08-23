@@ -12,6 +12,8 @@ interface Formation {
   prix: string
   certifiante: boolean
   modules: string[]
+  objectif: string
+  prerequis: string
   createdAt: string
 }
 
@@ -29,7 +31,9 @@ export default function AdminFormations() {
     duree: '',
     prix: '',
     certifiante: false,
-    modules: ['']
+    modules: [''],
+    objectif: '',
+    prerequis: ''
   })
 
   const categories = [
@@ -102,7 +106,7 @@ export default function AdminFormations() {
         setShowForm(false)
         setEditMode(false)
         setEditingId(null)
-        setFormData({ titre: '', description: '', categorie: '', duree: '', prix: '', certifiante: false, modules: [''] })
+        setFormData({ titre: '', description: '', categorie: '', duree: '', prix: '', certifiante: false, modules: [''], objectif: '', prerequis: '' })
       } else {
         alert(editMode ? "Erreur lors de la modification de la formation" : "Erreur lors de la création de la formation")
       }
@@ -121,7 +125,9 @@ export default function AdminFormations() {
       duree: formation.duree,
       prix: formation.prix,
       certifiante: formation.certifiante,
-      modules: formation.modules.length > 0 ? formation.modules : ['']
+      modules: formation.modules.length > 0 ? formation.modules : [''],
+      objectif: formation.objectif || '',
+      prerequis: formation.prerequis || ''
     })
     setEditingId(formation.id)
     setEditMode(true)
@@ -129,7 +135,7 @@ export default function AdminFormations() {
   }
 
   const resetForm = () => {
-    setFormData({ titre: '', description: '', categorie: '', duree: '', prix: '', certifiante: false, modules: [''] })
+    setFormData({ titre: '', description: '', categorie: '', duree: '', prix: '', certifiante: false, modules: [''], objectif: '', prerequis: '' })
     setEditMode(false)
     setEditingId(null)
     setShowForm(false)
@@ -185,8 +191,8 @@ export default function AdminFormations() {
         </div>
       ) : formations.length === 0 ? (
         <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl">
-          <BookOpen className="w-16 h-16 text-orange-800/20 mx-auto mb-4" />
-          <p className="text-orange-800/60 font-medium">Aucune formation enregistrée.</p>
+          <BookOpen className="w-16 h-16 text-orange-800/40 mx-auto mb-4" />
+          <p className="text-orange-800/80 font-medium">Aucune formation enregistrée.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
@@ -207,8 +213,8 @@ export default function AdminFormations() {
                   )}
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">{formation.titre}</h3>
-                <p className="text-orange-800/70 text-sm mb-4 max-w-3xl">{formation.description}</p>
-                <div className="flex flex-wrap gap-4 text-xs text-orange-800/50">
+                <p className="text-orange-800/90 text-sm mb-4 max-w-3xl">{formation.description}</p>
+                <div className="flex flex-wrap gap-4 text-xs text-orange-800/70">
                   <span>Duree: <strong className="text-white font-medium">{formation.duree}</strong></span>
                   <span>|</span>
                   <span>Prix: <strong className="text-white font-medium">{formation.prix}</strong></span>
@@ -291,6 +297,28 @@ export default function AdminFormations() {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Description détaillée de la formation..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Objectif de la formation</label>
+                <textarea
+                  rows={2}
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  value={formData.objectif}
+                  onChange={(e) => setFormData({ ...formData, objectif: e.target.value })}
+                  placeholder="Objectifs pédagogiques de cette formation..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-orange-800 mb-2">Pré-requis</label>
+                <textarea
+                  rows={2}
+                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-orange-200/20 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                  value={formData.prerequis}
+                  onChange={(e) => setFormData({ ...formData, prerequis: e.target.value })}
+                  placeholder="Pré-requis nécessaires pour suivre cette formation..."
                 />
               </div>
 

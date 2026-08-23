@@ -42,11 +42,26 @@ export default function Avis() {
 
   const fetchApprovedAvis = async () => {
     try {
-      const res = await fetch('/api/avis?approved=true')
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      
+      const res = await fetch('/api/avis?approved=true', {
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!res.ok) {
+        console.error('Erreur HTTP lors du chargement des avis')
+        setTestimonials([])
+        return
+      }
+      
       const data = await res.json()
       setTestimonials(data.avis || [])
     } catch (err) {
       console.error('Erreur lors du chargement des avis:', err)
+      setTestimonials([])
     } finally {
       setLoading(false)
     }

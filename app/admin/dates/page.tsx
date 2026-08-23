@@ -176,8 +176,8 @@ export default function AdminDates() {
         </div>
       ) : dates.length === 0 ? (
         <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl">
-          <Calendar className="w-16 h-16 text-orange-800/20 mx-auto mb-4" />
-          <p className="text-orange-800/60 font-medium">Aucune date programmée pour le moment.</p>
+          <Calendar className="w-16 h-16 text-orange-800/40 mx-auto mb-4" />
+          <p className="text-orange-800/80 font-medium">Aucune date programmée pour le moment.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -189,7 +189,7 @@ export default function AdminDates() {
               <div>
                 <h3 className="text-lg font-bold text-white mb-4">{date.formationTitre}</h3>
                 
-                <div className="space-y-3 text-sm text-orange-800/70 mb-4">
+                <div className="space-y-3 text-sm text-orange-800/90 mb-4">
                   <p className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
                     {date.lieu}
@@ -278,7 +278,7 @@ export default function AdminDates() {
                   )}
                 </select>
                 {formations.length === 0 && (
-                  <p className="text-xs text-orange-800/50 mt-1">
+                  <p className="text-xs text-orange-800/70 mt-1">
                     💡 Créez d'abord des formations dans l'onglet "Formations"
                   </p>
                 )}

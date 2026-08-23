@@ -1,44 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-function getSupabase() {
-  const { createClient } = require('@supabase/supabase-js')
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return null
-  }
-
-  // Validate URL format
-  try {
-    new URL(supabaseUrl)
-  } catch (e) {
-    console.error('Invalid Supabase URL format:', supabaseUrl)
-    return null
-  }
-
-  return createClient(supabaseUrl, supabaseAnonKey)
-}
+import { permanentDelete, softDelete, updateItem } from '@/lib/jsonDb'
 
 export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = getSupabase()
-    if (!supabase) {
-      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
+    const { id } = await props.params
+    let body: Record<string, unknown> = {}
+    try {
+      body = await request.json()
+    } catch {
+      body = {}
     }
 
-    const { id } = await props.params
+    const hasUpdateFields = ['nom', 'role', 'entreprise', 'texte', 'note', 'email', 'telephone', 'logo'].some(
+      (key) => key in body
+    )
 
-    const { data: avis, error } = await supabase
-      .from('avis')
-      .update({ approuve: true })
-      .eq('id', id)
-      .select()
-      .single()
+    const avis = hasUpdateFields
+      ? updateItem('avis', id, body)
+      : updateItem('avis', id, { approuve: body.approuve !== undefined ? body.approuve : true })
 
-    if (error) {
-      console.error('Erreur Supabase:', error)
-      return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
+    if (!avis) {
+      return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
     }
 
     return NextResponse.json({ success: true, avis })
@@ -50,24 +32,22 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 
 export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = getSupabase()
-    if (!supabase) {
-      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
-    }
-
     const { id } = await props.params
+    const { searchParams } = new URL(request.url)
+    const permanent = searchParams.get('permanent') === 'true'
 
-    const { error } = await supabase
-      .from('avis')
-      .delete()
-      .eq('id', id)
-
-    if (error) {
-      console.error('Erreur Supabase:', error)
-      return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
+    if (permanent) {
+      const ok = permanentDelete('avis', id)
+      if (!ok) return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
+      return NextResponse.json({ success: true, message: 'Avis supprimé définitivement' })
     }
 
-    return NextResponse.json({ success: true, message: 'Avis supprimé' })
+    const avis = softDelete('avis', id)
+    if (!avis) {
+      return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
+    }
+
+    return NextResponse.json({ success: true, message: 'Avis déplacé dans la corbeille' })
   } catch (error) {
     console.error('Erreur DELETE /api/avis/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
