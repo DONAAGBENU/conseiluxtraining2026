@@ -52,7 +52,17 @@ export async function readAll<T extends RecordItem>(type: EntityType): Promise<T
       return []
     }
 
-    return (data || []) as T[]
+    // Convertir deleted_at en deletedAt pour tous les éléments
+    const convertedData = (data || []).map((item: any) => {
+      const { deleted_at, created_at, ...rest } = item
+      return {
+        ...rest,
+        deletedAt: deleted_at,
+        createdAt: created_at,
+      }
+    })
+
+    return convertedData as T[]
   } catch (error) {
     console.error(`Error reading ${type}:`, error)
     return []
@@ -102,7 +112,17 @@ export async function listActive<T extends RecordItem>(type: EntityType): Promis
       return []
     }
 
-    return (data || []) as T[]
+    // Convertir deleted_at en deletedAt pour tous les éléments
+    const convertedData = (data || []).map((item: any) => {
+      const { deleted_at, created_at, ...rest } = item
+      return {
+        ...rest,
+        deletedAt: deleted_at,
+        createdAt: created_at,
+      }
+    })
+
+    return convertedData as T[]
   } catch (error) {
     console.error(`Error listing active ${type}:`, error)
     return []
@@ -120,8 +140,12 @@ export async function createItem<T extends RecordItem>(
     }
 
     const tableName = TABLE_NAMES[type]
+    
+    // Convertir deletedAt en deleted_at pour Supabase
+    const { deletedAt, ...restData } = data as any
+    
     const item = {
-      ...data,
+      ...restData,
       id: data.id || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       deleted_at: null,
       created_at: new Date().toISOString(),
@@ -136,6 +160,16 @@ export async function createItem<T extends RecordItem>(
     if (error) {
       console.error(`Error creating ${type}:`, error)
       return null
+    }
+
+    // Convertir deleted_at en deletedAt pour le retour
+    if (insertedData) {
+      const { deleted_at, created_at, ...rest } = insertedData as any
+      return {
+        ...rest,
+        deletedAt: deleted_at,
+        createdAt: created_at,
+      } as T
     }
 
     return insertedData as T
@@ -158,7 +192,7 @@ export async function updateItem<T extends RecordItem>(
     }
 
     const tableName = TABLE_NAMES[type]
-    const { id: _id, deletedAt: _deleted, ...rest } = data as Record<string, unknown>
+    const { id: _id, deletedAt, createdAt, ...rest } = data as Record<string, unknown>
 
     let query = supabase.from(tableName).update(rest).eq('id', id)
 
@@ -171,6 +205,16 @@ export async function updateItem<T extends RecordItem>(
     if (error) {
       console.error(`Error updating ${type}:`, error)
       return null
+    }
+
+    // Convertir deleted_at en deletedAt pour le retour
+    if (updatedData) {
+      const { deleted_at, created_at, ...rest } = updatedData as any
+      return {
+        ...rest,
+        deletedAt: deleted_at,
+        createdAt: created_at,
+      } as T
     }
 
     return updatedData as T
@@ -202,6 +246,16 @@ export async function softDelete<T extends RecordItem>(type: EntityType, id: str
       return null
     }
 
+    // Convertir deleted_at en deletedAt pour le retour
+    if (deletedData) {
+      const { deleted_at, created_at, ...rest } = deletedData as any
+      return {
+        ...rest,
+        deletedAt: deleted_at,
+        createdAt: created_at,
+      } as T
+    }
+
     return deletedData as T
   } catch (error) {
     console.error(`Error soft deleting ${type}:`, error)
@@ -229,6 +283,16 @@ export async function restoreItem<T extends RecordItem>(type: EntityType, id: st
     if (error) {
       console.error(`Error restoring ${type}:`, error)
       return null
+    }
+
+    // Convertir deleted_at en deletedAt pour le retour
+    if (restoredData) {
+      const { deleted_at, created_at, ...rest } = restoredData as any
+      return {
+        ...rest,
+        deletedAt: deleted_at,
+        createdAt: created_at,
+      } as T
     }
 
     return restoredData as T
@@ -284,8 +348,18 @@ export async function listTrash() {
       }
 
       if (data && data.length > 0) {
+        // Convertir deleted_at en deletedAt pour tous les éléments
+        const convertedData = data.map((item: any) => {
+          const { deleted_at, created_at, ...rest } = item
+          return {
+            ...rest,
+            deletedAt: deleted_at,
+            createdAt: created_at,
+          }
+        })
+
         items.push(
-          ...data.map((item) => ({
+          ...convertedData.map((item) => ({
             entityType,
             label: ENTITY_LABELS[entityType],
             origin:
@@ -301,7 +375,7 @@ export async function listTrash() {
     }
 
     return items.sort((a, b) => 
-      String(b.item.deleted_at).localeCompare(String(a.item.deleted_at))
+      String(b.item.deletedAt).localeCompare(String(a.item.deletedAt))
     )
   } catch (error) {
     console.error('Error listing trash:', error)
