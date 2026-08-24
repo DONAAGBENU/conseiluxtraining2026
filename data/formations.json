@@ -1,5 +1,21 @@
 [
   {
+    "titre": "anglais",
+    "description": "cette formation est pour une bonne ",
+    "categorie": "Langues",
+    "duree": "5 jours",
+    "prix": "50000",
+    "certifiante": false,
+    "modules": [
+      "module 3"
+    ],
+    "objectif": "examan toefl",
+    "prerequis": "toefl est une examen...",
+    "createdAt": "2026-08-24T11:52:04.950Z",
+    "id": "1787572324951-aijbtk",
+    "deletedAt": null
+  },
+  {
     "id": "1786755916138",
     "titre": "knylwk4jny3",
     "description": "m t;34lyn34oyjn3o5j",

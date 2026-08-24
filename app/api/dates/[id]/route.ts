@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { permanentDelete, softDelete, updateItem } from '@/lib/jsonDb'
+import { permanentDelete, softDelete, updateItem } from '@/lib/supabaseDb'
 
 export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
@@ -11,7 +11,7 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
       return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
     }
 
-    const dateRecord = updateItem('dates', id, {
+    const dateRecord = await updateItem('dates', id, {
       formationId,
       formationTitre,
       lieu,
@@ -39,12 +39,12 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
     const permanent = searchParams.get('permanent') === 'true'
 
     if (permanent) {
-      const ok = permanentDelete('dates', id)
+      const ok = await permanentDelete('dates', id)
       if (!ok) return NextResponse.json({ error: 'Date introuvable' }, { status: 404 })
       return NextResponse.json({ success: true, message: 'Date supprimée définitivement' })
     }
 
-    const dateRecord = softDelete('dates', id)
+    const dateRecord = await softDelete('dates', id)
     if (!dateRecord) {
       return NextResponse.json({ error: 'Date introuvable' }, { status: 404 })
     }

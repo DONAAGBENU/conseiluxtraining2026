@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createItem, listActive } from '@/lib/jsonDb'
+import { createItem, listActive } from '@/lib/supabaseDb'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const source = searchParams.get('source')
 
-    let leads = listActive('leads').sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+    let leads = (await listActive('leads')).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
 
     if (source) {
       leads = leads.filter((lead) => lead.source === source)
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Nom, email et téléphone sont requis' }, { status: 400 })
     }
 
-    const lead = createItem('leads', {
+    const lead = await createItem('leads', {
       nom,
       email,
       telephone,

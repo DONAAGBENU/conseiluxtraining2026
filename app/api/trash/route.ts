@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ENTITY_TYPES, EntityType, listTrash, permanentDelete, restoreItem } from '@/lib/jsonDb'
+import { ENTITY_TYPES, EntityType, listTrash, permanentDelete, restoreItem } from '@/lib/supabaseDb'
 
 export async function GET() {
   try {
-    return NextResponse.json({ items: listTrash() })
+    const items = await listTrash()
+    return NextResponse.json({ items })
   } catch (error) {
     console.error('Erreur GET /api/trash:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'restore') {
-      const item = restoreItem(entityType as EntityType, id)
+      const item = await restoreItem(entityType as EntityType, id)
       if (!item) {
         return NextResponse.json({ error: 'Élément introuvable dans la corbeille' }, { status: 404 })
       }
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'permanent') {
-      const ok = permanentDelete(entityType as EntityType, id)
+      const ok = await permanentDelete(entityType as EntityType, id)
       if (!ok) {
         return NextResponse.json({ error: 'Élément introuvable' }, { status: 404 })
       }

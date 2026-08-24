@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createItem, listActive } from '@/lib/jsonDb'
+import { createItem, listActive } from '@/lib/supabaseDb'
 
 export async function GET() {
   try {
-    const formations = listActive('formations').sort((a, b) =>
+    const formations = (await listActive('formations')).sort((a, b) =>
       String(b.createdAt || '').localeCompare(String(a.createdAt || ''))
     )
     return NextResponse.json({ formations, total: formations.length })
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
     }
 
-    const formation = createItem('formations', {
+    const formation = await createItem('formations', {
       titre,
       description,
       categorie,

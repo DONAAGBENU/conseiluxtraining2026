@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { permanentDelete, softDelete, updateItem } from '@/lib/jsonDb'
+import { permanentDelete, softDelete, updateItem } from '@/lib/supabaseDb'
 
 export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
@@ -16,8 +16,8 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
     )
 
     const avis = hasUpdateFields
-      ? updateItem('avis', id, body)
-      : updateItem('avis', id, { approuve: body.approuve !== undefined ? body.approuve : true })
+      ? await updateItem('avis', id, body)
+      : await updateItem('avis', id, { approuve: body.approuve !== undefined ? body.approuve : true })
 
     if (!avis) {
       return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
@@ -37,12 +37,12 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
     const permanent = searchParams.get('permanent') === 'true'
 
     if (permanent) {
-      const ok = permanentDelete('avis', id)
+      const ok = await permanentDelete('avis', id)
       if (!ok) return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
       return NextResponse.json({ success: true, message: 'Avis supprimé définitivement' })
     }
 
-    const avis = softDelete('avis', id)
+    const avis = await softDelete('avis', id)
     if (!avis) {
       return NextResponse.json({ error: 'Avis introuvable' }, { status: 404 })
     }

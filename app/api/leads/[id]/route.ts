@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { permanentDelete, softDelete, updateItem } from '@/lib/jsonDb'
+import { permanentDelete, softDelete, updateItem } from '@/lib/supabaseDb'
 
 export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await props.params
     const body = await request.json()
 
-    const lead = updateItem('leads', id, {
+    const lead = await updateItem('leads', id, {
       nom: body.nom,
       email: body.email,
       telephone: body.telephone,
@@ -37,12 +37,12 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
     const permanent = searchParams.get('permanent') === 'true'
 
     if (permanent) {
-      const ok = permanentDelete('leads', id)
+      const ok = await permanentDelete('leads', id)
       if (!ok) return NextResponse.json({ error: 'Enregistrement introuvable' }, { status: 404 })
       return NextResponse.json({ success: true, message: 'Enregistrement supprimé définitivement' })
     }
 
-    const lead = softDelete('leads', id)
+    const lead = await softDelete('leads', id)
     if (!lead) {
       return NextResponse.json({ error: 'Enregistrement introuvable' }, { status: 404 })
     }

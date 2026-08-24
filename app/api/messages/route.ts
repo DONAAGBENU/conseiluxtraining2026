@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createItem, listActive } from '@/lib/jsonDb'
+import { createItem, listActive } from '@/lib/supabaseDb'
 
 export async function GET() {
   try {
-    const messages = listActive('messages').sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+    const messages = (await listActive('messages')).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
     return NextResponse.json({ messages, total: messages.length })
   } catch (error) {
     console.error('Erreur GET /api/messages:', error)
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Nom, email et message sont requis' }, { status: 400 })
     }
 
-    const messageData = createItem('messages', {
+    const messageData = await createItem('messages', {
       nom,
       email,
       telephone: telephone || '',

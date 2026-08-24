@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createItem, listActive } from '@/lib/jsonDb'
+import { createItem, listActive } from '@/lib/supabaseDb'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const filterApproved = searchParams.get('approved') === 'true'
 
-    let avis = listActive('avis').sort((a, b) =>
+    let avis = (await listActive('avis')).sort((a, b) =>
       String(b.createdAt || '').localeCompare(String(a.createdAt || ''))
     )
 
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'La note doit être entre 1 et 5' }, { status: 400 })
     }
 
-    const avis = createItem('avis', {
+    const avis = await createItem('avis', {
       nom: String(nom).trim(),
       role: role?.trim() || '',
       entreprise: entreprise?.trim() || '',

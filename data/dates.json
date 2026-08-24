@@ -1,13 +1,25 @@
 [
   {
+    "formationId": "1787572324951-aijbtk",
+    "formationTitre": "anglais",
+    "lieu": "ghana",
+    "date": "23 janvier au 12 fevrier",
+    "duree": "5 jours",
+    "places": 15,
+    "disponibles": 15,
+    "createdAt": "2026-08-24T11:53:31.050Z",
+    "id": "1787572411051-gd242l",
+    "deletedAt": null
+  },
+  {
     "id": "2",
     "formationId": "2",
-    "formationTitre": "Cybersécurité CISSP",
+    "formationTitre": "Gestion de Projet PMP",
     "lieu": "Lomé, Togo",
-    "date": "22-26 Septembre 2024",
+    "date": "22-26 Septembre 2026",
     "duree": "5 jours",
     "places": 12,
-    "disponibles": 5,
+    "disponibles": 12,
     "createdAt": "2026-08-11T12:04:49.976Z"
   },
   {

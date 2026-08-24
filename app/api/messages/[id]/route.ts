@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { permanentDelete, softDelete, updateItem } from '@/lib/jsonDb'
+import { permanentDelete, softDelete, updateItem } from '@/lib/supabaseDb'
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -14,8 +14,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const hasUpdateFields = ['nom', 'email', 'telephone', 'sujet', 'message'].some((key) => key in body)
 
     const message = hasUpdateFields
-      ? updateItem('messages', id, body)
-      : updateItem('messages', id, { lu: body.lu !== undefined ? body.lu : true })
+      ? await updateItem('messages', id, body)
+      : await updateItem('messages', id, { lu: body.lu !== undefined ? body.lu : true })
 
     if (!message) {
       return NextResponse.json({ error: 'Message introuvable' }, { status: 404 })
@@ -35,12 +35,12 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const permanent = searchParams.get('permanent') === 'true'
 
     if (permanent) {
-      const ok = permanentDelete('messages', id)
+      const ok = await permanentDelete('messages', id)
       if (!ok) return NextResponse.json({ error: 'Message introuvable' }, { status: 404 })
       return NextResponse.json({ success: true })
     }
 
-    const message = softDelete('messages', id)
+    const message = await softDelete('messages', id)
     if (!message) {
       return NextResponse.json({ error: 'Message introuvable' }, { status: 404 })
     }
