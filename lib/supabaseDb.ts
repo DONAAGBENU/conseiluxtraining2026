@@ -34,6 +34,63 @@ const TABLE_NAMES: Record<EntityType, string> = {
   analytics: 'analytics',
 }
 
+// Mapping camelCase → snake_case pour les colonnes spéciales par table
+const COLUMN_TO_DB: Record<string, Record<string, string>> = {
+  leads: {
+    formationTitre: 'formation_titre',
+    contactPreference: 'contact_preference',
+  },
+  dates: {
+    formationId: 'formation_id',
+    formationTitre: 'formation_titre',
+  },
+}
+
+// Mapping snake_case → camelCase pour la lecture depuis DB
+const COLUMN_FROM_DB: Record<string, Record<string, string>> = {
+  leads: {
+    formation_titre: 'formationTitre',
+    contact_preference: 'contactPreference',
+  },
+  dates: {
+    formation_id: 'formationId',
+    formation_titre: 'formationTitre',
+  },
+}
+
+/**
+ * Convertit un objet JS (camelCase) vers les noms de colonnes DB (snake_case)
+ * et supprime les champs camelCase standards (createdAt, deletedAt)
+ */
+function toDbRecord(type: EntityType, data: Record<string, unknown>): Record<string, unknown> {
+  const mapping = COLUMN_TO_DB[type] || {}
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(data)) {
+    // Ignorer les champs camelCase gérés séparément
+    if (key === 'createdAt' || key === 'deletedAt') continue
+    const dbKey = mapping[key] || key
+    result[dbKey] = value
+  }
+  return result
+}
+
+/**
+ * Convertit un enregistrement DB (snake_case) vers les noms JS (camelCase)
+ */
+function fromDbRecord(type: EntityType, item: Record<string, unknown>): Record<string, unknown> {
+  const mapping = COLUMN_FROM_DB[type] || {}
+  const { deleted_at, created_at, ...rest } = item as any
+  const result: Record<string, unknown> = {
+    deletedAt: deleted_at,
+    createdAt: created_at,
+  }
+  for (const [key, value] of Object.entries(rest)) {
+    const jsKey = mapping[key] || key
+    result[jsKey] = value
+  }
+  return result
+}
+
 export async function readAll<T extends RecordItem>(type: EntityType): Promise<T[]> {
   try {
     if (!supabase) {
@@ -52,16 +109,7 @@ export async function readAll<T extends RecordItem>(type: EntityType): Promise<T
       return []
     }
 
-    // Convertir deleted_at en deletedAt pour tous les éléments
-    const convertedData = (data || []).map((item: any) => {
-      const { deleted_at, created_at, ...rest } = item
-      return {
-        ...rest,
-        deletedAt: deleted_at,
-        createdAt: created_at,
-      }
-    })
-
+    const convertedData = (data || []).map((item: any) => fromDbRecord(type, item))
     return convertedData as T[]
   } catch (error) {
     console.error(`Error reading ${type}:`, error)
@@ -109,17 +157,15 @@ export async function listActive<T extends RecordItem>(type: EntityType): Promis
 
     if (error) {
       console.error(`Error listing active ${type}:`, error)
+      console.error('Error details:', JSON.stringify(error, null, 2))
       return []
     }
 
-    // Convertir deleted_at en deletedAt pour tous les éléments
     const convertedData = (data || []).map((item: any) => {
-      const { deleted_at, created_at, ...rest } = item
-      return {
-        ...rest,
-        deletedAt: deleted_at,
-        createdAt: created_at,
-      }
+      const record = fromDbRecord(type, item)
+      // Fallback si created_at est null
+      if (!record.createdAt) record.createdAt = new Date().toISOString()
+      return record
     })
 
     return convertedData as T[]
@@ -141,15 +187,19 @@ export async function createItem<T extends RecordItem>(
 
     const tableName = TABLE_NAMES[type]
     
-    // Convertir deletedAt en deleted_at pour Supabase
-    const { deletedAt, ...restData } = data as any
+    console.log(`Creating item in ${type} with data:`, data)
+
+    // Convertir les noms camelCase → snake_case pour Supabase
+    const dbData = toDbRecord(type, data as any)
     
     const item = {
-      ...restData,
-      id: data.id || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      ...dbData,
+      id: (data as any).id || crypto.randomUUID(),
       deleted_at: null,
       created_at: new Date().toISOString(),
-    } as unknown as T
+    }
+
+    console.log(`Item to insert in ${type}:`, item)
 
     const { data: insertedData, error } = await supabase
       .from(tableName)
@@ -159,20 +209,17 @@ export async function createItem<T extends RecordItem>(
 
     if (error) {
       console.error(`Error creating ${type}:`, error)
+      console.error('Error details:', JSON.stringify(error, null, 2))
       return null
     }
 
-    // Convertir deleted_at en deletedAt pour le retour
+    console.log(`Successfully created item in ${type}:`, insertedData)
+
     if (insertedData) {
-      const { deleted_at, created_at, ...rest } = insertedData as any
-      return {
-        ...rest,
-        deletedAt: deleted_at,
-        createdAt: created_at,
-      } as T
+      return fromDbRecord(type, insertedData as any) as T
     }
 
-    return insertedData as T
+    return null
   } catch (error) {
     console.error(`Error creating ${type}:`, error)
     return null
@@ -192,9 +239,12 @@ export async function updateItem<T extends RecordItem>(
     }
 
     const tableName = TABLE_NAMES[type]
-    const { id: _id, deletedAt, createdAt, ...rest } = data as Record<string, unknown>
+    // Convertir camelCase → snake_case pour la mise à jour
+    const dbData = toDbRecord(type, data as any)
+    // Supprimer l'id de la mise à jour
+    delete dbData.id
 
-    let query = supabase.from(tableName).update(rest).eq('id', id)
+    let query = supabase.from(tableName).update(dbData).eq('id', id)
 
     if (!options?.includeDeleted) {
       query = query.is('deleted_at', null)
@@ -207,17 +257,11 @@ export async function updateItem<T extends RecordItem>(
       return null
     }
 
-    // Convertir deleted_at en deletedAt pour le retour
     if (updatedData) {
-      const { deleted_at, created_at, ...rest } = updatedData as any
-      return {
-        ...rest,
-        deletedAt: deleted_at,
-        createdAt: created_at,
-      } as T
+      return fromDbRecord(type, updatedData as any) as T
     }
 
-    return updatedData as T
+    return null
   } catch (error) {
     console.error(`Error updating ${type}:`, error)
     return null
@@ -246,17 +290,11 @@ export async function softDelete<T extends RecordItem>(type: EntityType, id: str
       return null
     }
 
-    // Convertir deleted_at en deletedAt pour le retour
     if (deletedData) {
-      const { deleted_at, created_at, ...rest } = deletedData as any
-      return {
-        ...rest,
-        deletedAt: deleted_at,
-        createdAt: created_at,
-      } as T
+      return fromDbRecord(type, deletedData as any) as T
     }
 
-    return deletedData as T
+    return null
   } catch (error) {
     console.error(`Error soft deleting ${type}:`, error)
     return null
@@ -285,17 +323,11 @@ export async function restoreItem<T extends RecordItem>(type: EntityType, id: st
       return null
     }
 
-    // Convertir deleted_at en deletedAt pour le retour
     if (restoredData) {
-      const { deleted_at, created_at, ...rest } = restoredData as any
-      return {
-        ...rest,
-        deletedAt: deleted_at,
-        createdAt: created_at,
-      } as T
+      return fromDbRecord(type, restoredData as any) as T
     }
 
-    return restoredData as T
+    return null
   } catch (error) {
     console.error(`Error restoring ${type}:`, error)
     return null
@@ -348,15 +380,7 @@ export async function listTrash() {
       }
 
       if (data && data.length > 0) {
-        // Convertir deleted_at en deletedAt pour tous les éléments
-        const convertedData = data.map((item: any) => {
-          const { deleted_at, created_at, ...rest } = item
-          return {
-            ...rest,
-            deletedAt: deleted_at,
-            createdAt: created_at,
-          }
-        })
+        const convertedData = data.map((item: any) => fromDbRecord(entityType, item))
 
         items.push(
           ...convertedData.map((item) => ({

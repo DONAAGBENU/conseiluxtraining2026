@@ -3,9 +3,12 @@ import { createItem, listActive } from '@/lib/supabaseDb'
 
 export async function GET() {
   try {
-    const formations = (await listActive('formations')).sort((a, b) =>
-      String(b.createdAt || '').localeCompare(String(a.createdAt || ''))
-    )
+    const formations = (await listActive('formations')).sort((a, b) => {
+      const dateA = a.createdAt || a.created_at || ''
+      const dateB = b.createdAt || b.created_at || ''
+      return String(dateB).localeCompare(String(dateA))
+    })
+    console.log('API GET /api/formations - returning:', formations)
     return NextResponse.json({ formations, total: formations.length })
   } catch (error) {
     console.error('Erreur GET /api/formations:', error)
@@ -32,7 +35,6 @@ export async function POST(request: NextRequest) {
       modules: Array.isArray(modules) ? modules : [],
       objectif: objectif || '',
       prerequis: prerequis || '',
-      createdAt: new Date().toISOString(),
     })
 
     return NextResponse.json({ success: true, formation }, { status: 201 })

@@ -47,7 +47,6 @@ export async function POST(request: NextRequest) {
       email: email?.trim() || '',
       telephone: telephone?.trim() || '',
       approuve: false,
-      createdAt: new Date().toISOString(),
     })
 
     return NextResponse.json({ success: true, avis }, { status: 201 })

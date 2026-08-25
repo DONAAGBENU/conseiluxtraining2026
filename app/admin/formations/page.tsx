@@ -14,7 +14,8 @@ interface Formation {
   modules: string[]
   objectif: string
   prerequis: string
-  createdAt: string
+  createdAt?: string
+  deletedAt?: string | null
 }
 
 export default function AdminFormations() {
@@ -66,6 +67,7 @@ export default function AdminFormations() {
       }
       
       const data = await res.json()
+      console.log('Formations data received:', data)
       setFormations(data.formations || [])
     } catch (err) {
       console.error('Erreur lors du chargement des formations:', err)
