@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   description: 'Cabinet de conseil spécialisé en conseil stratégique, formation professionnelle, développement des compétences et recrutement sur mesure.',
   keywords: 'formation, conseil, recrutement, certification, TOEIC, TOEFL, GRE, management, leadership, cybersécurité',
   icons: {
-    icon: '/favicon.png',
-    apple: '/favicon.png',
+    icon: '/favicon.jpg',
+    apple: '/favicon.jpg',
   },
 }
 
@@ -29,8 +29,8 @@ export default function RootLayout({
   return (
     <html lang="fr" data-scroll-behavior="smooth">
       <head>
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
+        <link rel="apple-touch-icon" href="/favicon.jpg" />
       </head>
       <body className={`${inter.className} ${poppins.variable}`}>
         <div className="relative min-h-screen">

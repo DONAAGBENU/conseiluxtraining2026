@@ -1,0 +1,107 @@
+{
+  "version": "2.0",
+  "title": "Tracktest B1 English Practice Test",
+  "description": "Structure complète du test de niveau B1 Tracktest (Grammar, Reading, Listening)",
+  "lastUpdated": "2026-09-08",
+  "grammar": {
+    "totalQuestions": 20,
+    "pointsPerQuestion": 1,
+    "maxScore": 20
+  },
+  "reading": {
+    "totalQuestions": 25,
+    "pointsPerQuestion": 1,
+    "maxScore": 25,
+    "tasks": [
+      {
+        "id": "reading-task-1",
+        "title": "YUKON ADVENTURE HOLIDAYS",
+        "questionCount": 5,
+        "type": "true_false"
+      },
+      {
+        "id": "reading-task-2",
+        "title": "TRAVEL GUIDE: SOUTH AFRICA",
+        "questionCount": 5,
+        "type": "true_false"
+      },
+      {
+        "id": "reading-task-3",
+        "title": "SCANDAL IN BOHEMIA",
+        "questionCount": 5,
+        "type": "true_false"
+      },
+      {
+        "id": "reading-task-4",
+        "title": "FACE YOUR FEARS DAY",
+        "questionCount": 5,
+        "type": "true_false_doesnt_say"
+      },
+      {
+        "id": "reading-task-5",
+        "title": "ALEXA'S BLOG",
+        "questionCount": 5,
+        "type": "multiple_choice"
+      }
+    ]
+  },
+  "listening": {
+    "totalQuestions": 25,
+    "pointsPerQuestion": 1,
+    "maxScore": 25,
+    "audioFiles": [
+      {
+        "id": "listening-01",
+        "fileName": "listening-01.mpeg",
+        "path": "/tests-de-niveau/audio/listening-01.mpeg",
+        "taskTitle": "Task 1: Radio Interview of a Restaurant",
+        "questionCount": 5,
+        "type": "multiple_choice_3_options"
+      },
+      {
+        "id": "listening-02",
+        "fileName": "listening-02.mpeg",
+        "path": "/tests-de-niveau/audio/listening-02.mpeg",
+        "taskTitle": "Task 2: Harrods Shop in London",
+        "questionCount": 5,
+        "type": "multiple_choice_2_options"
+      },
+      {
+        "id": "listening-03",
+        "fileName": "listening-03.mpeg",
+        "path": "/tests-de-niveau/audio/listening-03.mpeg",
+        "taskTitle": "Task 3: Dogs as House Pets",
+        "questionCount": 5,
+        "type": "true_false"
+      },
+      {
+        "id": "listening-04",
+        "fileName": "listening-04.mpeg",
+        "path": "/tests-de-niveau/audio/listening-04.mpeg",
+        "taskTitle": "Task 4: The Wieliczka Salt Mine",
+        "questionCount": 5,
+        "type": "true_false"
+      },
+      {
+        "id": "listening-05",
+        "fileName": "listening-05.mpeg",
+        "path": "/tests-de-niveau/audio/listening-05.mpeg",
+        "taskTitle": "Task 5: Reactions to Books (5 Speakers)",
+        "questionCount": 5,
+        "type": "matching_5_options"
+      }
+    ]
+  },
+  "scoring": {
+    "totalCoreQuestions": 70,
+    "passingPercentage": 65,
+    "passingScore": 46,
+    "levelMapping": {
+      "A1": { "minPercentage": 0, "maxPercentage": 39 },
+      "A2": { "minPercentage": 40, "maxPercentage": 64 },
+      "B1": { "minPercentage": 65, "maxPercentage": 84 },
+      "B2": { "minPercentage": 85, "maxPercentage": 94 },
+      "C1": { "minPercentage": 95, "maxPercentage": 100 }
+    }
+  }
+}

@@ -6,6 +6,8 @@ import { translations, Language } from '@/lib/translations'
 type LanguageContextType = {
   language: Language
   setLanguage: (lang: Language) => void
+  darkMode: boolean
+  toggleDarkMode: () => void
   t: typeof translations.fr
 }
 
@@ -13,6 +15,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>('fr')
+  const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
     // Load language from localStorage on mount
@@ -20,16 +23,36 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (savedLanguage && (savedLanguage === 'fr' || savedLanguage === 'en')) {
       setLanguage(savedLanguage)
     }
+
+    const savedDarkMode = localStorage.getItem('site-dark-mode')
+    if (savedDarkMode === 'true') {
+      setDarkMode(true)
+    }
   }, [])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('theme-dark', darkMode)
+    document.documentElement.classList.toggle('theme-light', !darkMode)
+  }, [darkMode])
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang)
     localStorage.setItem('language', lang)
   }
 
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const next = !prev
+      localStorage.setItem('site-dark-mode', String(next))
+      return next
+    })
+  }
+
   const value = {
     language,
     setLanguage: handleSetLanguage,
+    darkMode,
+    toggleDarkMode,
     t: translations[language]
   }
 

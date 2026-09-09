@@ -1,0 +1,26 @@
+{
+  "recipient": "Formations@conseiluxtraining.com",
+  "studentData": {
+    "name": "dod",
+    "email": "donaagb8enu2000@gmail.com",
+    "phone": "90945455",
+    "country": "23 rue de test",
+    "city": "LOME TOGO",
+    "company": "ucao",
+    "educationLevel": "Baccalauréat / Lycée"
+  },
+  "result": {
+    "grammarScore": 8,
+    "readingScore": 2,
+    "listeningScore": 0,
+    "totalCoreScore": 10,
+    "percentage": 14,
+    "passed": false,
+    "writingScore": 7,
+    "speakingScore": 4,
+    "level": "A1"
+  },
+  "testName": "Tracktest B1 & TOEFL Assessment",
+  "date": "2026-09-09T10:01:39.267Z",
+  "emailSent": false
+}

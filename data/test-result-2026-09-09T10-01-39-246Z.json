@@ -1,0 +1,63 @@
+{
+  "studentData": {
+    "name": "dod",
+    "email": "donaagb8enu2000@gmail.com",
+    "phone": "90945455",
+    "country": "23 rue de test",
+    "city": "LOME TOGO",
+    "company": "ucao",
+    "educationLevel": "Baccalauréat / Lycée"
+  },
+  "testAnswers": {
+    "grammar": {
+      "g1": "b",
+      "g2": "b",
+      "g3": "b",
+      "g4": "b",
+      "g5": "b",
+      "g6": "a",
+      "g7": "b",
+      "g8": "b",
+      "g9": "b",
+      "g10": "b",
+      "g11": "b",
+      "g12": "b",
+      "g13": "b",
+      "g14": "a",
+      "g15": "a",
+      "g16": "b",
+      "g17": "b",
+      "g18": "b",
+      "g19": "b",
+      "g20": "b"
+    },
+    "reading": {
+      "r11": "b",
+      "r13": "a",
+      "r1": "a"
+    },
+    "listening": {},
+    "writing": {
+      "w1": "kfwkjfnwjnwjlqwn;fgwergoro5orjjrerj",
+      "w2": "jeujnfjwnefoern2oen2j2j4n2j432",
+      "w3": "ijwehfiwouhwuht3wr"
+    },
+    "speaking": {
+      "s1": "nkkkkkkkkkkk;k;n",
+      "s2_audio": "blob:http://localhost:3000/b074a823-a21b-4e28-98ad-e9c89a48601b"
+    }
+  },
+  "result": {
+    "grammarScore": 8,
+    "readingScore": 2,
+    "listeningScore": 0,
+    "totalCoreScore": 10,
+    "percentage": 14,
+    "passed": false,
+    "writingScore": 7,
+    "speakingScore": 4,
+    "level": "A1"
+  },
+  "testName": "Tracktest B1 & TOEFL Assessment",
+  "date": "2026-09-09T10:01:37.925Z"
+}

@@ -37,33 +37,37 @@ export default function Avis() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchApprovedAvis()
+    const controller = new AbortController()
+    fetchApprovedAvis(controller.signal)
+    return () => controller.abort()
   }, [])
 
-  const fetchApprovedAvis = async () => {
+  const fetchApprovedAvis = async (signal: AbortSignal) => {
     try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      const timeoutId = setTimeout(() => signal.dispatchEvent(new Event('abort')), 8000)
       
-      const res = await fetch('/api/avis?approved=true', {
-        signal: controller.signal
-      })
+      const res = await fetch('/api/avis?approved=true', { signal })
       
       clearTimeout(timeoutId)
       
       if (!res.ok) {
-        console.error('Erreur HTTP lors du chargement des avis')
         setTestimonials([])
         return
       }
       
       const data = await res.json()
       setTestimonials(data.avis || [])
-    } catch (err) {
+    } catch (err: unknown) {
+      // Ignore silently if the request was aborted (component unmount or timeout)
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return
+      }
       console.error('Erreur lors du chargement des avis:', err)
       setTestimonials([])
     } finally {
-      setLoading(false)
+      if (!signal.aborted) {
+        setLoading(false)
+      }
     }
   }
 

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Menu, X, Phone, ChevronDown, Globe, FileText } from 'lucide-react'
+import { Menu, X, Phone, ChevronDown, Globe, GraduationCap, Moon, Sun } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from './LanguageProvider'
 
@@ -31,8 +31,11 @@ export default function Header() {
   const [animatedText, setAnimatedText] = useState('')
   const [animDone, setAnimDone] = useState(false)
   const animRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const { language, setLanguage, t } = useLanguage()
+  const { language, setLanguage, t, darkMode, toggleDarkMode } = useLanguage()
   const fullText = 'Conseilux Training & Development'
+
+  // Libellé bilingue du bouton Centre de Langues (pas besoin de toucher aux fichiers de traduction)
+  const languageCenterLabel = language === 'fr' ? 'Centre de Langues' : 'Language Center'
 
   useEffect(() => {
     // Clean up any previous animation
@@ -89,23 +92,15 @@ export default function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center justify-center">
-            <div className="w-20 h-20 rounded-full bg-white/15 flex items-center justify-center shadow-inner shadow-black/15 ring-1 ring-white/15">
-              <Image
-                src="/images/logo conseilux vectoriel  [Récupéré]_Plan de travail 1.png"
-                alt="Logo Conseilux Training and Developement"
-                width={56}
-                height={56}
-                className="object-contain w-full h-full"
-              />
-            </div>
-            <div className="ml-2 hidden md:block" style={{ width: '220px' }}>
-              <h1 className="text-base font-bold text-white leading-tight" style={{ minHeight: '22px', width: '100%', overflow: 'hidden' }}>
-                {animatedText}
-                {!animDone && (
-                  <span className="animate-pulse text-orange-800">|</span>
-                )}
-              </h1>
-            </div>
+            <Image
+              src="/images/logo-transparent-white-text-cropped.png"
+              alt="Logo Conseilux Training and Development"
+              width={120}
+              height={88}
+              style={{ height: 'auto' }}
+              className="object-contain"
+              priority
+            />
           </Link>
 
           {/* Menu Desktop */}
@@ -192,14 +187,27 @@ export default function Header() {
                 {language === 'fr' ? 'FR' : 'EN'}
               </button>
             </li>
-            
-            <li>
-              <Link 
-                href="/catalogue"
-                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-800 to-orange-900 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-orange-800/30 hover:from-orange-700 hover:to-orange-800 transition-all duration-300"
+
+            <li className="flex items-center">
+              <button
+                type="button"
+                onClick={toggleDarkMode}
+                title={darkMode ? 'Mode clair' : 'Mode sombre'}
+                aria-label={darkMode ? 'Mode clair' : 'Mode sombre'}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/5 text-orange-800 transition-colors hover:border-orange-800 hover:text-white"
               >
-                <FileText className="w-4 h-4 shrink-0" />
-                {t.nav.downloadCatalogue}
+                {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+            </li>
+            
+            {/* Bouton Centre de Langues — remplace l'ancien bouton "Télécharger Catalogue" */}
+            <li className="shrink-0">
+              <Link 
+                href="/centre-de-langues"
+                className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-orange-800 to-orange-900 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-orange-800/30 hover:from-orange-700 hover:to-orange-800 transition-all duration-300 shrink-0 whitespace-nowrap min-w-[175px]"
+              >
+                <GraduationCap className="w-4 h-4 shrink-0" />
+                <span>{languageCenterLabel}</span>
               </Link>
             </li>
           </ul>
@@ -246,7 +254,29 @@ export default function Header() {
                 )}
               </div>
             ))}
+
+            {/* Bouton Centre de Langues (mobile) */}
+            <Link
+              href="/centre-de-langues"
+              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-800 to-orange-900 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-orange-800/30 w-fit"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <GraduationCap className="w-4 h-4 shrink-0" />
+              {languageCenterLabel}
+            </Link>
             
+            {/* Theme toggle mobile */}
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                type="button"
+                onClick={toggleDarkMode}
+                aria-label={darkMode ? 'Mode clair' : 'Mode sombre'}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/5 text-orange-800 transition-colors hover:border-orange-800 hover:text-white"
+              >
+                {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+            </div>
+
             {/* Social Links Mobile */}
             <div className="flex items-center gap-2 pt-4 border-t border-white/5">
               <Link

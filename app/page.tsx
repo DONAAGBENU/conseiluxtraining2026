@@ -160,49 +160,53 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-16 mb-2 flex items-center justify-center">
+                <div className="h-12 mb-2 flex items-center justify-center">
                   <Image
                     src="/images/conseil.jpeg"
                     alt="Conseil"
-                    width={60}
-                    height={60}
-                    className="object-contain w-auto h-auto"
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                 </div>
                 <p className="font-semibold text-white">{language === 'fr' ? 'Conseil' : 'Consulting'}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-16 mb-2 flex items-center justify-center">
+                <div className="h-12 mb-2 flex items-center justify-center">
                   <Image
                     src="/images/formation.jpeg"
                     alt="Formation"
-                    width={60}
-                    height={60}
-                    className="object-contain w-auto h-auto"
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                 </div>
                 <p className="font-semibold text-white">{language === 'fr' ? 'Formation' : 'Training'}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-16 mb-2 flex items-center justify-center">
+                <div className="h-12 mb-2 flex items-center justify-center">
                   <Image
                     src="/images/recrutement.jpeg"
                     alt="Recrutement"
-                    width={60}
-                    height={60}
-                    className="object-contain w-auto h-auto"
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                 </div>
                 <p className="font-semibold text-white">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-16 mb-2 flex items-center justify-center">
+                <div className="h-12 mb-2 flex items-center justify-center">
                   <Image
                     src="/images/accompagnement.jpeg"
                     alt="Accompagnement"
-                    width={60}
-                    height={60}
-                    className="object-contain w-auto h-auto"
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                 </div>
                 <p className="font-semibold text-white">{language === 'fr' ? 'Accompagnement' : 'Support'}</p>

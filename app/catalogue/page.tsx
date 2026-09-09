@@ -110,7 +110,7 @@ export default function CataloguePage() {
       // Téléchargement automatique après 1 seconde
       setTimeout(() => {
         const link = document.createElement('a')
-        link.href = '/catalogue.pdf'
+        link.href = '/catalogue/catalogue.pdf'
         link.download = 'Catalogue-Conseilux-Training.pdf'
         document.body.appendChild(link)
         link.click()
@@ -338,7 +338,7 @@ export default function CataloguePage() {
                     {language === 'fr' ? 'Votre demande a été enregistrée. Le téléchargement va commencer automatiquement.' : 'Your request has been registered. The download will start automatically.'}
                   </p>
                   <a
-                    href="/catalogue.pdf"
+                    href="/catalogue/catalogue.pdf"
                     download="Catalogue-Conseilux-Training.pdf"
                     className="inline-flex items-center gap-2 rounded-2xl bg-orange-800 hover:bg-orange-700 text-white font-semibold py-3 px-8 transition-colors shadow-lg shadow-orange-800/20"
                   >

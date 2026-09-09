@@ -1,5 +1,31 @@
 [
   {
+    "type": "visitor",
+    "page": "/",
+    "metadata": {
+      "timestamp": "2026-08-29T10:48:37.699Z",
+      "referrer": ""
+    },
+    "createdAt": "2026-08-29T10:48:37.799Z",
+    "ip_address": "::1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "id": "1788000517800-0ocq3q",
+    "deletedAt": null
+  },
+  {
+    "type": "visitor",
+    "page": "/",
+    "metadata": {
+      "timestamp": "2026-08-28T13:17:13.083Z",
+      "referrer": ""
+    },
+    "createdAt": "2026-08-28T13:17:13.185Z",
+    "ip_address": "::1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.134.0 Chrome/148.0.7778.280 Electron/42.8.1 Safari/537.36",
+    "id": "1787923033187-3t9xp7",
+    "deletedAt": null
+  },
+  {
     "type": "catalogue_download",
     "page": "/catalogue",
     "metadata": {
