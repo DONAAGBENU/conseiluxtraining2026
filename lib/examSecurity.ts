@@ -1,5 +1,6 @@
 export function isBlockedExamShortcut(event: KeyboardEvent): boolean {
   if (!event) return false;
+  if (!event.key) return false;
 
   const key = event.key.toLowerCase();
   const modKeyPressed = event.ctrlKey || event.metaKey || event.altKey;
@@ -22,6 +23,7 @@ export function isBlockedExamShortcut(event: KeyboardEvent): boolean {
 }
 
 export function isBlockedClipboardAction(event: Event): boolean {
+  if (!event || !event.type) return false;
   const type = event.type.toLowerCase();
   return ['copy', 'cut', 'paste', 'beforecopy', 'beforecut', 'beforepaste', 'contextmenu'].includes(type);
 }

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Menu, X, Phone, ChevronDown, Globe, GraduationCap, Moon, Sun } from 'lucide-react'
+import { Menu, X, Phone, ChevronDown, Globe, GraduationCap } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from './LanguageProvider'
 
@@ -31,7 +31,7 @@ export default function Header() {
   const [animatedText, setAnimatedText] = useState('')
   const [animDone, setAnimDone] = useState(false)
   const animRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const { language, setLanguage, t, darkMode, toggleDarkMode } = useLanguage()
+  const { language, setLanguage, t } = useLanguage()
   const fullText = 'Conseilux Training & Development'
 
   // Libellé bilingue du bouton Centre de Langues (pas besoin de toucher aux fichiers de traduction)
@@ -187,18 +187,6 @@ export default function Header() {
                 {language === 'fr' ? 'FR' : 'EN'}
               </button>
             </li>
-
-            <li className="flex items-center">
-              <button
-                type="button"
-                onClick={toggleDarkMode}
-                title={darkMode ? 'Mode clair' : 'Mode sombre'}
-                aria-label={darkMode ? 'Mode clair' : 'Mode sombre'}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/5 text-orange-800 transition-colors hover:border-orange-800 hover:text-white"
-              >
-                {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
-            </li>
             
             {/* Bouton Centre de Langues — remplace l'ancien bouton "Télécharger Catalogue" */}
             <li className="shrink-0">
@@ -265,18 +253,6 @@ export default function Header() {
               {languageCenterLabel}
             </Link>
             
-            {/* Theme toggle mobile */}
-            <div className="flex items-center gap-2 pt-2">
-              <button
-                type="button"
-                onClick={toggleDarkMode}
-                aria-label={darkMode ? 'Mode clair' : 'Mode sombre'}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/5 text-orange-800 transition-colors hover:border-orange-800 hover:text-white"
-              >
-                {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
-            </div>
-
             {/* Social Links Mobile */}
             <div className="flex items-center gap-2 pt-4 border-t border-white/5">
               <Link

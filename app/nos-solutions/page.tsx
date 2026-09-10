@@ -118,13 +118,14 @@ export default function NosSolutions() {
               {softwareSolutions.map((solution, index) => (
                 <div key={index} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
                   <div>
-                    <div className="text-white mb-4 h-12 w-12 rounded-lg overflow-hidden">
+                    <div className="mb-4 flex h-6 w-6 items-center justify-center overflow-hidden rounded-lg bg-white/5 text-white">
                       <Image
                         src={solution.image}
                         alt={solution.name}
-                        width={48}
-                        height={48}
-                        className="object-contain"
+                        width={20}
+                        height={20}
+                        className="h-5 w-5 object-contain"
+                        style={{ width: 'auto', height: 'auto' }}
                       />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{solution.name}</h3>

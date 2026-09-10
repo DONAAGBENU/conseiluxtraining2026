@@ -158,58 +158,54 @@ export default function Home() {
             <p className="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
               {t.home.solutionsSubtitle}
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-12 mb-2 flex items-center justify-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
                   <Image
                     src="/images/conseil.jpeg"
                     alt="Conseil"
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                    style={{ width: 'auto', height: 'auto' }}
+                    width={96}
+                    height={96}
+                    className="object-contain w-24 h-24"
                   />
                 </div>
-                <p className="font-semibold text-white">{language === 'fr' ? 'Conseil' : 'Consulting'}</p>
+                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Conseil' : 'Consulting'}</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-12 mb-2 flex items-center justify-center">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
                   <Image
                     src="/images/formation.jpeg"
                     alt="Formation"
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                    style={{ width: 'auto', height: 'auto' }}
+                    width={96}
+                    height={96}
+                    className="object-contain w-24 h-24"
                   />
                 </div>
-                <p className="font-semibold text-white">{language === 'fr' ? 'Formation' : 'Training'}</p>
+                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Formation' : 'Training'}</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-12 mb-2 flex items-center justify-center">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
                   <Image
                     src="/images/recrutement.jpeg"
                     alt="Recrutement"
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                    style={{ width: 'auto', height: 'auto' }}
+                    width={96}
+                    height={96}
+                    className="object-contain w-24 h-24"
                   />
                 </div>
-                <p className="font-semibold text-white">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</p>
+                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors">
-                <div className="h-12 mb-2 flex items-center justify-center">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
                   <Image
                     src="/images/accompagnement.jpeg"
                     alt="Accompagnement"
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                    style={{ width: 'auto', height: 'auto' }}
+                    width={96}
+                    height={96}
+                    className="object-contain w-24 h-24"
                   />
                 </div>
-                <p className="font-semibold text-white">{language === 'fr' ? 'Accompagnement' : 'Support'}</p>
+                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Accompagnement' : 'Support'}</p>
               </div>
             </div>
             <Link

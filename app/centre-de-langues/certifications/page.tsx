@@ -24,33 +24,58 @@ export default function CertificationsPage() {
   return (
     <main className={`${bgMain} transition-colors duration-300`}>
       {/* ---------- HEADER ---------- */}
-      <section className="bg-[#ff6b00] py-16 text-white">
-        <div className="mx-auto max-w-6xl px-6">
-          <Link 
-            href="/centre-de-langues" 
-            className="inline-flex items-center gap-1.5 text-xs text-white/80 hover:text-white transition-colors shrink-0 whitespace-nowrap"
-          >
-            {t.programmesPage.back}
-          </Link>
-          <div className="mt-4 flex items-center gap-4 flex-wrap">
+      <section className="bg-[#ff6b00] py-16 text-white relative overflow-hidden">
+        {/* subtle background pattern */}
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 80% 50%, #fff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+
+        <div className="relative mx-auto max-w-6xl px-6">
+          {/* Top row: back link + luxury button pushed to far right */}
+          <div className="flex items-center justify-between">
+            <Link
+              href="/centre-de-langues"
+              className="inline-flex items-center gap-1.5 text-xs text-white/80 hover:text-white transition-colors shrink-0 whitespace-nowrap"
+            >
+              {t.programmesPage.back}
+            </Link>
+
+            {/* ✨ Luxury "Test de Niveau" button — top-right corner */}
+            <Link
+              href="/centre-de-langues/test-de-niveau"
+              className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl border border-white/30 bg-white/10 backdrop-blur-md px-5 py-3 text-sm font-bold text-white shadow-2xl transition-all duration-300 hover:bg-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:-translate-y-0.5"
+            >
+              {/* shimmer sweep */}
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+              {/* pulsing green dot */}
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400" />
+              </span>
+
+              <span className="relative tracking-wide uppercase text-xs font-extrabold">{pt.testLevelButton}</span>
+
+              {/* arrow icon */}
+              <span className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+          </div>
+
+          {/* Title + subtitle below */}
+          <div className="mt-6">
             <h1
               className="text-3xl md:text-5xl"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {pt.title}
             </h1>
-            <Link
-              href="/centre-de-langues/test-de-niveau"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/20 hover:bg-white/30 px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-white shadow-lg shadow-black/10 transition-all duration-200 hover:-translate-y-0.5 sm:px-5 sm:py-3 sm:text-sm"
-            >
-              {pt.testLevelButton}
-            </Link>
+            <p className="mt-4 max-w-xl text-white/90">
+              {pt.subtitle}
+            </p>
           </div>
-          <p className="mt-4 max-w-xl text-white/90">
-            {pt.subtitle}
-          </p>
         </div>
       </section>
+
 
       {/* ---------- EXAMENS PRÉPARÉS ---------- */}
       <section className="mx-auto max-w-6xl px-6 py-16">
