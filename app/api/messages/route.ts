@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createItem, listActive } from '@/lib/supabaseDb'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const messages = (await listActive('messages')).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))

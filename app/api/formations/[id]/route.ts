@@ -5,7 +5,8 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
   try {
     const { id } = await props.params
     const body = await request.json()
-    const formation = await updateItem('formations', id, body)
+    const { id: _id, createdAt: _created, deletedAt: _deleted, ...safeBody } = body
+    const formation = await updateItem('formations', id, safeBody)
 
     if (!formation) {
       return NextResponse.json({ error: 'Formation introuvable' }, { status: 404 })

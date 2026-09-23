@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createItem, listActive } from '@/lib/jsonDb'
+import { createItem, listActive } from '@/lib/supabaseDb'
+
+export const dynamic = 'force-dynamic'
 
 function calculateStats(items: { createdAt?: string; created_at?: string }[]) {
   const now = new Date()
@@ -19,7 +21,7 @@ function calculateStats(items: { createdAt?: string; created_at?: string }[]) {
 
 export async function GET() {
   try {
-    const events = listActive('analytics') as {
+    const events = (await listActive('analytics')) as {
       type?: string
       createdAt?: string
       created_at?: string
@@ -49,18 +51,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Type requis' }, { status: 400 })
     }
 
-    const data = createItem('analytics', {
+    const data = await createItem('analytics', {
       type,
       page: page || '/',
       metadata: metadata || {},
-      createdAt: new Date().toISOString(),
-      ip_address: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-      user_agent: request.headers.get('user-agent') || 'unknown',
     })
 
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {
     console.error('Erreur POST /api/analytics:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Erreur serveur'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

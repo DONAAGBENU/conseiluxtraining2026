@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabaseClient'
+import { getSupabaseStorageClient } from '@/lib/supabaseStorage'
+
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
-    if (!supabase) {
-      return NextResponse.json({ error: 'Supabase non configuré' }, { status: 500 })
-    }
+    const storageClient = getSupabaseStorageClient()
 
     const formData = await request.formData()
     const file = formData.get('file') as File
@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Générer un nom de fichier unique
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+    const fileExt = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg'
+    const fileName = `${crypto.randomUUID()}.${fileExt}`
     const filePath = `formations/${fileName}`
 
     // Convertir le fichier en ArrayBuffer
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer)
 
     // Uploader vers Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await storageClient.storage
       .from('formations-images')
       .upload(filePath, buffer, {
         contentType: file.type,
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Obtenir l'URL publique
-    const { data: { publicUrl } } = supabase.storage
+    const { data: { publicUrl } } = storageClient.storage
       .from('formations-images')
       .getPublicUrl(filePath)
 

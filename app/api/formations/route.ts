@@ -1,43 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createItem, listActive } from '@/lib/supabaseDb'
-import { FORMATIONS_CATALOG, getFormationImage } from '@/app/data/formationsData'
+import { getFormationImage } from '@/app/data/formationsData'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    let dbFormations: any[] = []
-    try {
-      dbFormations = await listActive('formations')
-    } catch (e) {
-      console.warn('Could not read from db, using fallback catalog:', e)
-    }
+    const dbFormations = await listActive('formations')
 
-    // Filter out test/junk items if any, e.g. "knylwk4jny3"
-    const cleanedDb = dbFormations.filter(f => {
-      const t = (f.titre || '').trim().toLowerCase()
-      return t.length > 2 && !t.includes('knylwk')
-    })
-
-    // Merge: start with DB formations, then add catalog items that aren't already represented
-    const dbTitles = new Set(cleanedDb.map(f => (f.titre || '').toLowerCase().trim()))
-    const dbIds = new Set(cleanedDb.map(f => String(f.id)))
-
-    const missingCatalog = FORMATIONS_CATALOG.filter(c => {
-      const t = c.titre.toLowerCase().trim()
-      return !dbTitles.has(t) && !dbIds.has(c.id)
-    })
-
-    const combined = [...cleanedDb, ...missingCatalog].map(f => ({
+    const formations = dbFormations.map((f) => ({
       ...f,
-      image: getFormationImage(f),
-      modules: Array.isArray(f.modules) ? f.modules : [],
-      certifiante: Boolean(f.certifiante),
+      image: getFormationImage(f as { image?: string; categorie?: string; titre?: string }),
+      modules: Array.isArray((f as { modules?: unknown }).modules) ? ((f as unknown as { modules: string[] }).modules) : [],
+      certifiante: Boolean((f as { certifiante?: boolean }).certifiante),
     }))
 
-    return NextResponse.json({ formations: combined, total: combined.length })
+    return NextResponse.json(
+      { formations, total: formations.length },
+      { headers: { 'Cache-Control': 'no-store' } }
+    )
   } catch (error) {
     console.error('Erreur GET /api/formations:', error)
-    // Fallback to static catalog in case of any database glitch
-    return NextResponse.json({ formations: FORMATIONS_CATALOG, total: FORMATIONS_CATALOG.length })
+    const message = error instanceof Error ? error.message : 'Erreur serveur'
+    return NextResponse.json({ error: message, formations: [], total: 0 }, { status: 500 })
   }
 }
 
@@ -50,7 +35,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
     }
 
-    const payload: any = {
+    const payload: Record<string, unknown> = {
       titre,
       description,
       categorie,
@@ -62,12 +47,8 @@ export async function POST(request: NextRequest) {
       prerequis: prerequis || '',
     }
 
-    // Utiliser l'image fournie ou générer une image par défaut
-    if (image) {
-      payload.image = image
-    } else {
-      // Générer une image par défaut basée sur la catégorie/titre
-      payload.image = getFormationImage({ titre, categorie })
+    if (image && String(image).trim()) {
+      payload.image = String(image).trim()
     }
 
     const formation = await createItem('formations', payload)
@@ -75,6 +56,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, formation }, { status: 201 })
   } catch (error) {
     console.error('Erreur POST /api/formations:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Erreur serveur'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

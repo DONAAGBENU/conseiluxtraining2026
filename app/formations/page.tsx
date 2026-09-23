@@ -40,7 +40,7 @@ export default function FormationsList() {
   })
 
   useEffect(() => {
-    fetch('/api/formations')
+    fetch('/api/formations', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         setFormations(data.formations || [])

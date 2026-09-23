@@ -58,9 +58,10 @@ export default function AdminFormations() {
   const fetchFormations = async () => {
     try {
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 6000)
+      const timeoutId = setTimeout(() => controller.abort(), 15000)
       
       const res = await fetch('/api/formations', {
+        cache: 'no-store',
         signal: controller.signal
       })
       
@@ -108,7 +109,8 @@ export default function AdminFormations() {
         })
       }
 
-      if (res.ok) {
+      const data = await res.json().catch(() => ({}))
+      if (res.ok && data.formation) {
         await fetchFormations()
         setShowForm(false)
         setEditMode(false)
@@ -127,7 +129,7 @@ export default function AdminFormations() {
         })
         setImageMode('url')
       } else {
-        alert(editMode ? "Erreur lors de la modification de la formation" : "Erreur lors de la création de la formation")
+        alert(data.error || (editMode ? "Erreur lors de la modification de la formation" : "Erreur lors de la création de la formation"))
       }
     } catch {
       alert("Une erreur est survenue")
@@ -177,12 +179,15 @@ export default function AdminFormations() {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette formation ?')) {
       try {
         const res = await fetch(`/api/formations/${id}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          cache: 'no-store'
         })
         if (res.ok) {
+          setFormations((current) => current.filter((item) => item.id !== id))
           await fetchFormations()
         } else {
-          alert('Erreur lors de la suppression')
+          const data = await res.json().catch(() => ({}))
+          alert(data.error || 'Erreur lors de la suppression')
         }
       } catch {
         alert('Une erreur est survenue')

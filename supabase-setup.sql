@@ -9,6 +9,7 @@ BEGIN
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP WITH TIME ZONE;
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS objectif TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS prerequis TEXT DEFAULT '';
+        ALTER TABLE formations ADD COLUMN IF NOT EXISTS image TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
     ELSE
         -- Créer la table si elle n'existe pas
@@ -23,6 +24,7 @@ BEGIN
             modules JSONB DEFAULT '[]'::jsonb,
             objectif TEXT DEFAULT '',
             prerequis TEXT DEFAULT '',
+            image TEXT DEFAULT '',
             created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
             deleted_at TIMESTAMP WITH TIME ZONE
         );
@@ -200,3 +202,19 @@ CREATE POLICY "Allow all operations on messages" ON messages
 CREATE POLICY "Allow all operations on analytics" ON analytics
   FOR ALL USING (true)
   WITH CHECK (true);
+
+-- Stockage des images de formations
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('formations-images', 'formations-images', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+DROP POLICY IF EXISTS "Public read formation images" ON storage.objects;
+DROP POLICY IF EXISTS "Public upload formation images" ON storage.objects;
+
+CREATE POLICY "Public read formation images" ON storage.objects
+    FOR SELECT TO public
+    USING (bucket_id = 'formations-images');
+
+CREATE POLICY "Public upload formation images" ON storage.objects
+    FOR INSERT TO public
+    WITH CHECK (bucket_id = 'formations-images');

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useLanguage } from '@/app/components/LanguageProvider'
-import { FORMATIONS_CATALOG, getFormationImage } from '@/app/data/formationsData'
+import { getFormationImage } from '@/app/data/formationsData'
 
 const slugToDbCategory: { [key: string]: string } = {
   'technologies-numeriques': 'Technologie numérique',
@@ -100,7 +100,7 @@ export default function FormationDetail() {
     setLoading(true)
     const dbCategory = slugToDbCategory[slug]
     
-    fetch('/api/formations')
+    fetch('/api/formations', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         const list: any[] = data.formations || []
@@ -115,27 +115,17 @@ export default function FormationDetail() {
         } else {
           // It's an individual formation page
           // First check in the loaded list
-          let found = list.find(
+          const found = list.find(
             (f: any) => String(f.id) === slug || (f.titre || '').toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '') === slug
           )
-          // If not in API list, check directly in FORMATIONS_CATALOG
-          if (!found) {
-            found = FORMATIONS_CATALOG.find(
-              c => c.id === slug || c.titre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '') === slug
-            )
-          }
           setFormation(found || null)
           setIsCategory(false)
         }
       })
       .catch(err => {
         console.error('Erreur chargement formation:', err)
-        // Fallback for formation lookup
-        const found = FORMATIONS_CATALOG.find(c => c.id === slug)
-        if (found) {
-          setFormation(found)
-          setIsCategory(false)
-        }
+        setFormation(null)
+        setIsCategory(false)
       })
       .finally(() => setLoading(false))
   }, [slug])
