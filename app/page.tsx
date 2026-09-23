@@ -14,95 +14,94 @@ import {
   Award, Users, Target, BookOpen, CheckCircle, Clock, 
   GraduationCap, Globe, FileText, BarChart, ChevronRight,
   Server, Projector, Users2, Briefcase, TrendingUp, Languages,
-  Handshake
+  Handshake, Sparkles
 } from 'lucide-react'
 
 export default function Home() {
   const { t, language } = useLanguage()
   const domains = [
     {
-      icon: <Server className="w-10 h-10" />,
+      icon: <Server className="w-8 h-8" />,
       title: t.categories.technology,
-      description: 'IA, Cloud, Sécurité, Réseaux, Data',
+      description: 'IA, Cloud Computing, Cybersécurité CISSP, ISO 27001, Réseaux',
       href: '/formations/technologies-numeriques',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
-      icon: <Projector className="w-10 h-10" />,
+      icon: <Projector className="w-8 h-8" />,
       title: t.categories.projectManagement,
-      description: 'PMP, PRINCE2, Agile, Lean Six Sigma',
+      description: 'PMP® PMI, PRINCE2®, Scrum Master, Agile & Kanban',
       href: '/formations/gestion-projet',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
-      icon: <Users2 className="w-10 h-10" />,
+      icon: <Users2 className="w-8 h-8" />,
       title: t.categories.management,
-      description: 'Leadership, RH, Stratégie, Management',
+      description: 'Leadership situationnel, Stratégie RH, Conduite du changement',
       href: '/formations/management-leadership',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
-      icon: <Briefcase className="w-10 h-10" />,
+      icon: <Briefcase className="w-8 h-8" />,
       title: t.categories.careers,
-      description: 'Banque, Finance, Logistique, Industrie',
+      description: 'Audit financier, Contrôle de gestion, Logistique, Supply Chain',
       href: '/formations/filieres-metiers',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
-      icon: <TrendingUp className="w-10 h-10" />,
+      icon: <TrendingUp className="w-8 h-8" />,
       title: t.categories.commercial,
-      description: 'Ventes, Négociation, Relation client',
+      description: 'Négociation B2B complexe, Prospection grands comptes, Vente consultative',
       href: '/formations/performance-commerciale',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
-      icon: <Languages className="w-10 h-10" />,
+      icon: <Languages className="w-8 h-8" />,
       title: t.categories.languages,
-      description: 'TOEIC, TOEFL, GRE, Anglais',
+      description: 'Anglais des affaires, Préparation certifiante TOEIC® & TOEFL®',
       href: '/formations/langues',
-      color: 'border-orange-800 hover:border-orange-900'
     },
   ]
 
   const values = [
     {
-      icon: <CheckCircle className="w-8 h-8" />,
+      icon: <CheckCircle className="w-7 h-7" />,
       title: t.home.valueEthics,
       description: t.home.valueEthicsDesc
     },
     {
-      icon: <Users className="w-8 h-8" />,
+      icon: <Users className="w-7 h-7" />,
       title: t.home.valueProximity,
       description: t.home.valueProximityDesc
     },
     {
-      icon: <Award className="w-8 h-8" />,
+      icon: <Award className="w-7 h-7" />,
       title: t.home.valueExcellence,
       description: t.home.valueExcellenceDesc
     },
     {
-      icon: <Globe className="w-8 h-8" />,
+      icon: <Globe className="w-7 h-7" />,
       title: t.home.valueInnovation,
       description: t.home.valueInnovationDesc
     },
   ]
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950 transition-colors duration-200">
       <Header />
 
       <main className="flex-grow">
         <Hero />
-        <section className="py-4 bg-transparent">
+        
+        {/* Partenaires */}
+        <section className="py-2 bg-slate-50/60 dark:bg-slate-900/40 border-y border-slate-200/60 dark:border-slate-800/60">
           <Partners />
         </section>
 
         {/* Domaines de formation */}
-        <section className="py-20 bg-transparent">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
+        <section className="py-16 md:py-24 bg-transparent">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="text-center mb-14 max-w-3xl mx-auto">
+              <span className="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-2 block">
+                {language === 'fr' ? 'Nos Pôles d\'Expertise' : 'Areas of Expertise'}
+              </span>
               <h2 className="section-title">{t.home.domainsTitle}</h2>
-              <p className="section-subtitle text-white/80">
+              <p className="section-subtitle">
                 {t.home.domainsSubtitle}
               </p>
             </div>
@@ -112,15 +111,23 @@ export default function Home() {
                 <Link
                   key={index}
                   href={domain.href}
-                  className={`bg-white/10 border border-white/10 ${domain.color} rounded-3xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group backdrop-blur-sm`}
+                  className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-7 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group flex flex-col justify-between"
                 >
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="text-orange-500">{domain.icon}</div>
-                    <h3 className="text-lg font-semibold text-white">{domain.title}</h3>
+                  <div>
+                    <div className="w-14 h-14 rounded-2xl bg-orange-50 dark:bg-orange-950/60 border border-orange-200/80 dark:border-orange-800/50 text-orange-600 dark:text-orange-400 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                      {domain.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors mb-2">
+                      {domain.title}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                      {domain.description}
+                    </p>
                   </div>
-                  <p className="text-white/80 text-sm">{domain.description}</p>
-                  <div className="mt-3 text-white font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                    {t.home.seeFormations} <ChevronRight className="w-4 h-4" />
+
+                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-orange-600 dark:text-orange-400">
+                    <span>{t.home.seeFormations}</span>
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </Link>
               ))}
@@ -129,92 +136,112 @@ export default function Home() {
         </section>
 
         {/* Nos valeurs */}
-        <section className="py-20 bg-transparent border-t border-white/5">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
+        <section className="py-16 md:py-24 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-200/80 dark:border-slate-800">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="text-center mb-14 max-w-3xl mx-auto">
+              <span className="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-2 block">
+                {language === 'fr' ? 'Notre ADN' : 'Our DNA'}
+              </span>
               <h2 className="section-title">{t.home.valuesTitle}</h2>
-              <p className="section-subtitle text-white/80">
+              <p className="section-subtitle">
                 {t.home.valuesSubtitle}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {values.map((value, index) => (
-                <div key={index} className="text-center group">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500/20 border border-orange-500/30 rounded-full text-orange-500 mb-4 group-hover:bg-orange-500/30 transition-colors">
+                <div key={index} className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 text-center shadow-xs hover:shadow-md transition-all">
+                  <div className="inline-flex items-center justify-center w-14 h-14 bg-orange-50 dark:bg-orange-950/60 border border-orange-200/80 dark:border-orange-800/60 rounded-2xl text-orange-600 dark:text-orange-400 mb-4">
                     {value.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{value.title}</h3>
-                  <p className="text-white/80 text-sm">{value.description}</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{value.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">{value.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Solutions */}
-        <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.home.solutionsTitle}</h2>
-            <p className="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
-              {t.home.solutionsSubtitle}
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
-                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
-                  <Image
-                    src="/images/conseil.jpeg"
-                    alt="Conseil"
-                    width={96}
-                    height={96}
-                    className="object-contain w-24 h-24"
-                  />
-                </div>
-                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Conseil' : 'Consulting'}</p>
+        {/* Solutions & Accompagnement */}
+        <section className="py-16 md:py-24">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="bg-gradient-to-br from-orange-600 to-orange-800 text-white rounded-3xl p-8 md:p-14 shadow-xl">
+              <div className="text-center max-w-3xl mx-auto mb-10">
+                <span className="text-xs font-bold uppercase tracking-widest text-orange-200 mb-2 block">
+                  {language === 'fr' ? 'Approche Globale' : 'Holistic Approach'}
+                </span>
+                <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-3">
+                  {t.home.solutionsTitle}
+                </h2>
+                <p className="text-sm md:text-base text-orange-100/90 leading-relaxed">
+                  {t.home.solutionsSubtitle}
+                </p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
-                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
-                  <Image
-                    src="/images/formation.jpeg"
-                    alt="Formation"
-                    width={96}
-                    height={96}
-                    className="object-contain w-24 h-24"
-                  />
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
+                <div className="bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-20 h-20 flex items-center justify-center overflow-hidden rounded-xl bg-white/20">
+                    <Image
+                      src="/images/conseil.jpeg"
+                      alt="Conseil"
+                      width={80}
+                      height={80}
+                      className="object-contain"
+                    />
+                  </div>
+                  <p className="text-xs md:text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Conseil Stratégique' : 'Consulting'}</p>
                 </div>
-                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Formation' : 'Training'}</p>
+
+                <div className="bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-20 h-20 flex items-center justify-center overflow-hidden rounded-xl bg-white/20">
+                    <Image
+                      src="/images/formation.jpeg"
+                      alt="Formation"
+                      width={80}
+                      height={80}
+                      className="object-contain"
+                    />
+                  </div>
+                  <p className="text-xs md:text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Formation Certifiante' : 'Training'}</p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-20 h-20 flex items-center justify-center overflow-hidden rounded-xl bg-white/20">
+                    <Image
+                      src="/images/recrutement.jpeg"
+                      alt="Recrutement"
+                      width={80}
+                      height={80}
+                      className="object-contain"
+                    />
+                  </div>
+                  <p className="text-xs md:text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Recrutement & Chasse' : 'Recruitment'}</p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-20 h-20 flex items-center justify-center overflow-hidden rounded-xl bg-white/20">
+                    <Image
+                      src="/images/accompagnement.jpeg"
+                      alt="Accompagnement"
+                      width={80}
+                      height={80}
+                      className="object-contain"
+                    />
+                  </div>
+                  <p className="text-xs md:text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Accompagnement RH' : 'Support'}</p>
+                </div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
-                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
-                  <Image
-                    src="/images/recrutement.jpeg"
-                    alt="Recrutement"
-                    width={96}
-                    height={96}
-                    className="object-contain w-24 h-24"
-                  />
-                </div>
-                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1">
-                <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-xl">
-                  <Image
-                    src="/images/accompagnement.jpeg"
-                    alt="Accompagnement"
-                    width={96}
-                    height={96}
-                    className="object-contain w-24 h-24"
-                  />
-                </div>
-                <p className="text-sm font-bold text-white tracking-wide">{language === 'fr' ? 'Accompagnement' : 'Support'}</p>
+
+              <div className="text-center mt-10">
+                <Link
+                  href="/nos-solutions"
+                  className="inline-flex items-center gap-2 bg-white text-orange-700 hover:bg-orange-50 px-7 py-3 rounded-xl font-bold text-sm shadow-lg shadow-black/10 transition-all hover:gap-3"
+                >
+                  <span>{t.home.discoverSolutions}</span>
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
-            <Link
-              href="/nos-solutions"
-              className="inline-flex items-center gap-2 mt-8 bg-orange-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-900 transition-colors"
-            >
-              {t.home.discoverSolutions}
-              <ChevronRight className="w-5 h-5" />
-            </Link>
           </div>
         </section>
 
@@ -224,26 +251,28 @@ export default function Home() {
         {/* Témoignages */}
         <Testimonials />
 
-        {/* CTA */}
-        <section className="py-16 bg-transparent text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">{t.home.readyTitle}</h2>
-            <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-              {t.home.readySubtitle}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/contact"
-                className="bg-orange-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-900 transition-colors"
-              >
-                {t.home.contactUs}
-              </Link>
-              <Link
-                href="/catalogue"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-slate-900 transition-colors"
-              >
-                {t.home.downloadCatalog}
-              </Link>
+        {/* CTA Prêt à démarrer */}
+        <section className="py-16 md:py-20">
+          <div className="container mx-auto px-4 max-w-4xl text-center">
+            <div className="bg-slate-900 dark:bg-slate-800 text-white rounded-3xl p-10 md:p-14 shadow-xl">
+              <h2 className="text-2xl md:text-3xl font-extrabold mb-3">{t.home.readyTitle}</h2>
+              <p className="text-sm md:text-base text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
+                {t.home.readySubtitle}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  href="/contact"
+                  className="bg-orange-600 hover:bg-orange-500 text-white px-7 py-3 rounded-xl font-bold text-sm shadow-md shadow-orange-600/20 transition-all"
+                >
+                  {t.home.contactUs}
+                </Link>
+                <Link
+                  href="/catalogue"
+                  className="border border-slate-600 hover:border-slate-400 text-slate-200 hover:text-white px-7 py-3 rounded-xl font-bold text-sm transition-all"
+                >
+                  {t.home.downloadCatalog}
+                </Link>
+              </div>
             </div>
           </div>
         </section>

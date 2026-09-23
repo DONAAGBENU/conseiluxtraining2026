@@ -1,0 +1,10 @@
+# Configuration Template pour Conseilux Training
+# Copiez ce contenu dans votre fichier .env.local
+
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Admin Credentials
+ADMIN_EMAIL=contact@conseiluxtraining.com
+ADMIN_PASSWORD=Admin2345conseil

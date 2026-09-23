@@ -27,10 +27,10 @@ export default function PartnerLogos() {
   }, [])
 
   return (
-    <div className="bg-slate-900/50 py-6 md:py-8 border-t border-white/5">
+    <div className="bg-slate-50 dark:bg-slate-900/50 py-6 md:py-8 border-t border-slate-200/60 dark:border-white/5">
       <div className="container mx-auto px-4 mb-4 md:mb-6">
-        <h3 className="text-center text-lg md:text-xl font-bold text-white mb-1 md:mb-2">{language === 'fr' ? 'Nos Partenaires' : 'Our Partners'}</h3>
-        <p className="text-center text-white/60 text-xs md:text-sm">{language === 'fr' ? 'Ils nous font confiance' : 'They trust us'}</p>
+        <h3 className="text-center text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-1 md:mb-2">{language === 'fr' ? 'Nos Partenaires' : 'Our Partners'}</h3>
+        <p className="text-center text-slate-500 dark:text-slate-400 text-xs md:text-sm">{language === 'fr' ? 'Ils nous font confiance' : 'They trust us'}</p>
       </div>
 
       <div className="overflow-hidden w-full">
@@ -38,7 +38,7 @@ export default function PartnerLogos() {
           {duplicatedImages.map((image, index) => (
             <div
               key={`${image}-${index}`}
-              className="flex-shrink-0 w-12 h-10 sm:w-14 sm:h-12 md:w-20 md:h-14 lg:w-24 lg:h-16 xl:w-32 xl:h-20 bg-white/10 rounded-lg p-1 md:p-2 flex items-center justify-center border border-white/10 hover:border-orange-500/30 transition-all group"
+              className="flex-shrink-0 w-12 h-10 sm:w-14 sm:h-12 md:w-20 md:h-14 lg:w-24 lg:h-16 xl:w-32 xl:h-20 bg-white dark:bg-slate-800 rounded-lg p-1 md:p-2 flex items-center justify-center border border-slate-200 dark:border-white/10 hover:border-orange-500/30 transition-all group"
             >
               <Image
                 src={image}

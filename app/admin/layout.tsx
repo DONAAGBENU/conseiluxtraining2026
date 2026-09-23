@@ -25,9 +25,9 @@ export default function AdminLayout({
 
   const checkAuth = async () => {
     try {
-      // Ajout d'un timeout de 5 secondes pour éviter le chargement infini
+      // Timeout augmenté à 10 secondes pour éviter le chargement infini
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      const timeoutId = setTimeout(() => controller.abort(), 10000)
 
       const res = await fetch('/api/auth/check', {
         signal: controller.signal
@@ -44,6 +44,7 @@ export default function AdminLayout({
       setAuthenticated(data.authenticated || false)
     } catch (error) {
       console.error('Erreur checkAuth:', error)
+      // En cas d'erreur ou de timeout, on considère l'utilisateur comme non authentifié
       setAuthenticated(false)
     } finally {
       setLoading(false)

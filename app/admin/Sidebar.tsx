@@ -13,7 +13,7 @@ export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
   const router = useRouter()
 
   const menuItems = [
-    { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard className="w-5 h-5" /> },
+    { label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
     { label: 'Formations', href: '/admin/formations', icon: <BookOpen className="w-5 h-5" /> },
     { label: 'Dates de formation', href: '/admin/dates', icon: <Calendar className="w-5 h-5" /> },
     { label: 'Avis clients', href: '/admin/avis', icon: <Star className="w-5 h-5" /> },

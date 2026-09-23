@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
-import { Star, Calendar, MessageSquare, Loader2, X, Send, CheckCircle } from 'lucide-react'
+import { Star, Calendar, MessageSquare, Loader2, X, Send, CheckCircle, Quote } from 'lucide-react'
 import { useLanguage } from '@/app/components/LanguageProvider'
 
 interface Testimonial {
@@ -58,7 +58,6 @@ export default function Avis() {
       const data = await res.json()
       setTestimonials(data.avis || [])
     } catch (err: unknown) {
-      // Ignore silently if the request was aborted (component unmount or timeout)
       if (err instanceof DOMException && err.name === 'AbortError') {
         return
       }
@@ -106,7 +105,7 @@ export default function Avis() {
       } else {
         setError(data.error || (language === 'fr' ? 'Erreur lors de l\'envoi de l\'avis' : 'Error sending review'))
       }
-    } catch (err) {
+    } catch {
       setError(language === 'fr' ? 'Une erreur est survenue. Veuillez réessayer.' : 'An error occurred. Please try again.')
     } finally {
       setFormLoading(false)
@@ -114,73 +113,90 @@ export default function Avis() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col text-white">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <Header />
       
       <main className="flex-grow">
-        <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
+        {/* Hero Section */}
+        <section className="py-16 md:py-20 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800/80">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>{t.reviews.title}</h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              {language === 'fr' ? 'Ce que nos clients disent de leurs expériences avec ConseiluxTraining' : 'What our clients say about their experiences with ConseiluxTraining'}
+            <span className="inline-block text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-950/60 px-3.5 py-1.5 rounded-full mb-3">
+              {language === 'fr' ? 'Témoignages & Retours' : 'Testimonials & Reviews'}
+            </span>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+              {t.reviews.title}
+            </h1>
+            <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8">
+              {language === 'fr' 
+                ? 'Ce que nos apprenants, cadres et dirigeants partenaires disent de l\'impact des formations ConseiluxTraining.' 
+                : 'What our learners, executives, and partner managers say about ConseiluxTraining programs.'}
             </p>
+
+            <button
+              onClick={() => setShowForm(true)}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-semibold px-6 py-3 rounded-xl shadow-md shadow-orange-600/20 hover:shadow-lg transition-all"
+            >
+              <MessageSquare className="w-5 h-5" />
+              {t.reviews.addReview}
+            </button>
           </div>
         </section>
 
+        {/* Reviews Grid */}
         <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="flex justify-center mb-8">
-              <button
-                onClick={() => setShowForm(true)}
-                className="bg-orange-800 hover:bg-orange-700 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg shadow-orange-800/10"
-              >
-                <MessageSquare className="w-5 h-5" />
-                {t.reviews.addReview}
-              </button>
-            </div>
-
+          <div className="container mx-auto px-4 max-w-6xl">
             {loading ? (
-              <div className="flex items-center justify-center min-h-[30vh]">
-                <Loader2 className="w-10 h-10 animate-spin text-orange-800" />
+              <div className="flex flex-col items-center justify-center min-h-[30vh] gap-3">
+                <Loader2 className="w-10 h-10 animate-spin text-orange-600" />
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  {language === 'fr' ? 'Chargement des témoignages...' : 'Loading reviews...'}
+                </p>
               </div>
             ) : testimonials.length === 0 ? (
-              <div className="text-center py-16 bg-white/5 border border-white/10 rounded-3xl max-w-xl mx-auto">
-                <MessageSquare className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                <p className="text-white/60 font-medium">{t.reviews.noReviews}</p>
+              <div className="text-center py-16 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-xl mx-auto p-8">
+                <MessageSquare className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                <p className="text-slate-600 dark:text-slate-300 font-medium mb-2">{t.reviews.noReviews}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">
+                  {language === 'fr' ? 'Soyez le premier à partager votre expérience !' : 'Be the first to share your experience!'}
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {testimonials.map((testimonial) => (
                   <div 
                     key={testimonial.id} 
-                    className="card border-t-4 border-orange-800 hover:-translate-y-1 transition-all bg-white/10 backdrop-blur-md border-white/10 flex flex-col justify-between"
+                    className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-orange-500/40 transition-all flex flex-col justify-between relative group"
                   >
                     <div>
-                      <div className="flex text-white mb-3">
-                        {[...Array(testimonial.note)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-current" />
-                        ))}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex text-amber-500">
+                          {[...Array(testimonial.note || 5)].map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-amber-500" />
+                          ))}
+                        </div>
+                        <Quote className="w-6 h-6 text-slate-200 dark:text-slate-800 group-hover:text-orange-500/20 transition-colors" />
                       </div>
-                      <p className="text-white/90 mb-6 italic text-sm font-light leading-relaxed">
-                        &quot;{testimonial.texte}&quot;
+                      
+                      <p className="text-slate-700 dark:text-slate-300 mb-6 italic text-sm leading-relaxed">
+                        &ldquo;{testimonial.texte}&rdquo;
                       </p>
                     </div>
 
-                    <div className="border-t border-white/5 pt-4 mt-auto">
+                    <div className="border-t border-slate-100 dark:border-slate-800 pt-4 mt-auto">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-white/20 border border-white/30 rounded-full flex items-center justify-center text-white font-bold text-base">
-                          {testimonial.nom.charAt(0)}
+                        <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-base shadow-sm">
+                          {testimonial.nom ? testimonial.nom.charAt(0).toUpperCase() : 'A'}
                         </div>
                         <div>
-                          <p className="font-semibold text-white">{testimonial.nom}</p>
-                          <div className="flex flex-wrap items-center gap-1.5 text-xs text-white/60 mt-0.5">
+                          <p className="font-semibold text-slate-900 dark:text-white text-sm">{testimonial.nom}</p>
+                          <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                             <span>{testimonial.role}</span>
                             {testimonial.role && testimonial.entreprise && <span>•</span>}
                             <span>{testimonial.entreprise}</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-[10px] text-white/40 mt-3 flex items-center gap-1">
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-3 flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" />
                         {testimonial.date}
                       </p>
@@ -197,39 +213,45 @@ export default function Avis() {
 
       {/* Modal d'ajout d'avis */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-900 border border-white/10 rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl">
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto text-slate-800 dark:text-slate-100 shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.reviews.reviewFormTitle}</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                {t.reviews.reviewFormTitle}
+              </h2>
               <button
                 onClick={() => setShowForm(false)}
-                className="text-white/40 hover:text-white p-1 hover:bg-white/5 rounded-full transition-all"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             {success && (
-              <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                <p className="text-green-400 text-sm font-medium">{language === 'fr' ? 'Avis envoyé avec succès ! Il sera publié après modération.' : 'Review sent successfully! It will be published after moderation.'}</p>
+              <div className="mb-6 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-4 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <p className="text-emerald-700 dark:text-emerald-300 text-sm font-medium">
+                  {language === 'fr' ? 'Avis envoyé avec succès ! Il sera publié après validation.' : 'Review sent successfully! It will be published after moderation.'}
+                </p>
               </div>
             )}
 
             {error && (
-              <div className="mb-6 bg-red-500/20 border border-red-500/30 rounded-2xl p-4 flex items-center gap-3">
-                <X className="w-5 h-5 text-red-400" />
-                <p className="text-red-400 text-sm font-medium">{error}</p>
+              <div className="mb-6 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 rounded-2xl p-4 flex items-center gap-3">
+                <X className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
+                <p className="text-rose-700 dark:text-rose-300 text-sm font-medium">{error}</p>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-white mb-2">{t.reviews.yourName} *</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  {t.reviews.yourName} *
+                </label>
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-white/40 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                   placeholder={language === 'fr' ? 'Votre nom complet' : 'Your full name'}
                   value={formData.nom}
                   onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
@@ -238,20 +260,24 @@ export default function Avis() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Votre rôle' : 'Your role'}</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                    {language === 'fr' ? 'Votre rôle / fonction' : 'Your role'}
+                  </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-white/40 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
-                    placeholder={language === 'fr' ? 'ex: Directeur, Consultant...' : 'e.g. Director, Consultant...'}
+                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder={language === 'fr' ? 'ex: Directeur IT, Consultant...' : 'e.g. IT Director, Consultant...'}
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Entreprise' : 'Company'}</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                    {language === 'fr' ? 'Entreprise' : 'Company'}
+                  </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-white/40 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
+                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                     placeholder={language === 'fr' ? 'Nom de votre entreprise' : 'Your company name'}
                     value={formData.entreprise}
                     onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
@@ -261,20 +287,24 @@ export default function Avis() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Email (optionnel)' : 'Email (optional)'}</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                    {language === 'fr' ? 'Email (optionnel)' : 'Email (optional)'}
+                  </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-white/40 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
-                    placeholder="your@email.com"
+                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+                    placeholder="votre@email.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">{language === 'fr' ? 'Téléphone (optionnel)' : 'Phone (optional)'}</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                    {language === 'fr' ? 'Téléphone (optionnel)' : 'Phone (optional)'}
+                  </label>
                   <input
                     type="tel"
-                    className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-white/40 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
+                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                     placeholder="+228 90 54 64 64"
                     value={formData.telephone}
                     onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
@@ -283,20 +313,22 @@ export default function Avis() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white mb-2">{t.reviews.yourRating} *</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  {t.reviews.yourRating} *
+                </label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
                       type="button"
                       onClick={() => setFormData({ ...formData, note: star })}
-                      className="p-2 transition-all"
+                      className="p-1.5 transition-transform hover:scale-110"
                     >
                       <Star
-                        className={`w-8 h-8 ${
+                        className={`w-7 h-7 ${
                           star <= formData.note
-                            ? 'text-white fill-current'
-                            : 'text-white/40'
+                            ? 'text-amber-500 fill-amber-500'
+                            : 'text-slate-300 dark:text-slate-700'
                         }`}
                       />
                     </button>
@@ -305,21 +337,23 @@ export default function Avis() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white mb-2">{t.reviews.yourComment} *</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  {t.reviews.yourComment} *
+                </label>
                 <textarea
                   rows={4}
                   required
-                  className="w-full px-4 py-3 bg-black/35 border border-white/10 rounded-2xl text-white placeholder-white/40 focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                   placeholder={language === 'fr' ? 'Partagez votre expérience avec ConseiluxTraining...' : 'Share your experience with ConseiluxTraining...'}
                   value={formData.texte}
                   onChange={(e) => setFormData({ ...formData, texte: e.target.value })}
-                ></textarea>
+                />
               </div>
 
               <button
                 type="submit"
                 disabled={formLoading}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-800 px-6 py-3 text-white text-lg font-semibold shadow-lg shadow-orange-500/20 hover:bg-orange-700 disabled:bg-orange-800/50 disabled:cursor-not-allowed transition-colors mt-4"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-6 py-3 text-white text-base font-semibold shadow-md shadow-orange-600/20 hover:from-orange-500 hover:to-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-4"
               >
                 {formLoading ? (
                   <>

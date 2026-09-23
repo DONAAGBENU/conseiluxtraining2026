@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
-import { Mail, Phone, MapPin, Clock, Send, Loader2, CheckCircle } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Send, Loader2, CheckCircle, MessageSquare } from 'lucide-react'
 import { useLanguage } from '@/app/components/LanguageProvider'
 
 export default function Contact() {
@@ -36,12 +36,13 @@ export default function Contact() {
       } else {
         alert(language === 'fr' ? 'Erreur lors de l\'envoi du message' : 'Error sending message')
       }
-    } catch (err) {
+    } catch {
       alert(language === 'fr' ? 'Une erreur est survenue' : 'An error occurred')
     } finally {
       setLoading(false)
     }
   }
+
   const offices = [
     {
       city: 'Cotonou',
@@ -76,102 +77,115 @@ export default function Contact() {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <Header />
       
       <main className="flex-grow">
-        <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>{t.contact.title}</h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+        {/* Hero */}
+        <section className="py-14 md:py-20 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-center">
+          <div className="container mx-auto px-4 max-w-3xl">
+            <span className="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-2 block">
+              {language === 'fr' ? 'Parlons de vos projets' : 'Let\'s talk'}
+            </span>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+              {t.contact.title}
+            </h1>
+            <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
               {t.contact.subtitle}
             </p>
           </div>
         </section>
 
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <section className="py-16 md:py-20">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
               {/* Formulaire */}
-              <div className="card border-t-4 border-orange-800 bg-white/10 backdrop-blur-md border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-6" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.contact.sendMessage}</h2>
+              <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-7 md:p-9 shadow-sm border-t-4 border-t-orange-600">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+                  {t.contact.sendMessage}
+                </h2>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mb-6">
+                  {language === 'fr' ? 'Remplissez le formulaire et nous vous répondrons dans les plus brefs délais.' : 'Fill out the form and we will reply as soon as possible.'}
+                </p>
                 
                 {success && (
-                  <div className="mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <p className="text-green-400 text-sm font-medium">{t.contact.successMessage}</p>
+                  <div className="mb-6 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 rounded-2xl p-4 flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <p className="text-emerald-700 dark:text-emerald-300 text-xs font-medium">{t.contact.successMessage}</p>
                   </div>
                 )}
                 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 text-xs">
                   <div>
-                    <label className="block text-sm font-medium text-white mb-1">
+                    <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       {t.contact.name} *
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm"
                       placeholder={language === 'fr' ? 'Votre nom complet' : 'Your full name'}
                       value={formData.nom}
                       onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-white mb-1">
-                      {t.contact.email} *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
-                      placeholder="your@email.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        {t.contact.email} *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm"
+                        placeholder="your@email.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        {t.contact.phone}
+                      </label>
+                      <input
+                        type="tel"
+                        className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm"
+                        placeholder="+228 90 00 00 00"
+                        value={formData.telephone}
+                        onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-white mb-1">
-                      {t.contact.phone}
-                    </label>
-                    <input
-                      type="tel"
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
-                      placeholder="+229 01 23 45 67"
-                      value={formData.telephone}
-                      onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-white mb-1">
+                    <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       {t.contact.subject}
                     </label>
                     <select
-                      className="w-full px-4 py-2 bg-black/35 text-white border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none [&>option]:bg-blue-900"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm [&>option]:bg-white [&>option]:text-slate-900 dark:[&>option]:bg-slate-900 dark:[&>option]:text-white"
                       value={formData.sujet}
                       onChange={(e) => setFormData({ ...formData, sujet: e.target.value })}
                     >
                       <option value="">{language === 'fr' ? 'Sélectionnez un sujet' : 'Select a subject'}</option>
-                      <option value="formation">{language === 'fr' ? 'Demande de formation' : 'Training request'}</option>
-                      <option value="conseil">{language === 'fr' ? 'Conseil stratégique' : 'Strategic consulting'}</option>
-                      <option value="recrutement">{language === 'fr' ? 'Recrutement' : 'Recruitment'}</option>
-                      <option value="catalogue">{language === 'fr' ? 'Télécharger catalogue' : 'Download catalog'}</option>
-                      <option value="autre">{language === 'fr' ? 'Autre' : 'Other'}</option>
+                      <option value="formation">{language === 'fr' ? 'Demande de formation certifiante' : 'Certified training request'}</option>
+                      <option value="conseil">{language === 'fr' ? 'Conseil stratégique & Audit' : 'Strategic consulting & Audit'}</option>
+                      <option value="recrutement">{language === 'fr' ? 'Recrutement & Chasse de tête' : 'Recruitment'}</option>
+                      <option value="catalogue">{language === 'fr' ? 'Téléchargement de catalogue' : 'Download catalog'}</option>
+                      <option value="autre">{language === 'fr' ? 'Autre demande' : 'Other'}</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-white mb-1">
+                    <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       {t.contact.message} *
                     </label>
                     <textarea
-                      rows={5}
+                      rows={4}
                       required
-                      className="w-full px-4 py-2 bg-black/35 text-white placeholder-white/40 border border-white/10 rounded-lg focus:ring-2 focus:ring-orange-800 focus:border-orange-800 outline-none"
-                      placeholder={language === 'fr' ? 'Décrivez votre demande...' : 'Describe your request...'}
+                      className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all text-sm"
+                      placeholder={language === 'fr' ? 'Décrivez votre demande en quelques lignes...' : 'Describe your request...'}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     ></textarea>
@@ -180,17 +194,17 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-orange-800 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors flex items-center justify-center gap-2 disabled:bg-orange-800/50 disabled:cursor-not-allowed"
+                    className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-xl font-semibold shadow-md shadow-orange-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-sm cursor-pointer"
                   >
                     {loading ? (
                       <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        {language === 'fr' ? 'Envoi en cours...' : 'Sending...'}
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>{language === 'fr' ? 'Envoi en cours...' : 'Sending...'}</span>
                       </>
                     ) : (
                       <>
-                        <Send className="w-5 h-5" />
-                        {t.contact.send}
+                        <Send className="w-4 h-4" />
+                        <span>{t.contact.send}</span>
                       </>
                     )}
                   </button>
@@ -198,40 +212,45 @@ export default function Contact() {
               </div>
 
               {/* Informations de contact */}
-              <div className="space-y-6">
-                <div className="card border-t-4 border-orange-800 bg-white/10 backdrop-blur-md border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.contact.offices}</h3>
+              <div className="lg:col-span-5 space-y-6">
+                <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-7 shadow-xs">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-orange-600" />
+                    <span>{t.contact.offices}</span>
+                  </h3>
                   <div className="space-y-4">
                     {offices.map((office, index) => (
-                      <div key={index} className="border-b border-white/10 last:border-0 pb-3 last:pb-0">
-                        <h4 className="font-semibold text-white">{office.city}, {office.country}</h4>
-                        <p className="text-sm text-white/80 flex items-center gap-2 mt-1">
-                          <Phone className="w-4 h-4 text-white" />
-                          {office.phone}
+                      <div key={index} className="border-b border-slate-100 dark:border-slate-800 last:border-0 pb-3 last:pb-0">
+                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">{office.city}, {office.country}</h4>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2 mt-1">
+                          <Phone className="w-3.5 h-3.5 text-orange-600" />
+                          <span>{office.phone}</span>
                         </p>
-                        <p className="text-sm text-white/80 flex items-center gap-2 mt-1">
-                          <MapPin className="w-4 h-4 text-white" />
-                          {office.address}
+                        <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2 mt-0.5">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{office.address}</span>
                         </p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="card border-t-4 border-orange-800 bg-white/10 backdrop-blur-md border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.contact.generalInfo}</h3>
-                  <div className="space-y-4">
-                    <p className="flex items-center gap-3 text-sm text-white">
-                      <Mail className="w-5 h-5 text-white flex-shrink-0" />
+                <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-7 shadow-xs">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+                    {t.contact.generalInfo}
+                  </h3>
+                  <div className="space-y-3 text-xs md:text-sm text-slate-600 dark:text-slate-300">
+                    <p className="flex items-center gap-3">
+                      <Mail className="w-4 h-4 text-orange-600 shrink-0" />
                       <span>contact@conseiluxtraining.com</span>
                     </p>
-                    <p className="flex items-center gap-3 text-sm text-white">
-                      <Clock className="w-5 h-5 text-white flex-shrink-0" />
+                    <p className="flex items-center gap-3">
+                      <Clock className="w-4 h-4 text-orange-600 shrink-0" />
                       <span>{language === 'fr' ? 'Lundi - Vendredi : 8h00 - 18h00' : 'Monday - Friday: 8:00 AM - 6:00 PM'}</span>
                     </p>
-                    <div className="mt-4 border-t border-white/5 pt-4">
-                      <p className="text-sm text-white/90 font-medium">
-                        {language === 'fr' ? '📍 Présence multi-pays : Bénin, Togo, Côte d\'Ivoire, Niger, France' : '📍 Multi-country presence: Benin, Togo, Ivory Coast, Niger, France'}
+                    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        📍 {language === 'fr' ? 'Présence internationale : Bénin, Togo, Côte d\'Ivoire, Niger, France' : 'International presence: Benin, Togo, Ivory Coast, Niger, France'}
                       </p>
                     </div>
                   </div>

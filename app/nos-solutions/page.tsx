@@ -2,9 +2,7 @@
 
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
-import { 
-  CheckCircle, ArrowRight
-} from 'lucide-react'
+import { CheckCircle, ArrowRight, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLanguage } from '@/app/components/LanguageProvider'
@@ -13,32 +11,28 @@ export default function NosSolutions() {
   const { t, language } = useLanguage()
   const softwareSolutions = [
     {
-      name: 'SAP',
-      description: language === 'fr' ? 'ERP complet pour la gestion d\'entreprise' : 'Complete ERP for business management',
+      name: 'SAP ERP',
+      description: language === 'fr' ? 'ERP complet pour le pilotage d\'entreprise' : 'Complete ERP for enterprise management',
       features: language === 'fr' ? ['Finance & Comptabilité', 'RH & Paie', 'Logistique', 'Ventes'] : ['Finance & Accounting', 'HR & Payroll', 'Logistics', 'Sales'],
       image: '/images/conseil.jpeg',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
       name: 'Sage 100',
-      description: language === 'fr' ? 'Gestion commerciale et comptabilité' : 'Commercial management and accounting',
+      description: language === 'fr' ? 'Gestion commerciale et comptabilité analytique' : 'Commercial management and accounting',
       features: language === 'fr' ? ['Comptabilité', 'Facturation', 'Gestion de stock', 'CRM'] : ['Accounting', 'Invoicing', 'Stock management', 'CRM'],
       image: '/images/formation.jpeg',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
-      name: 'Microsoft 365',
-      description: language === 'fr' ? 'Suite collaborative et productive' : 'Collaborative and productive suite',
-      features: ['Teams', 'SharePoint', 'Power BI', 'Office'],
+      name: 'Microsoft 365 & Copilot',
+      description: language === 'fr' ? 'Suite collaborative, productivité et IA intégrée' : 'Collaborative suite, productivity and AI',
+      features: ['Teams', 'SharePoint', 'Power BI', 'Office 365'],
       image: '/images/recrutement.jpeg',
-      color: 'border-orange-800 hover:border-orange-900'
     },
     {
-      name: 'Power Platform',
-      description: language === 'fr' ? 'Automatisation et analyse de données' : 'Automation and data analysis',
-      features: ['Power BI', 'Power Apps', 'Power Automate', 'Power Virtual Agents'],
+      name: 'Microsoft Power Platform',
+      description: language === 'fr' ? 'Automatisation de processus et tableaux de bord' : 'Process automation and data dashboards',
+      features: ['Power BI', 'Power Apps', 'Power Automate', 'Copilot Studio'],
       image: '/images/accompagnement.jpeg',
-      color: 'border-orange-800 hover:border-orange-900'
     },
   ]
 
@@ -70,33 +64,44 @@ export default function NosSolutions() {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950 transition-colors duration-200">
       <Header />
       
       <main className="flex-grow">
         {/* Hero */}
-        <section className="py-20 bg-gradient-to-r from-primary to-dark text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>{t.solutions.title}</h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+        <section className="py-14 md:py-20 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+          <div className="container mx-auto px-4 max-w-4xl text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-3 block">
+              {language === 'fr' ? 'Accompagnement & Expertise' : 'Expertise & Solutions'}
+            </span>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+              {t.solutions.title}
+            </h1>
+            <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
               {t.solutions.subtitle}
             </p>
           </div>
         </section>
 
         {/* Services */}
-        <section className="py-16 bg-transparent">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-white mb-12" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-              {t.solutions.services}
-            </h2>
+        <section className="py-16 md:py-20">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
+                {t.solutions.services}
+              </h2>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service, index) => (
-                <div key={index} className="card border-l-4 border-orange-800 flex items-start gap-4 bg-white/10 backdrop-blur-md border-white/10">
-                  <CheckCircle className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <div 
+                  key={index} 
+                  className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 shadow-xs border-l-4 border-l-orange-600 flex items-start gap-4 hover:shadow-lg transition-all"
+                >
+                  <CheckCircle className="w-5 h-5 text-orange-600 shrink-0 mt-1" />
                   <div>
-                    <h3 className="font-semibold text-white mb-1">{service.title}</h3>
-                    <p className="text-sm text-white/80">{service.description}</p>
+                    <h3 className="font-bold text-slate-900 dark:text-white mb-1.5 text-base">{service.title}</h3>
+                    <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{service.description}</p>
                   </div>
                 </div>
               ))}
@@ -105,45 +110,52 @@ export default function NosSolutions() {
         </section>
 
         {/* Logiciels */}
-        <section className="py-16 bg-transparent border-t border-white/5">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-white mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-              {t.solutions.software}
-            </h2>
-            <p className="text-center text-white/60 mb-12 max-w-2xl mx-auto">
-              {language === 'fr' ? 'Des logiciels de gestion adaptés à tous les secteurs d\'activité' : 'Management software adapted to all business sectors'}
-            </p>
+        <section className="py-16 md:py-20 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="text-center mb-12 max-w-2xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3">
+                {t.solutions.software}
+              </h2>
+              <p className="text-slate-600 dark:text-slate-300 text-sm">
+                {language === 'fr' ? 'Des solutions logicielles de premier ordre adaptées aux exigences métiers' : 'Leading software solutions adapted to your business needs'}
+              </p>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {softwareSolutions.map((solution, index) => (
-                <div key={index} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
+                <div 
+                  key={index} 
+                  className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                >
                   <div>
-                    <div className="mb-4 flex h-6 w-6 items-center justify-center overflow-hidden rounded-lg bg-white/5 text-white">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-orange-50 dark:bg-orange-950/60 border border-orange-200 dark:border-orange-800 p-2">
                       <Image
                         src={solution.image}
                         alt={solution.name}
-                        width={20}
-                        height={20}
-                        className="h-5 w-5 object-contain"
-                        style={{ width: 'auto', height: 'auto' }}
+                        width={32}
+                        height={32}
+                        className="object-contain"
                       />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{solution.name}</h3>
-                    <p className="text-white/80 mb-4 text-sm">{solution.description}</p>
-                    <ul className="space-y-2">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{solution.name}</h3>
+                    <p className="text-slate-600 dark:text-slate-300 mb-4 text-xs leading-relaxed">{solution.description}</p>
+                    
+                    <ul className="space-y-1.5 mb-6">
                       {solution.features.map((feature, idx) => (
-                        <li key={idx} className="text-sm text-white flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-white shrink-0" />
-                          {feature}
+                        <li key={idx} className="text-xs text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
+
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-2 mt-6 text-white font-semibold hover:text-orange-300 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-600 dark:text-orange-400 hover:gap-2 transition-all pt-3 border-t border-slate-100 dark:border-slate-800"
                   >
-                    {t.solutions.learnMore} <ArrowRight className="w-4 h-4" />
+                    <span>{t.solutions.learnMore}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               ))}
@@ -152,19 +164,21 @@ export default function NosSolutions() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 bg-orange-800 text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>{t.solutions.ctaTitle}</h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              {t.solutions.ctaSubtitle}
-            </p>
-            <Link 
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-white text-orange-800 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors"
-            >
-              {t.solutions.consultUs}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+        <section className="py-16 md:py-20">
+          <div className="container mx-auto px-4 max-w-4xl text-center">
+            <div className="bg-gradient-to-br from-orange-600 to-orange-800 text-white rounded-3xl p-10 md:p-14 shadow-xl">
+              <h2 className="text-2xl md:text-3xl font-extrabold mb-3">{t.solutions.ctaTitle}</h2>
+              <p className="text-sm md:text-base text-orange-100 mb-8 max-w-xl mx-auto leading-relaxed">
+                {t.solutions.ctaSubtitle}
+              </p>
+              <Link 
+                href="/contact"
+                className="inline-flex items-center gap-2 bg-white text-orange-700 hover:bg-orange-50 px-8 py-3.5 rounded-xl font-bold text-sm shadow-md transition-all cursor-pointer"
+              >
+                <span>{t.solutions.consultUs}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </section>
       </main>
