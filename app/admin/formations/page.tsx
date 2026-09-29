@@ -12,9 +12,13 @@ interface Formation {
   duree: string
   prix: string
   certifiante: boolean
+  certificationName?: string
+  modalite?: string
   modules: string[]
   objectif: string
   prerequis: string
+  publicCible?: string
+  pointsForts?: string[]
   image?: string
   createdAt?: string
   deletedAt?: string | null
@@ -34,9 +38,13 @@ export default function AdminFormations() {
     duree: '',
     prix: '',
     certifiante: false,
+    certificationName: '',
+    modalite: '',
     modules: [''],
     objectif: '',
     prerequis: '',
+    publicCible: '',
+    pointsForts: [''],
     image: ''
   })
   const [imageMode, setImageMode] = useState<'url' | 'upload'>('url')
@@ -50,10 +58,6 @@ export default function AdminFormations() {
     'Filières métiers',
     'Langues'
   ]
-
-  useEffect(() => {
-    fetchFormations()
-  }, [])
 
   const fetchFormations = async () => {
     try {
@@ -81,6 +85,10 @@ export default function AdminFormations() {
     }
   }
 
+  useEffect(() => {
+    fetchFormations()
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setFormLoading(true)
@@ -88,7 +96,8 @@ export default function AdminFormations() {
     const payload = {
       ...formData,
       image: formData.image, // Ne pas ajouter d'image par défaut si l'utilisateur n'en fournit pas
-      modules: formData.modules.filter(m => m.trim() !== '')
+      modules: formData.modules.filter(m => m.trim() !== ''),
+      pointsForts: (formData.pointsForts || []).filter(point => point.trim() !== '')
     }
 
     try {
@@ -115,16 +124,20 @@ export default function AdminFormations() {
         setShowForm(false)
         setEditMode(false)
         setEditingId(null)
-        setFormData({ 
+        setFormData({
           titre: '', 
           description: '', 
           categorie: '', 
           duree: '', 
           prix: '', 
           certifiante: false, 
+          certificationName: '',
+          modalite: '',
           modules: [''], 
           objectif: '', 
           prerequis: '',
+          publicCible: '',
+          pointsForts: [''],
           image: '' 
         })
         setImageMode('url')
@@ -146,9 +159,13 @@ export default function AdminFormations() {
       duree: formation.duree || '',
       prix: formation.prix || '',
       certifiante: !!formation.certifiante,
+      certificationName: formation.certificationName || '',
+      modalite: formation.modalite || '',
       modules: formation.modules && formation.modules.length > 0 ? formation.modules : [''],
       objectif: formation.objectif || '',
       prerequis: formation.prerequis || '',
+      publicCible: formation.publicCible || '',
+      pointsForts: formation.pointsForts && formation.pointsForts.length > 0 ? formation.pointsForts : [''],
       image: formation.image || ''
     })
     setEditingId(formation.id)
@@ -164,9 +181,13 @@ export default function AdminFormations() {
       duree: '', 
       prix: '', 
       certifiante: false, 
+      certificationName: '',
+      modalite: '',
       modules: [''], 
       objectif: '', 
       prerequis: '',
+      publicCible: '',
+      pointsForts: [''],
       image: '' 
     })
     setImageMode('url')
@@ -207,6 +228,11 @@ export default function AdminFormations() {
   const updateModule = (index: number, value: string) => {
     const newModules = formData.modules.map((m, i) => i === index ? value : m)
     setFormData({ ...formData, modules: newModules })
+  }
+
+  const updatePointFort = (index: number, value: string) => {
+    const pointsForts = (formData.pointsForts || ['']).map((point, i) => i === index ? value : point)
+    setFormData({ ...formData, pointsForts })
   }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -475,6 +501,40 @@ export default function AdminFormations() {
                 />
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Modalité</label>
+                  <input
+                    type="text"
+                    className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                    value={formData.modalite}
+                    onChange={(e) => setFormData({ ...formData, modalite: e.target.value })}
+                    placeholder="Présentiel & Visio"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Nom de la certification</label>
+                  <input
+                    type="text"
+                    className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                    value={formData.certificationName}
+                    onChange={(e) => setFormData({ ...formData, certificationName: e.target.value })}
+                    placeholder="Ex. Project Management Professional (PMP)®"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-medium mb-1">Public visé</label>
+                <textarea
+                  rows={2}
+                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                  value={formData.publicCible}
+                  onChange={(e) => setFormData({ ...formData, publicCible: e.target.value })}
+                  placeholder="Profils concernés par cette formation..."
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-300 font-medium mb-1">Durée</label>
@@ -536,6 +596,42 @@ export default function AdminFormations() {
                           type="button"
                           onClick={() => removeModule(index)}
                           className="p-2 text-red-400 hover:bg-red-500/20 rounded-xl border border-red-500/20 cursor-pointer"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-slate-300 font-medium">Atouts de la formation</label>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, pointsForts: [...(formData.pointsForts || []), ''] })}
+                    className="text-orange-400 hover:text-orange-300 text-xs font-semibold cursor-pointer"
+                  >
+                    + Ajouter un atout
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {(formData.pointsForts || ['']).map((point, index) => (
+                    <div key={index} className="flex gap-2">
+                      <input
+                        type="text"
+                        className="flex-1 px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-xs"
+                        value={point}
+                        onChange={(e) => updatePointFort(index, e.target.value)}
+                        placeholder={`Atout ${index + 1}`}
+                      />
+                      {(formData.pointsForts || []).length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, pointsForts: (formData.pointsForts || []).filter((_, i) => i !== index) })}
+                          className="p-2 text-red-400 hover:bg-red-500/20 rounded-xl border border-red-500/20 cursor-pointer"
+                          aria-label={`Supprimer l'atout ${index + 1}`}
                         >
                           <X className="w-4 h-4" />
                         </button>

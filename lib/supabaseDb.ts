@@ -170,7 +170,8 @@ function errorMessage(error: unknown, fallback: string) {
 
 async function mutateWithColumnRetry<T>(
   run: (payload: Record<string, unknown>) => Promise<{ data: T | null; error: { message?: string; code?: string } | null }>,
-  payload: Record<string, unknown>
+  payload: Record<string, unknown>,
+  options: { strictSchema?: boolean } = {}
 ): Promise<T> {
   const current = { ...payload }
   for (let attempt = 0; attempt < 12; attempt++) {
@@ -178,6 +179,9 @@ async function mutateWithColumnRetry<T>(
     if (!error && data) return data
     const col = unknownColumn(error)
     if (col && col in current) {
+      if (options.strictSchema) {
+        throw new Error(`La colonne Supabase "${col}" manque dans la table. Exécutez la mise à jour du schéma SQL.`)
+      }
       delete current[col]
       continue
     }
@@ -224,7 +228,7 @@ export async function writeAll<T extends RecordItem>(type: EntityType, items: T[
 export async function listActive<T extends RecordItem>(type: EntityType): Promise<T[]> {
   const supabase = getDb()
   const tableName = TABLE_NAMES[type]
-  let query = supabase.from(tableName).select('*').is('deleted_at', null)
+  const query = supabase.from(tableName).select('*').is('deleted_at', null)
 
   const { data, error } = await query.order('created_at', { ascending: false })
   if (error) {
@@ -241,7 +245,8 @@ export async function listActive<T extends RecordItem>(type: EntityType): Promis
 
 export async function createItem<T extends RecordItem>(
   type: EntityType,
-  data: Omit<T, 'id'> & { id?: string }
+  data: Omit<T, 'id'> & { id?: string },
+  options: { strictSchema?: boolean } = {}
 ): Promise<T> {
   const supabase = getDb()
   const tableName = TABLE_NAMES[type]
@@ -255,7 +260,7 @@ export async function createItem<T extends RecordItem>(
 
   const insertedData = await mutateWithColumnRetry(async (payload) => {
     return supabase.from(tableName).insert(payload).select().single()
-  }, item)
+  }, item, options)
 
   return fromDbRecord(type, insertedData as unknown as Record<string, unknown>) as T
 }
@@ -264,7 +269,7 @@ export async function updateItem<T extends RecordItem>(
   type: EntityType,
   id: string,
   data: Partial<T>,
-  options?: { includeDeleted?: boolean }
+  options?: { includeDeleted?: boolean; strictSchema?: boolean }
 ): Promise<T | null> {
   const supabase = getDb()
   const tableName = TABLE_NAMES[type]
@@ -278,10 +283,11 @@ export async function updateItem<T extends RecordItem>(
         query = query.is('deleted_at', null)
       }
       return query.select().single()
-    }, dbData)
+    }, dbData, options)
     return fromDbRecord(type, updatedData as unknown as Record<string, unknown>) as T
   } catch (error) {
     console.error(`Error updating ${type}:`, error)
+    if (options?.strictSchema) throw error
     return null
   }
 }

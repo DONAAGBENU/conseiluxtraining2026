@@ -10,6 +10,10 @@ BEGIN
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS objectif TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS prerequis TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS image TEXT DEFAULT '';
+        ALTER TABLE formations ADD COLUMN IF NOT EXISTS certification_name TEXT DEFAULT '';
+        ALTER TABLE formations ADD COLUMN IF NOT EXISTS modalite TEXT DEFAULT 'Présentiel & Visio';
+        ALTER TABLE formations ADD COLUMN IF NOT EXISTS public_cible TEXT DEFAULT '';
+        ALTER TABLE formations ADD COLUMN IF NOT EXISTS points_forts JSONB DEFAULT '[]'::jsonb;
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
     ELSE
         -- Créer la table si elle n'existe pas
@@ -24,6 +28,10 @@ BEGIN
             modules JSONB DEFAULT '[]'::jsonb,
             objectif TEXT DEFAULT '',
             prerequis TEXT DEFAULT '',
+            certification_name TEXT DEFAULT '',
+            modalite TEXT DEFAULT 'Présentiel & Visio',
+            public_cible TEXT DEFAULT '',
+            points_forts JSONB DEFAULT '[]'::jsonb,
             image TEXT DEFAULT '',
             created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
             deleted_at TIMESTAMP WITH TIME ZONE

@@ -6,7 +6,7 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
     const { id } = await props.params
     const body = await request.json()
     const { id: _id, createdAt: _created, deletedAt: _deleted, ...safeBody } = body
-    const formation = await updateItem('formations', id, safeBody)
+    const formation = await updateItem('formations', id, safeBody, { strictSchema: true })
 
     if (!formation) {
       return NextResponse.json({ error: 'Formation introuvable' }, { status: 404 })
@@ -15,7 +15,8 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
     return NextResponse.json({ success: true, formation })
   } catch (error) {
     console.error('Erreur PUT /api/formations/[id]:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Erreur serveur'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
 

@@ -29,7 +29,10 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { titre, description, categorie, duree, prix, certifiante, modules, objectif, prerequis, image } = body
+    const {
+      titre, description, categorie, duree, prix, certifiante, certificationName,
+      modalite, modules, objectif, prerequis, publicCible, pointsForts, image,
+    } = body
 
     if (!titre || !categorie || !description) {
       return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 })
@@ -42,16 +45,20 @@ export async function POST(request: NextRequest) {
       duree: duree || 'À définir',
       prix: prix || 'À définir',
       certifiante: !!certifiante,
+      certificationName: certificationName || '',
+      modalite: modalite || 'Présentiel & Visio',
       modules: Array.isArray(modules) ? modules : [],
       objectif: objectif || '',
       prerequis: prerequis || '',
+      publicCible: publicCible || '',
+      pointsForts: Array.isArray(pointsForts) ? pointsForts : [],
     }
 
     if (image && String(image).trim()) {
       payload.image = String(image).trim()
     }
 
-    const formation = await createItem('formations', payload)
+    const formation = await createItem('formations', payload, { strictSchema: true })
 
     return NextResponse.json({ success: true, formation }, { status: 201 })
   } catch (error) {
