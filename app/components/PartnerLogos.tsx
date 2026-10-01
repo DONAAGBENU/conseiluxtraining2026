@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useLanguage } from './LanguageProvider'
 
@@ -19,21 +18,15 @@ const partnerImages = [
 
 export default function PartnerLogos() {
   const { language } = useLanguage()
-  const [duplicatedImages, setDuplicatedImages] = useState<string[]>([])
-
-  useEffect(() => {
-    // Duplicate images for infinite scroll effect
-    setDuplicatedImages([...partnerImages, ...partnerImages, ...partnerImages])
-  }, [])
+  const duplicatedImages = [...partnerImages, ...partnerImages, ...partnerImages]
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900/50 py-6 md:py-8 border-t border-slate-200/60 dark:border-white/5">
-      <div className="container mx-auto px-4 mb-4 md:mb-6">
-        <h3 className="text-center text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-1 md:mb-2">{language === 'fr' ? 'Nos Partenaires' : 'Our Partners'}</h3>
-        <p className="text-center text-slate-500 dark:text-slate-400 text-xs md:text-sm">{language === 'fr' ? 'Ils nous font confiance' : 'They trust us'}</p>
+    <div className="border-t border-slate-200 dark:border-slate-800/80 transition-colors duration-200">
+      <div className="container mx-auto px-4 py-5">
+        <h3 className="text-center text-lg md:text-xl font-bold text-slate-900 dark:text-white">{language === 'fr' ? 'Nos Partenaires' : 'Our Partners'}</h3>
       </div>
 
-      <div className="overflow-hidden w-full">
+      <div className="overflow-hidden w-full pb-6">
         <div className="flex gap-2 md:gap-4 lg:gap-6 xl:gap-8 animate-scroll group-hover:pause min-w-max">
           {duplicatedImages.map((image, index) => (
             <div

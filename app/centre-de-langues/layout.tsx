@@ -16,7 +16,14 @@ function LayoutInner({ children, isTestPage }: { children: React.ReactNode; isTe
         <Footer />
       ) : (
         <div className="border-t border-[#ff6b00]/20 bg-[#0a1128] py-4">
-          <p className="ml-4 text-left text-xs font-medium italic tracking-[0.18em] text-[#ff6b00]">by DONA</p>
+          <a
+            href="https://donatienagbenuporfolio.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-4 inline-block text-left text-xs font-semibold tracking-[0.18em] text-[#ff6b00] hover:text-orange-300"
+          >
+            BYDONATHE DEV
+          </a>
         </div>
       )}
     </div>

@@ -1,7 +1,8 @@
 "use client"
 
 import Link from 'next/link'
-import { Mail, Phone, MapPin, Clock, ArrowUp } from 'lucide-react'
+import Image from 'next/image'
+import { Mail, Phone, Clock, ArrowUp } from 'lucide-react'
 import PartnerLogos from './PartnerLogos'
 import { useState, useEffect } from 'react'
 import { useLanguage } from './LanguageProvider'
@@ -51,15 +52,15 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="bg-slate-950 text-slate-300 border-t border-slate-800/80">
+      <footer className="bg-white text-slate-700 border-t border-slate-200 dark:bg-slate-950 dark:text-slate-300 dark:border-slate-800/80 transition-colors duration-200">
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* About */}
             <div>
               <h3 className="text-2xl font-bold mb-4 text-white">
-                <span className="text-orange-500">Conseilux</span> Training and Development
+                <span className="text-orange-600 dark:text-orange-500">Conseilux</span> Training and Development
               </h3>
-              <p className="text-slate-400 mb-4 text-sm">
+              <p className="text-slate-600 dark:text-slate-400 mb-4 text-sm">
                 {t.footer.about}
               </p>
               <div className="flex space-x-4">
@@ -67,7 +68,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/company/conseilux-training-and-development/about/?viewAsMember=true" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-800 transition-colors"
+                  className="text-slate-500 dark:text-gray-400 hover:text-orange-700 dark:hover:text-orange-400 transition-colors"
                   title="LinkedIn"
                 >
                   <LinkedInIcon />
@@ -76,7 +77,7 @@ export default function Footer() {
                   href="https://www.facebook.com/share/1EqDD3THTx/" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-800 transition-colors"
+                  className="text-slate-500 dark:text-gray-400 hover:text-orange-700 dark:hover:text-orange-400 transition-colors"
                   title="Facebook"
                 >
                   <FacebookIcon />
@@ -85,7 +86,7 @@ export default function Footer() {
                   href="#" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-800 transition-colors"
+                  className="text-slate-500 dark:text-gray-400 hover:text-orange-700 dark:hover:text-orange-400 transition-colors"
                   title="Twitter"
                 >
                   <TwitterIcon />
@@ -95,21 +96,21 @@ export default function Footer() {
 
             {/* Formations */}
             <div>
-              <h4 className="font-semibold mb-4 text-orange-400">{t.footer.ourFormations}</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><Link href="/formations/technologies-numeriques" className="hover:text-white transition-colors">{t.categories.technology}</Link></li>
-                <li><Link href="/formations/gestion-projet" className="hover:text-white transition-colors">{t.categories.projectManagement}</Link></li>
-                <li><Link href="/formations/management-leadership" className="hover:text-white transition-colors">{t.categories.management}</Link></li>
-                <li><Link href="/formations/filieres-metiers" className="hover:text-white transition-colors">{t.categories.careers}</Link></li>
-                <li><Link href="/formations/performance-commerciale" className="hover:text-white transition-colors">{t.categories.commercial}</Link></li>
-                <li><Link href="/formations/langues" className="hover:text-white transition-colors">{t.categories.languages}</Link></li>
+              <h4 className="font-semibold mb-4 text-orange-700 dark:text-orange-400">{t.footer.ourFormations}</h4>
+              <ul className="space-y-2 text-slate-600 dark:text-slate-400 text-sm">
+                <li><Link href="/formations/technologies-numeriques" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.categories.technology}</Link></li>
+                <li><Link href="/formations/gestion-projet" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.categories.projectManagement}</Link></li>
+                <li><Link href="/formations/management-leadership" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.categories.management}</Link></li>
+                <li><Link href="/formations/filieres-metiers" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.categories.careers}</Link></li>
+                <li><Link href="/formations/performance-commerciale" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.categories.commercial}</Link></li>
+                <li><Link href="/formations/langues" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.categories.languages}</Link></li>
               </ul>
             </div>
 
             {/* Contact */}
             <div>
-              <h4 className="font-semibold mb-4 text-orange-400">{language === 'fr' ? 'Nos Bureaux' : 'Our Offices'}</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
+              <h4 className="font-semibold mb-4 text-orange-700 dark:text-orange-400">{language === 'fr' ? 'Nos Bureaux' : 'Our Offices'}</h4>
+              <ul className="space-y-2 text-slate-600 dark:text-slate-400 text-sm">
                 {phoneNumbers.map((phone) => (
                   <li key={phone.country} className="flex items-center gap-2">
                     <Phone size={14} className="text-orange-400 flex-shrink-0" />
@@ -117,7 +118,7 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 space-y-2 text-slate-400 text-sm">
+              <div className="mt-4 space-y-2 text-slate-600 dark:text-slate-400 text-sm">
                 <p className="flex items-center gap-2">
                   <Mail size={14} className="text-orange-400" />
                   contact@conseiluxtraining.com
@@ -130,14 +131,14 @@ export default function Footer() {
             </div>
 
             {/* Liens */}
-            <div>
-              <h4 className="font-semibold mb-4 text-orange-400">{t.footer.quickLinks}</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><Link href="/nos-solutions" className="hover:text-white transition-colors">{t.nav.solutions}</Link></li>
-                <li><Link href="/catalogue" className="hover:text-white transition-colors">{t.nav.downloadCatalogue}</Link></li>
-                <li><Link href="/avis" className="hover:text-white transition-colors">{t.nav.reviews}</Link></li>
-                <li><Link href="/evaluation" className="hover:text-white transition-colors">{t.nav.evaluation}</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">{t.nav.contact}</Link></li>
+            <div className="order-first">
+              <h4 className="font-semibold mb-4 text-orange-700 dark:text-orange-400">{t.footer.quickLinks}</h4>
+              <ul className="space-y-2 text-slate-600 dark:text-slate-400 text-sm">
+                <li><Link href="/nos-solutions" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.nav.solutions}</Link></li>
+                <li><Link href="/catalogue" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.nav.downloadCatalogue}</Link></li>
+                <li><Link href="/avis" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.nav.reviews}</Link></li>
+                <li><Link href="/evaluation" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.nav.evaluation}</Link></li>
+                <li><Link href="/contact" className="hover:text-slate-950 dark:hover:text-white transition-colors">{t.nav.contact}</Link></li>
               </ul>
             </div>
           </div>
@@ -145,11 +146,27 @@ export default function Footer() {
           {/* Partner Logos */}
           <PartnerLogos />
 
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm relative">
-            <p>© 2026 Conseilux Training and Development. {t.footer.rights}.</p>
-            <div className="absolute bottom-0 right-4 text-orange-800/60 text-xs font-medium">
-              by DONA
+          <div className="mt-8 rounded-lg border border-slate-200 bg-slate-50/80 px-5 py-4 pr-20 text-sm text-slate-600 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900/60 dark:text-gray-400 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <Link href="/" aria-label="Accueil Conseilux Training and Development" className="shrink-0">
+                <Image
+                  src="/images/logo-transparent-white-text-cropped.png"
+                  alt="Logo Conseilux Training and Development"
+                  width={110}
+                  height={64}
+                  className="h-12 w-auto object-contain brightness-75 dark:brightness-100"
+                />
+              </Link>
+              <p className="min-w-0">© 2026 Conseilux Training and Development. {t.footer.rights}.</p>
             </div>
+            <Link
+              href="https://donatienagbenuporfolio.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 whitespace-nowrap self-end text-orange-700 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-300 transition-colors text-xs font-semibold sm:self-auto"
+            >
+              DONATHE DEV
+            </Link>
           </div>
         </div>
       </footer>
