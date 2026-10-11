@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { useLanguage } from '@/app/components/LanguageProvider'
 import { getFormationImage } from '@/app/data/formationsData'
+import { RichTextInline } from '@/lib/RichText'
 
 export default function FormationsList() {
   const { t, language } = useLanguage()
@@ -318,6 +319,9 @@ export default function FormationsList() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
                 {filteredFormations.map((item) => {
                   const imageSrc = getFormationImage(item)
+                  const duree = item.duree === 'À définir' ? '' : item.duree
+                  const modalite = item.modalite === 'Présentiel & Visio' ? '' : item.modalite
+                  const prix = item.prix === 'À définir' ? '' : item.prix
                   return (
                     <article
                       key={item.id}
@@ -352,28 +356,28 @@ export default function FormationsList() {
                           )}
 
                           {/* Modality Pill on image bottom */}
-                          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
-                            <span className="inline-flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md">
+                          {(duree || modalite) && <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
+                            {duree && <span className="inline-flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md">
                               <Clock className="w-3.5 h-3.5 text-orange-400" />
-                              <span>{item.duree || '5 jours'}</span>
-                            </span>
-                            <span className="inline-flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px]">
+                              <span>{duree}</span>
+                            </span>}
+                            {modalite && <span className="inline-flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px]">
                               <Users className="w-3.5 h-3.5 text-blue-400" />
-                              <span>{item.modalite ? item.modalite.split('&')[0].trim() : 'Présentiel & Visio'}</span>
-                            </span>
-                          </div>
+                              <span><RichTextInline text={modalite} /></span>
+                            </span>}
+                          </div>}
                         </div>
 
                         {/* Card Content */}
                         <div className="p-5">
                           <Link href={`/formations/${item.id}`}>
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 mb-2.5 leading-snug">
-                              {item.titre}
+                              <RichTextInline text={item.titre} />
                             </h3>
                           </Link>
 
-                          <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed line-clamp-2 mb-4">
-                            {item.description}
+                          <p className="whitespace-pre-line text-slate-600 dark:text-slate-300 text-xs leading-relaxed line-clamp-2 mb-4">
+                            <RichTextInline text={item.description} />
                           </p>
 
                           {/* Key Modules preview */}
@@ -397,14 +401,14 @@ export default function FormationsList() {
                           )}
 
                           {/* Price Tag */}
-                          <div className="flex items-center justify-between pt-1 text-xs">
+                          {prix && <div className="flex items-center justify-between pt-1 text-xs">
                             <span className="text-slate-500 dark:text-slate-400">
                               {language === 'fr' ? 'Tarif entreprise :' : 'Tuition / Price:'}
                             </span>
                             <span className="font-bold text-slate-900 dark:text-white text-sm">
-                              {item.prix || (language === 'fr' ? 'Sur devis' : 'On quote')}
+                              {prix}
                             </span>
-                          </div>
+                          </div>}
                         </div>
                       </div>
 

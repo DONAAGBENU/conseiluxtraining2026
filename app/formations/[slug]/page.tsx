@@ -1,7 +1,7 @@
 "use client"
 
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import { 
@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { useLanguage } from '@/app/components/LanguageProvider'
 import { getFormationImage } from '@/app/data/formationsData'
 import { parseModules, parseObjectifs, parsePrerequis } from '@/lib/formationFormatter'
+import { normalizeFormationSections, RichText, RichTextInline } from '@/lib/RichText'
 
 const slugToDbCategory: { [key: string]: string } = {
   'technologies-numeriques': 'Technologie numérique',
@@ -87,7 +88,8 @@ export default function FormationDetail() {
   const [selectedFormation, setSelectedFormation] = useState<any>(null)
   const [selectedDate, setSelectedDate] = useState<string>('')
   
-  const [activeTab, setActiveTab] = useState<'presentation' | 'objectifs' | 'programme' | 'prerequis' | 'certification' | 'sessions'>('presentation')
+  const [activeTab, setActiveTab] = useState<'presentation' | 'objectifs' | 'programme' | 'prerequis' | 'sessions'>('presentation')
+  const sectionNavRef = useRef<HTMLDivElement>(null)
   const [openModules, setOpenModules] = useState<{ [key: number]: boolean }>({ 1: true, 2: true })
   const [allExpanded, setAllExpanded] = useState(false)
 
@@ -162,6 +164,55 @@ export default function FormationDetail() {
       .finally(() => setLoading(false))
   }, [rawSlug])
 
+  useEffect(() => {
+    if (loading || isCategory || !sectionNavRef.current) return
+
+    const header = document.querySelector('header')
+    const sectionNav = sectionNavRef.current
+    if (!header) return
+
+    const syncStickyOffset = () => {
+      sectionNav.style.top = `${header.getBoundingClientRect().height}px`
+    }
+
+    const resizeObserver = new ResizeObserver(syncStickyOffset)
+    resizeObserver.observe(header)
+    syncStickyOffset()
+    return () => resizeObserver.disconnect()
+  }, [isCategory, loading])
+
+  useEffect(() => {
+    if (loading || !formation) return
+
+    const sectionIds = ['presentation']
+    if (formation.objectif?.trim()) sectionIds.push('objectifs')
+    if (Array.isArray(formation.modules) && formation.modules.some((module: string) => module.trim())) {
+      sectionIds.push('programme')
+    }
+    if (formation.publicCible?.trim() || formation.prerequis?.trim()) sectionIds.push('prerequis')
+    if (dates.length > 0) sectionIds.push('sessions')
+
+    const observer = new IntersectionObserver(() => {
+      const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 0
+      const navHeight = sectionNavRef.current?.getBoundingClientRect().height ?? 0
+      const activationLine = headerHeight + navHeight + 16
+      const currentSection = sectionIds
+        .map((sectionId) => document.getElementById(sectionId))
+        .filter((section): section is HTMLElement =>
+          section !== null && section.getBoundingClientRect().top <= activationLine
+        )
+        .pop()
+      if (currentSection) setActiveTab(currentSection.id as typeof activeTab)
+    }, { rootMargin: '-170px 0px -55% 0px' })
+
+    sectionIds.forEach((sectionId) => {
+      const section = document.getElementById(sectionId)
+      if (section) observer.observe(section)
+    })
+
+    return () => observer.disconnect()
+  }, [dates.length, formation, loading])
+
   const toggleModule = (idx: number) => {
     setOpenModules(prev => ({ ...prev, [idx]: !prev[idx] }))
   }
@@ -189,12 +240,13 @@ export default function FormationDetail() {
     setShowForm(true)
   }
 
-  const scrollToSection = (sectionId: string, tabKey: any) => {
+  const scrollToSection = (sectionId: string, tabKey: typeof activeTab) => {
     setActiveTab(tabKey)
     const el = document.getElementById(sectionId)
     if (el) {
-      const yOffset = -120
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
+      const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 0
+      const navHeight = sectionNavRef.current?.getBoundingClientRect().height ?? 0
+      const y = window.scrollY + el.getBoundingClientRect().top - headerHeight - navHeight - 16
       window.scrollTo({ top: y, behavior: 'smooth' })
     }
   }
@@ -341,23 +393,21 @@ export default function FormationDetail() {
                               </div>
                             )}
 
-                            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
-                              <span className="inline-flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md">
+                              {(item.duree && item.duree !== 'À définir' || item.prix && item.prix !== 'À définir') && <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
+                                {item.duree && item.duree !== 'À définir' && <span className="inline-flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md">
                                 <Clock className="w-3.5 h-3.5 text-orange-400" />
-                                <span>{item.duree || '5 jours'}</span>
-                              </span>
-                              <span className="font-bold text-white bg-orange-600/90 px-2.5 py-1 rounded-md text-[11px]">
-                                {item.prix || (language === 'fr' ? 'Sur devis' : 'On quote')}
-                              </span>
-                            </div>
+                                  <span>{item.duree}</span>
+                                </span>}
+                                {item.prix && item.prix !== 'À définir' && <span className="font-bold text-white bg-orange-600/90 px-2.5 py-1 rounded-md text-[11px]">{item.prix}</span>}
+                              </div>}
                           </div>
 
                           <div className="p-5">
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 mb-2 leading-snug">
-                              {item.titre}
+                              <RichTextInline text={item.titre} />
                             </h3>
-                            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed line-clamp-3 mb-4">
-                              {item.description}
+                            <p className="whitespace-pre-line text-slate-600 dark:text-slate-300 text-xs leading-relaxed line-clamp-3 mb-4">
+                              <RichTextInline text={item.description} />
                             </p>
 
                             {item.objectif && (
@@ -365,7 +415,7 @@ export default function FormationDetail() {
                                 <h4 className="text-[11px] font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider mb-1">
                                   {language === 'fr' ? 'Objectif clé' : 'Key Objective'}
                                 </h4>
-                                <p className="text-slate-700 dark:text-slate-300 text-xs line-clamp-2">{item.objectif}</p>
+                                <p className="text-slate-700 dark:text-slate-300 text-xs line-clamp-2"><RichTextInline text={item.objectif} /></p>
                               </div>
                             )}
                           </div>
@@ -444,25 +494,18 @@ export default function FormationDetail() {
   // VUE 3 : DÉTAIL COMPLET DE LA FORMATION (STYLE OO2 PREMIUM)
   // ──────────────────────────────────────────
   const heroImg = getFormationImage(formation)
-  const isPMP = formation.titre?.toLowerCase().includes('pmp') || formation.categorie?.toLowerCase().includes('projet')
-
   // Parse structured data from database
-  const parsedModules = parseModules(formation.modules || [])
+  const parsedModules = parseModules((formation.modules || []).filter((module: string) => module.trim()))
   const parsedObj = parseObjectifs(formation.objectif || '')
   const parsedPre = parsePrerequis(formation.prerequis || '')
+  const formationDuree = formation.duree === 'À définir' ? '' : formation.duree
+  const formationPrix = formation.prix === 'À définir' ? '' : formation.prix
+  const formationModalite = formation.modalite === 'Présentiel & Visio' ? '' : formation.modalite
 
   // Fallback high-value points forts if not specified
-  const pointsForts = formation.pointsForts && formation.pointsForts.length > 0 
-    ? formation.pointsForts 
-    : [
-        "Conformité intégrale au nouvel Exam Content Outline (ECO) 2026 et PMBOK® 8e Édition",
-        "Simulateur d'examen nouvelle génération inclus avec examens blancs en conditions réelles",
-        "Attestation officielle de 35 heures de contact (PDUs) obligatoire pour la candidature PMI",
-        "Accompagnement méthodologique personnalisé pour l'éligibilité et l'inscription au PMI",
-        "Formateurs seniors experts certifiés PMP® avec plus de 15 ans d'expérience managériale"
-      ]
+  const formationSections = normalizeFormationSections(formation.pointsForts)
 
-  const publicCible = formation.publicCible || "Directeurs et chefs de projets, directeurs de programmes, coordinateurs de projet, PMO, ingénieurs d'études, consultants, managers transversaux et toute personne impliquée dans la conduite de projets stratégiques."
+  const publicCible = formation.publicCible || ''
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
@@ -493,7 +536,7 @@ export default function FormationDetail() {
               </Link>
               <ChevronRight className="w-3 h-3 text-slate-600" />
               <span className="text-slate-200 font-medium truncate max-w-xs sm:max-w-md">
-                {formation.titre}
+                <RichTextInline text={formation.titre} />
               </span>
             </nav>
 
@@ -504,72 +547,75 @@ export default function FormationDetail() {
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/20 text-orange-400 border border-orange-500/30">
                     {formation.categorie?.toUpperCase()}
                   </span>
-                  {formation.certifiante && (
+                  {formation.certificationName && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs">
                       <Award className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{formation.certificationName || 'CERTIFICATION OFFICIELLE RECONNUE'}</span>
-                    </span>
-                  )}
-                  {isPMP && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/40">
-                      <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-                      <span>NOUVEAU ECO 2026 & PMBOK 8e</span>
+                      <span><RichTextInline text={formation.certificationName} /></span>
                     </span>
                   )}
                 </div>
 
                 {/* Grand Titre de la Formation */}
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-5 leading-tight text-white uppercase">
-                  {formation.titre}
+                  <RichTextInline text={formation.titre} />
                 </h1>
 
                 {/* Description de présentation */}
-                <p className="text-base md:text-lg text-slate-300 leading-relaxed mb-8 max-w-3xl">
-                  {formation.description}
+                <p className="whitespace-pre-line text-base md:text-lg text-slate-300 leading-relaxed mb-8 max-w-3xl">
+                  <RichTextInline text={formation.description} />
                 </p>
 
                 {/* Bandeau de faits marquants (Quick Facts façon oo2) */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-800/80 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4">
+                  {(formationDuree || formationModalite || formation.certificationName || formation.certifiante || formationPrix) && <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-800/80 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4">
+                  {formationDuree && (
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
                       <Clock className="w-5 h-5" />
                     </div>
                     <div>
                       <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-semibold">DURÉE</span>
-                      <strong className="text-xs sm:text-sm font-bold text-white block">{formation.duree || '5 jours (35h)'}</strong>
+                      <strong className="text-xs sm:text-sm font-bold text-white block">{formationDuree}</strong>
                     </div>
                   </div>
+                  )}
 
+                  {formationModalite && (
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
                       <Users className="w-5 h-5" />
                     </div>
                     <div>
                       <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-semibold">MODALITÉ</span>
-                      <strong className="text-xs sm:text-sm font-bold text-white block">Présentiel & Visio</strong>
+                      <strong className="text-xs sm:text-sm font-bold text-white block"><RichTextInline text={formationModalite} /></strong>
                     </div>
                   </div>
+                  )}
 
-                  <div className="flex items-center gap-3">
+                  {(formation.certificationName || formation.certifiante) && <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                       <Award className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-semibold">ÉVALUATION</span>
-                      <strong className="text-xs sm:text-sm font-bold text-white block">Examen PMP® PMI</strong>
+                      <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-semibold">CERTIFICATION</span>
+                      <strong className="text-xs sm:text-sm font-bold text-white block">
+                        {formation.certificationName ? <RichTextInline text={formation.certificationName} /> : 'Certifiante'}
+                      </strong>
                     </div>
                   </div>
+                  }
 
+                  {formationPrix && (
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
                       <GraduationCap className="w-5 h-5" />
                     </div>
                     <div>
                       <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-semibold">TARIF</span>
-                      <strong className="text-xs sm:text-sm font-bold text-white block">{formation.prix || '1 490 000 FCFA'}</strong>
+                      <strong className="text-xs sm:text-sm font-bold text-white block">{formationPrix}</strong>
                     </div>
                   </div>
-                </div>
+                  )}
+                </div>}
               </div>
 
               {/* Photo hero à droite */}
@@ -595,7 +641,7 @@ export default function FormationDetail() {
         {/* ========================================================= */}
         {/* BARRE D'ONGLETS STICKY (Comme sur www.oo2.fr)              */}
         {/* ========================================================= */}
-        <div className="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs">
+        <div ref={sectionNavRef} className="sticky top-[101px] z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="flex items-center overflow-x-auto no-scrollbar py-2.5 gap-2 text-xs md:text-sm font-semibold">
               <button
@@ -610,7 +656,7 @@ export default function FormationDetail() {
                 <span>PRÉSENTATION</span>
               </button>
 
-              <button
+              {formation.objectif?.trim() && <button
                 onClick={() => scrollToSection('objectifs', 'objectifs')}
                 className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
                   activeTab === 'objectifs'
@@ -620,9 +666,9 @@ export default function FormationDetail() {
               >
                 <Target className="w-4 h-4" />
                 <span>OBJECTIFS</span>
-              </button>
+              </button>}
 
-              <button
+              {parsedModules.length > 0 && <button
                 onClick={() => scrollToSection('programme', 'programme')}
                 className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
                   activeTab === 'programme'
@@ -632,9 +678,9 @@ export default function FormationDetail() {
               >
                 <BookOpen className="w-4 h-4" />
                 <span>PROGRAMME ({parsedModules.length})</span>
-              </button>
+              </button>}
 
-              <button
+              {(publicCible || parsedPre.generalPrerequis.length > 0 || parsedPre.eligibilityLevels.length > 0) && <button
                 onClick={() => scrollToSection('prerequis', 'prerequis')}
                 className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
                   activeTab === 'prerequis'
@@ -644,20 +690,9 @@ export default function FormationDetail() {
               >
                 <Users className="w-4 h-4" />
                 <span>PUBLIC & PRÉREQUIS</span>
-              </button>
+              </button>}
 
-              <button
-                onClick={() => scrollToSection('certification', 'certification')}
-                className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
-                  activeTab === 'certification'
-                    ? 'bg-orange-600 text-white shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Award className="w-4 h-4" />
-                <span>CERTIFICATION PMP®</span>
-              </button>
-
+              {dates.length > 0 && (
               <button
                 onClick={() => scrollToSection('sessions', 'sessions')}
                 className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
@@ -669,6 +704,7 @@ export default function FormationDetail() {
                 <Calendar className="w-4 h-4" />
                 <span>DATES & SESSIONS</span>
               </button>
+              )}
             </div>
           </div>
         </div>
@@ -695,52 +731,36 @@ export default function FormationDetail() {
                       <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
                         PRÉSENTATION DE LA FORMATION
                       </h2>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        Excellence méthodologique et préparation certifiante
-                      </span>
                     </div>
                   </div>
 
                   {/* Paragraphes de présentation avec vrais retours à la ligne */}
-                  <div className="space-y-4 text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed mb-8">
-                    <p>
-                      {formation.description}
+                  <div className="whitespace-pre-line space-y-4 text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed mb-8">
+                    <p className="whitespace-pre-line">
+                      <RichTextInline text={formation.description} />
                     </p>
-                    {isPMP && (
-                      <p>
-                        Cette formation intensive vous prépare rigoureusement à l'obtention de la certification <strong>Project Management Professional (PMP)®</strong> délivrée par le <strong>Project Management Institute (PMI)</strong>, standard mondial incontournable en matière de gouvernance de projets complexes.
-                      </p>
-                    )}
                   </div>
 
-                  {/* Grille des Points Forts Conseilux Training */}
-                  <div>
+                  {formationSections.length > 0 && <div className="mt-8 border-t border-slate-100 pt-6 dark:border-slate-800">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-4 flex items-center gap-2">
                       <Flame className="w-4 h-4" />
-                      LES ATOUTS CONSEILUX TRAINING
+                      INFORMATIONS COMPLÉMENTAIRES
                     </h3>
-                    <div className="grid grid-cols-1 gap-3">
-                      {pointsForts.map((pt: string, idx: number) => (
-                        <div 
-                          key={idx} 
-                          className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-750"
-                        >
-                          <div className="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
-                            <Check className="w-4 h-4 font-bold" />
-                          </div>
-                          <p className="text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-200 leading-snug">
-                            {pt}
-                          </p>
+                    <div className="space-y-4">
+                      {formationSections.filter((section) => section.title.trim() || section.content.trim()).map((section, idx) => (
+                        <div key={idx} className="border-l-2 border-orange-500 pl-4">
+                          {section.title && <h4 className="mb-2 text-sm font-bold text-slate-900 dark:text-white">{section.title}</h4>}
+                          <RichText content={section.content} className="text-sm leading-relaxed text-slate-700 dark:text-slate-300" />
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </div>}
                 </div>
 
                 {/* ───────────────────────────────────────────────────────── */}
                 {/* 2. SECTION OBJECTIFS PÉDAGOGIQUES                         */}
                 {/* ───────────────────────────────────────────────────────── */}
-                <div id="objectifs" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
+                {formation.objectif?.trim() && <div id="objectifs" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
                   <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
                     <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
                       <Target className="w-5 h-5" />
@@ -749,16 +769,13 @@ export default function FormationDetail() {
                       <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
                         OBJECTIFS PÉDAGOGIQUES
                       </h2>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        Compétences opérationnelles et alignement Exam Content Outline (ECO) 2026
-                      </span>
                     </div>
                   </div>
 
                   {/* Intro des objectifs */}
                   {parsedObj.intro && (
                     <div className="p-4 rounded-2xl bg-orange-50/70 dark:bg-orange-950/20 border border-orange-200/60 dark:border-orange-900/40 text-slate-800 dark:text-slate-200 text-sm leading-relaxed mb-6 font-medium">
-                      {parsedObj.intro}
+                        <RichTextInline text={parsedObj.intro} />
                     </div>
                   )}
 
@@ -769,17 +786,17 @@ export default function FormationDetail() {
                         key={dIdx} 
                         className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-850 p-5 md:p-6"
                       >
-                        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/80 dark:border-slate-750">
-                          <h3 className="text-sm md:text-base font-extrabold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+                        {(dom.title || dom.percentage) && <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/80 dark:border-slate-750">
+                          {dom.title && <h3 className="text-sm md:text-base font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                             <span className="w-2.5 h-2.5 rounded-full bg-orange-600 inline-block" />
-                            {dom.title}
-                          </h3>
+                            <RichTextInline text={dom.title} />
+                          </h3>}
                           {dom.percentage && (
                             <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                               {dom.percentage}
                             </span>
                           )}
-                        </div>
+                        </div>}
 
                         {/* Liste des objectifs du domaine avec retour à la ligne garanti */}
                         <ul className="space-y-3">
@@ -789,10 +806,10 @@ export default function FormationDetail() {
                               <div className="leading-relaxed">
                                 {it.highlight && (
                                   <strong className="text-slate-900 dark:text-white font-semibold capitalize">
-                                    {it.highlight} :{' '}
+                                    <RichTextInline text={it.highlight} /> :{' '}
                                   </strong>
                                 )}
-                                <span>{it.text}</span>
+                                <span><RichTextInline text={it.text} /></span>
                               </div>
                             </li>
                           ))}
@@ -800,12 +817,12 @@ export default function FormationDetail() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div>}
 
                 {/* ───────────────────────────────────────────────────────── */}
                 {/* 3. SECTION PROGRAMME DÉTAILLÉ (MODULES)                   */}
                 {/* ───────────────────────────────────────────────────────── */}
-                <div id="programme" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
+                {parsedModules.length > 0 && <div id="programme" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
@@ -815,9 +832,6 @@ export default function FormationDetail() {
                         <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
                           PROGRAMME DÉTAILLÉ DE LA FORMATION
                         </h2>
-                        <span className="text-xs text-slate-500 dark:text-slate-400">
-                          {parsedModules.length} MODULES D'EXCELLENCE PÉDAGOGIQUE
-                        </span>
                       </div>
                     </div>
 
@@ -858,8 +872,8 @@ export default function FormationDetail() {
                             </span>
 
                             <div className="flex-1">
-                              <h3 className="text-xs sm:text-sm md:text-base font-extrabold text-slate-900 dark:text-white uppercase tracking-tight leading-snug">
-                                {mod.title}
+                              <h3 className="text-xs sm:text-sm md:text-base font-extrabold text-slate-900 dark:text-white leading-snug">
+                                <RichTextInline text={mod.title} />
                               </h3>
                               {mod.items.length > 0 && !isOpen && (
                                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
@@ -877,13 +891,13 @@ export default function FormationDetail() {
                           {isOpen && (
                             <div className="px-5 pb-5 pt-1 border-t border-slate-100 dark:border-slate-800">
                               {mod.items.length === 0 ? (
-                                <p className="text-xs text-slate-500 italic">Contenu détaillé communiqué lors de la session.</p>
+                                null
                               ) : (
                                 <ul className="space-y-2.5 mt-3">
                                   {mod.items.map((point, pIdx) => (
                                     <li key={pIdx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700 dark:text-slate-200">
                                       <span className="w-1.5 h-1.5 rounded-full bg-orange-600 mt-2 shrink-0" />
-                                      <span className="leading-relaxed">{point}</span>
+                                      <span className="leading-relaxed"><RichTextInline text={point} /></span>
                                     </li>
                                   ))}
                                 </ul>
@@ -894,12 +908,12 @@ export default function FormationDetail() {
                       )
                     })}
                   </div>
-                </div>
+                </div>}
 
                 {/* ───────────────────────────────────────────────────────── */}
                 {/* 4. SECTION PUBLIC CIBLE & PRÉREQUIS                       */}
                 {/* ───────────────────────────────────────────────────────── */}
-                <div id="prerequis" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
+                {(publicCible || parsedPre.generalPrerequis.length > 0 || parsedPre.eligibilityLevels.length > 0) && <div id="prerequis" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
                   <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
                     <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
                       <Users className="w-5 h-5" />
@@ -908,49 +922,46 @@ export default function FormationDetail() {
                       <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
                         PUBLIC VISÉ & PRÉREQUIS
                       </h2>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        Profils concernés et conditions officielles d'éligibilité PMI
-                      </span>
                     </div>
                   </div>
 
                   {/* Public concerné */}
-                  <div className="mb-8 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                  {publicCible && <div className="mb-8 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                     <h3 className="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider mb-2 flex items-center gap-2">
                       <UserCheck className="w-4 h-4" />
                       PUBLIC CONCERNÉ
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+                    <p className="whitespace-pre-line text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
                       {publicCible}
                     </p>
-                  </div>
+                  </div>}
 
                   {/* Prérequis pour suivre la formation */}
-                  <div className="mb-8">
+                  {parsedPre.generalPrerequis.length > 0 && <div className="mb-8">
                     <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                      <ShieldCheck className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                       PRÉREQUIS POUR SUIVRE LA FORMATION
                     </h3>
                     <div className="space-y-2.5">
                       {parsedPre.generalPrerequis.map((g, gIdx) => (
-                        <div key={gIdx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 p-3 rounded-xl bg-slate-50/60 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
-                          <Check className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                          <span>{g}</span>
+                        <div key={gIdx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-800 dark:text-slate-200 p-3 rounded-xl bg-slate-50/60 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
+                          <Check className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0 mt-0.5" />
+                          <span><RichTextInline text={g} /></span>
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </div>}
 
                   {/* Conditions d'éligibilité officielles à l'examen PMP */}
                   {parsedPre.eligibilityLevels.length > 0 && (
                     <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
                       <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-2">
                         <GraduationCap className="w-4 h-4 text-blue-500" />
-                        {parsedPre.eligibilityTitle}
+                        <RichTextInline text={parsedPre.eligibilityTitle || ''} />
                       </h3>
                       {parsedPre.eligibilityIntro && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
-                          {parsedPre.eligibilityIntro}
+                        <p className="whitespace-pre-line text-xs text-slate-800 dark:text-slate-200 mb-4">
+                          <RichTextInline text={parsedPre.eligibilityIntro} />
                         </p>
                       )}
 
@@ -961,11 +972,11 @@ export default function FormationDetail() {
                             className="p-4 rounded-2xl border border-slate-200/80 dark:border-slate-750 bg-white dark:bg-slate-850 flex flex-col justify-between shadow-2xs"
                           >
                             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase mb-2 leading-snug">
-                              {lvl.title}
+                              <RichTextInline text={lvl.title} />
                             </h4>
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold border border-blue-200/60 dark:border-blue-800/60">
-                              <Clock className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                              <span>{lvl.experience}</span>
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 dark:bg-orange-950/40 text-orange-800 dark:text-orange-200 text-xs font-semibold border border-orange-200/60 dark:border-orange-800/60">
+                              <Clock className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400 shrink-0" />
+                              <span><RichTextInline text={lvl.experience} /></span>
                             </div>
                           </div>
                         ))}
@@ -975,70 +986,17 @@ export default function FormationDetail() {
                       {parsedPre.note && (
                         <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-amber-900 dark:text-amber-200 text-xs leading-relaxed flex items-start gap-2.5">
                           <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                          <span><strong>À savoir : </strong>{parsedPre.note}</span>
+                          <span><strong>À savoir : </strong><RichTextInline text={parsedPre.note} /></span>
                         </div>
                       )}
                     </div>
                   )}
-                </div>
-
-                {/* ───────────────────────────────────────────────────────── */}
-                {/* 5. SECTION MODALITÉS CERTIFICATION PMP® (Comme oo2)       */}
-                {/* ───────────────────────────────────────────────────────── */}
-                <div id="certification" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-                    <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
-                      <Award className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
-                        MODALITÉS DE LA CERTIFICATION PMP®
-                      </h2>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        Examen officiel du Project Management Institute (PMI)
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-750">
-                      <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider block font-semibold mb-1">FORMAT DE L'ÉPREUVE</span>
-                      <strong className="text-sm font-bold text-slate-900 dark:text-white block">180 questions</strong>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                        QCM, questions d'appariement, glisser-déposer, zones réactives (Point & Click) et études de cas.
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-750">
-                      <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider block font-semibold mb-1">DURÉE TOTALE</span>
-                      <strong className="text-sm font-bold text-slate-900 dark:text-white block">240 minutes (4 heures)</strong>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                        Comprend 2 pauses structurées de 10 minutes après les questions 60 et 120.
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-750">
-                      <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider block font-semibold mb-1">CENTRE DE TEST & EN LIGNE</span>
-                      <strong className="text-sm font-bold text-slate-900 dark:text-white block">Centre Pearson VUE ou En Ligne</strong>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                        Possibilité de passer l'examen dans un centre agréé ou chez soi avec surveillance proctoring.
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-750">
-                      <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider block font-semibold mb-1">MAINTIEN DU CERTIFICAT</span>
-                      <strong className="text-sm font-bold text-slate-900 dark:text-white block">Cycle de 3 ans (60 PDUs)</strong>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                        Le certificat est valable 3 ans et renouvelé via l'acquisition de crédits de développement continu.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                </div>}
 
                 {/* ───────────────────────────────────────────────────────── */}
                 {/* 6. SECTION SESSIONS & DATES DE FORMATION                  */}
                 {/* ───────────────────────────────────────────────────────── */}
-                <div id="sessions" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
+                {dates.length > 0 && <div id="sessions" className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
                   <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
                     <div className="w-10 h-10 rounded-2xl bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold">
                       <Calendar className="w-5 h-5" />
@@ -1047,25 +1005,9 @@ export default function FormationDetail() {
                       <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
                         PROCHAINES SESSIONS & CALENDRIER
                       </h2>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        Inscriptions ouvertes en présentiel et classe virtuelle interactive
-                      </span>
                     </div>
                   </div>
 
-                  {dates.length === 0 ? (
-                    <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 text-center">
-                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-3">
-                        Des sessions sont organisées chaque mois sur mesure et en inter-entreprises.
-                      </p>
-                      <button
-                        onClick={() => handleOpenForm(formation)}
-                        className="btn-primary text-xs"
-                      >
-                        Demander les prochaines dates disponibles
-                      </button>
-                    </div>
-                  ) : (
                     <div className="space-y-3.5">
                       {dates.map((s, sIdx) => (
                         <div 
@@ -1079,21 +1021,19 @@ export default function FormationDetail() {
                                 {s.date}
                               </strong>
                             </div>
-                            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
-                              <span className="flex items-center gap-1">
+                            {(s.lieu || s.duree || s.disponibles !== undefined && s.disponibles !== null) && <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
+                              {s.lieu && <span className="flex items-center gap-1">
                                 <MapPin className="w-3.5 h-3.5 text-orange-500" />
                                 {s.lieu}
-                              </span>
-                              <span>•</span>
-                              <span className="flex items-center gap-1">
+                              </span>}
+                              {s.duree && <span className="flex items-center gap-1">
                                 <Clock className="w-3.5 h-3.5 text-blue-500" />
-                                {s.duree || '5 jours (35h)'}
-                              </span>
-                              <span>•</span>
-                              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                                {s.duree}
+                              </span>}
+                              {s.disponibles !== undefined && s.disponibles !== null && <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
                                 {s.disponibles} places disponibles
-                              </span>
-                            </div>
+                              </span>}
+                            </div>}
                           </div>
 
                           <button
@@ -1106,8 +1046,7 @@ export default function FormationDetail() {
                         </div>
                       ))}
                     </div>
-                  )}
-                </div>
+                </div>}
 
               </div>
 
@@ -1132,17 +1071,14 @@ export default function FormationDetail() {
                   </div>
 
                   {/* Prix de la formation */}
-                  <div className="mb-5 pb-5 border-b border-slate-200 dark:border-slate-800">
+                  {formationPrix && <div className="mb-5 pb-5 border-b border-slate-200 dark:border-slate-800">
                     <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider block font-semibold">
                       TARIF PAR PARTICIPANT :
                     </span>
                     <div className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mt-1">
-                      {formation.prix || '1 490 000 FCFA'}
+                      {formationPrix}
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">
-                      Financement entreprise, FDFP ou individuel possible
-                    </span>
-                  </div>
+                  </div>}
 
                   {/* Boutons d'action principaux */}
                   <div className="space-y-3">
@@ -1169,46 +1105,10 @@ export default function FormationDetail() {
                       className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs transition-all cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>Télécharger le programme (PDF)</span>
+                      <span>Imprimer la fiche</span>
                     </button>
                   </div>
 
-                  {/* Garanties et Réassurance */}
-                  <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 space-y-3 text-xs text-slate-600 dark:text-slate-300">
-                    <div className="flex items-center gap-2.5">
-                      <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span>Attestation officielle de 35h PDUs délivrée</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span>Accès au simulateur d'examen 2026 inclus</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span>Accompagnement éligibilité dossier PMI</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span>Formateurs seniors certifiés PMP®</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Encart Contact & Orientation */}
-                <div className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200/80 dark:border-orange-800/40 rounded-3xl p-6 text-center">
-                  <PhoneCall className="w-7 h-7 text-orange-600 mx-auto mb-2" />
-                  <h4 className="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider mb-1">
-                    BESOIN D'UN CONSEIL PERSONNALISÉ ?
-                  </h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-xs mb-3">
-                    Nos conseillers formation sont disponibles pour étudier votre projet et vos financements.
-                  </p>
-                  <a
-                    href="tel:+22890546464"
-                    className="inline-block text-xs font-bold text-orange-600 dark:text-orange-400 hover:underline"
-                  >
-                    +228 90 54 64 64 / Formations@conseiluxtraining.com
-                  </a>
                 </div>
 
               </div>

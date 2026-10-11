@@ -11,10 +11,13 @@ BEGIN
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS prerequis TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS image TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS certification_name TEXT DEFAULT '';
-        ALTER TABLE formations ADD COLUMN IF NOT EXISTS modalite TEXT DEFAULT 'Présentiel & Visio';
+        ALTER TABLE formations ADD COLUMN IF NOT EXISTS modalite TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS public_cible TEXT DEFAULT '';
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS points_forts JSONB DEFAULT '[]'::jsonb;
         ALTER TABLE formations ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+        ALTER TABLE formations ALTER COLUMN duree SET DEFAULT '';
+        ALTER TABLE formations ALTER COLUMN prix SET DEFAULT '';
+        ALTER TABLE formations ALTER COLUMN modalite SET DEFAULT '';
     ELSE
         -- Créer la table si elle n'existe pas
         CREATE TABLE formations (
@@ -22,14 +25,14 @@ BEGIN
             titre TEXT NOT NULL,
             description TEXT NOT NULL,
             categorie TEXT NOT NULL,
-            duree TEXT DEFAULT 'À définir',
-            prix TEXT DEFAULT 'À définir',
+            duree TEXT DEFAULT '',
+            prix TEXT DEFAULT '',
             certifiante BOOLEAN DEFAULT false,
             modules JSONB DEFAULT '[]'::jsonb,
             objectif TEXT DEFAULT '',
             prerequis TEXT DEFAULT '',
             certification_name TEXT DEFAULT '',
-            modalite TEXT DEFAULT 'Présentiel & Visio',
+            modalite TEXT DEFAULT '',
             public_cible TEXT DEFAULT '',
             points_forts JSONB DEFAULT '[]'::jsonb,
             image TEXT DEFAULT '',

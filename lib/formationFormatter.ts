@@ -81,11 +81,9 @@ export function parseModules(modules: string[] = []): ParsedModule[] {
       }
     }
 
-    const uppercaseTitle = title.toUpperCase()
-
     return {
       index: idx + 1,
-      title: uppercaseTitle,
+      title,
       items
     }
   })
@@ -121,7 +119,7 @@ export function parseObjectifs(rawObjectif: string = ''): ParsedObjectifs {
 
     return {
       intro,
-      domains: items.length > 0 ? [{ title: 'OBJECTIFS PRINCIPAUX', items }] : []
+      domains: items.length > 0 ? [{ title: '', items }] : []
     }
   }
 

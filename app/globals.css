@@ -23,6 +23,18 @@
   .container-custom {
     @apply container mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  .rich-text-editor:empty::before {
+    color: #64748b;
+    content: attr(data-placeholder);
+    pointer-events: none;
+  }
+
+  .rich-text-editor ul,
+  .rich-text-editor ol {
+    list-style: revert;
+    padding-left: 1.25rem;
+  }
   
   .section-title {
     @apply text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4;

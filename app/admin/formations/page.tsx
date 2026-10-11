@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, X, Loader2, Award, BookOpen, Edit, Image as ImageIcon, Sparkles, CheckCircle, Upload } from 'lucide-react'
 import { getFormationImage } from '@/app/data/formationsData'
+import { FormationSection, normalizeFormationSections, RichTextEditor, RichTextInline } from '@/lib/RichText'
 
 interface Formation {
   id: string
@@ -18,7 +19,7 @@ interface Formation {
   objectif: string
   prerequis: string
   publicCible?: string
-  pointsForts?: string[]
+  pointsForts?: FormationSection[] | string[]
   image?: string
   createdAt?: string
   deletedAt?: string | null
@@ -44,7 +45,7 @@ export default function AdminFormations() {
     objectif: '',
     prerequis: '',
     publicCible: '',
-    pointsForts: [''],
+    pointsForts: [{ title: '', content: '' }],
     image: ''
   })
   const [imageMode, setImageMode] = useState<'url' | 'upload'>('url')
@@ -91,13 +92,17 @@ export default function AdminFormations() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!formData.titre.trim() || !formData.description.trim()) {
+      alert('Le titre et la description synthétique sont obligatoires.')
+      return
+    }
     setFormLoading(true)
 
     const payload = {
       ...formData,
       image: formData.image, // Ne pas ajouter d'image par défaut si l'utilisateur n'en fournit pas
       modules: formData.modules.filter(m => m.trim() !== ''),
-      pointsForts: (formData.pointsForts || []).filter(point => point.trim() !== '')
+      pointsForts: (formData.pointsForts || []).filter(section => section.title.trim() || section.content.trim())
     }
 
     try {
@@ -137,7 +142,7 @@ export default function AdminFormations() {
           objectif: '', 
           prerequis: '',
           publicCible: '',
-          pointsForts: [''],
+          pointsForts: [{ title: '', content: '' }],
           image: '' 
         })
         setImageMode('url')
@@ -165,7 +170,9 @@ export default function AdminFormations() {
       objectif: formation.objectif || '',
       prerequis: formation.prerequis || '',
       publicCible: formation.publicCible || '',
-      pointsForts: formation.pointsForts && formation.pointsForts.length > 0 ? formation.pointsForts : [''],
+      pointsForts: normalizeFormationSections(formation.pointsForts).length > 0
+        ? normalizeFormationSections(formation.pointsForts)
+        : [{ title: '', content: '' }],
       image: formation.image || ''
     })
     setEditingId(formation.id)
@@ -187,7 +194,7 @@ export default function AdminFormations() {
       objectif: '', 
       prerequis: '',
       publicCible: '',
-      pointsForts: [''],
+      pointsForts: [{ title: '', content: '' }],
       image: '' 
     })
     setImageMode('url')
@@ -230,10 +237,17 @@ export default function AdminFormations() {
     setFormData({ ...formData, modules: newModules })
   }
 
-  const updatePointFort = (index: number, value: string) => {
-    const pointsForts = (formData.pointsForts || ['']).map((point, i) => i === index ? value : point)
+  const updatePointFort = (index: number, key: keyof FormationSection, value: string) => {
+    const pointsForts = (formData.pointsForts || []).map((section, i) =>
+      i === index && typeof section !== 'string' ? { ...section, [key]: value } : section
+    )
     setFormData({ ...formData, pointsForts })
   }
+
+  const addInfoSection = () => setFormData({
+    ...formData,
+    pointsForts: [...normalizeFormationSections(formData.pointsForts), { title: '', content: '' }],
+  })
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -321,7 +335,8 @@ export default function AdminFormations() {
                       )}
                     </div>
                     <h3 className="text-lg font-bold text-white mb-1">{formation.titre}</h3>
-                    <p className="text-slate-400 text-xs line-clamp-2 max-w-2xl mb-2">{formation.description}</p>
+                    <h3 className="text-lg font-bold text-white mb-1"><RichTextInline text={formation.titre} /></h3>
+                    <p className="whitespace-pre-line text-slate-400 text-xs line-clamp-2 max-w-2xl mb-2"><RichTextInline text={formation.description} /></p>
                     
                     <div className="flex flex-wrap gap-3 text-xs text-slate-400">
                       <span>Durée : <strong className="text-slate-200">{formation.duree || 'N/A'}</strong></span>
@@ -375,12 +390,10 @@ export default function AdminFormations() {
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div>
                 <label className="block text-slate-300 font-medium mb-1">Titre de la formation *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm"
+                <RichTextEditor
+                  rows={1}
                   value={formData.titre}
-                  onChange={(e) => setFormData({ ...formData, titre: e.target.value })}
+                  onChange={(value) => setFormData({ ...formData, titre: value })}
                   placeholder="ex: Lead Implementer ISO 27001"
                 />
               </div>
@@ -469,34 +482,30 @@ export default function AdminFormations() {
 
               <div>
                 <label className="block text-slate-300 font-medium mb-1">Description synthétique *</label>
-                <textarea
-                  required
+                <RichTextEditor
                   rows={3}
-                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(value) => setFormData({ ...formData, description: value })}
                   placeholder="Présentation et proposition de valeur de la formation..."
                 />
               </div>
 
               <div>
                 <label className="block text-slate-300 font-medium mb-1">Objectifs pédagogiques</label>
-                <textarea
-                  rows={2}
-                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                <RichTextEditor
+                  rows={3}
                   value={formData.objectif}
-                  onChange={(e) => setFormData({ ...formData, objectif: e.target.value })}
+                  onChange={(value) => setFormData({ ...formData, objectif: value })}
                   placeholder="Ce que les participants sauront faire à l'issue de la formation..."
                 />
               </div>
 
               <div>
                 <label className="block text-slate-300 font-medium mb-1">Prérequis</label>
-                <textarea
-                  rows={2}
-                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                <RichTextEditor
+                  rows={3}
                   value={formData.prerequis}
-                  onChange={(e) => setFormData({ ...formData, prerequis: e.target.value })}
+                  onChange={(value) => setFormData({ ...formData, prerequis: value })}
                   placeholder="Expérience ou compétences préalables recommandées..."
                 />
               </div>
@@ -504,21 +513,19 @@ export default function AdminFormations() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-300 font-medium mb-1">Modalité</label>
-                  <input
-                    type="text"
-                    className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                  <RichTextEditor
+                    rows={1}
                     value={formData.modalite}
-                    onChange={(e) => setFormData({ ...formData, modalite: e.target.value })}
+                    onChange={(value) => setFormData({ ...formData, modalite: value })}
                     placeholder="Présentiel & Visio"
                   />
                 </div>
                 <div>
                   <label className="block text-slate-300 font-medium mb-1">Nom de la certification</label>
-                  <input
-                    type="text"
-                    className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                  <RichTextEditor
+                    rows={1}
                     value={formData.certificationName}
-                    onChange={(e) => setFormData({ ...formData, certificationName: e.target.value })}
+                    onChange={(value) => setFormData({ ...formData, certificationName: value })}
                     placeholder="Ex. Project Management Professional (PMP)®"
                   />
                 </div>
@@ -583,14 +590,15 @@ export default function AdminFormations() {
                 </div>
                 <div className="space-y-2">
                   {formData.modules.map((module, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        className="flex-1 px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-xs"
-                        value={module}
-                        onChange={(e) => updateModule(index, e.target.value)}
-                        placeholder={`Module ${index + 1} : Titre et compétences`}
-                      />
+                    <div key={index} className="flex items-start gap-2">
+                      <div className="flex-1">
+                        <RichTextEditor
+                          rows={4}
+                          value={module}
+                          onChange={(value) => updateModule(index, value)}
+                          placeholder={`Module ${index + 1} : titre sur la première ligne, puis détails et puces`}
+                        />
+                      </div>
                       {formData.modules.length > 1 && (
                         <button
                           type="button"
@@ -607,35 +615,45 @@ export default function AdminFormations() {
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-slate-300 font-medium">Atouts de la formation</label>
+                  <label className="block text-slate-300 font-medium">Informations complémentaires</label>
                   <button
                     type="button"
-                    onClick={() => setFormData({ ...formData, pointsForts: [...(formData.pointsForts || []), ''] })}
+                    onClick={addInfoSection}
                     className="text-orange-400 hover:text-orange-300 text-xs font-semibold cursor-pointer"
                   >
-                    + Ajouter un atout
+                    + Ajouter une rubrique
                   </button>
                 </div>
                 <div className="space-y-2">
-                  {(formData.pointsForts || ['']).map((point, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        className="flex-1 px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-xs"
-                        value={point}
-                        onChange={(e) => updatePointFort(index, e.target.value)}
-                        placeholder={`Atout ${index + 1}`}
-                      />
-                      {(formData.pointsForts || []).length > 1 && (
+                  {normalizeFormationSections(formData.pointsForts).concat(
+                    normalizeFormationSections(formData.pointsForts).length ? [] : [{ title: '', content: '' }]
+                  ).map((section, index) => (
+                    <div key={index} className="space-y-2 rounded-xl border border-slate-800 p-3">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          className="flex-1 px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500 outline-none text-sm"
+                          value={section.title}
+                          onChange={(e) => updatePointFort(index, 'title', e.target.value)}
+                          placeholder="Titre : Points forts, Formateur, Méthodes..."
+                        />
+                        {normalizeFormationSections(formData.pointsForts).length > 1 && (
                         <button
                           type="button"
-                          onClick={() => setFormData({ ...formData, pointsForts: (formData.pointsForts || []).filter((_, i) => i !== index) })}
+                          onClick={() => setFormData({ ...formData, pointsForts: normalizeFormationSections(formData.pointsForts).filter((_, i) => i !== index) })}
                           className="p-2 text-red-400 hover:bg-red-500/20 rounded-xl border border-red-500/20 cursor-pointer"
-                          aria-label={`Supprimer l'atout ${index + 1}`}
+                          aria-label={`Supprimer la rubrique ${index + 1}`}
                         >
                           <X className="w-4 h-4" />
                         </button>
-                      )}
+                        )}
+                      </div>
+                      <RichTextEditor
+                        rows={3}
+                        value={section.content}
+                        onChange={(value) => updatePointFort(index, 'content', value)}
+                        placeholder="Décris cette rubrique avec du texte et des puces..."
+                      />
                     </div>
                   ))}
                 </div>
